@@ -2,17 +2,19 @@ import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Table, Building2, TreePine, MapPin, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { useArea } from "../../assets/AreaContext/AreaContext";
 
 const Individual_subHeader = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+const { selectedArea, setSelectedArea } = useArea();
 
   const isActive = (path) => location.pathname === path;
 
   const areas = [
-    "All areas",
-    "Victorai Island",
+    "All Areas",
+    "Victoria Island",
     "Lekki",
     "Ikeja",
     "Yaba",
@@ -20,7 +22,6 @@ const Individual_subHeader = () => {
     "Surulere",
     "Ajah",
     "Maryland",
-    "Yaba",
     "Festac",
     "Apapa",
     "Agege/Ogba",
@@ -39,8 +40,10 @@ const Individual_subHeader = () => {
   };
 
   return (
+    
     <SubHeaderContainer>
       <SubHeaderContent>
+        {/* Navigation buttons */}
         <NavButton
           active={isActive("/individual-dashboard")}
           onClick={() => navigate("/individual-dashboard")}
@@ -69,23 +72,27 @@ const Individual_subHeader = () => {
           <IconWrapper>{getIcon("multipurpose")}</IconWrapper>
           <Label>Multipurpose</Label>
         </NavButton>
+
+        {/* Filter dropdown */}
         <FilterSection>
           <FilterButton
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             isOpen={isDropdownOpen}
           >
             <MapPin size={18} />
-            <span>All Areas</span>
+            <span>{selectedArea}</span> {/* ✅ Show selected area */}
             <ChevronIcon isOpen={isDropdownOpen}>
               <ChevronDown size={16} />
             </ChevronIcon>
           </FilterButton>
+
           {isDropdownOpen && (
             <DropdownMenu>
-              {areas.map((area) => (
+              {areas.map((area, index) => (
                 <DropdownItem
-                  key={area}
+                  key={index}
                   onClick={() => {
+                    setSelectedArea(area); // ✅ Save selected area
                     setIsDropdownOpen(false);
                   }}
                 >
@@ -101,6 +108,7 @@ const Individual_subHeader = () => {
 };
 
 export default Individual_subHeader;
+
 
 const SubHeaderContainer = styled.div`
   background-color: #ffffff;

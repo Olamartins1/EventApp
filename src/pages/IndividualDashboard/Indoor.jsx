@@ -1,34 +1,44 @@
-import { useEffect, useState } from "react";
+
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import VenueCard from "../../components/VenueCard";
-
+import {useArea} from "../../assets/AreaContext/AreaContext"
 const Indoor = () => {
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const token = localStorage.getItem("authToken");
+const {selectedArea}= useArea()
   useEffect(() => {
     const fetchIndoorVenues = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        
         const response = await axios.get(
-          "https://eventiq-final-project.onrender.com/venues"
+        `https://eventiq-final-project.onrender.com/api/v1/allvenues-indoor?city=${selectedArea}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
+console.log(`https://eventiq-final-project.onrender.com/api/v1/allvenues-indoor?city=${selectedArea}`,
+)
+        // // Depending on API structure
+        // const allVenues = response.data.data || response.data;
 
-        
-        const indoorVenues = response.data.filter(
-          (venue) =>
-            venue.category?.toLowerCase() === "indoor" ||
-            venue.type?.toLowerCase() === "indoor"
-        );
+        // // Filter for indoor only
+        // const indoorVenues = allVenues.filter(
+        //   (venue) =>
+        //     venue.category?.toLowerCase() === "indoor" ||
+        //     venue.type?.toLowerCase() === "indoor"
+        // );
 
-        setVenues(indoorVenues);
+       setVenues(response.data.data);
       } catch (err) {
-        console.error(" Error fetching indoor venues:", err);
+        console.error("Error fetching indoor venues:", err);
         setError("Failed to load indoor venues. Please try again later.");
       } finally {
         setLoading(false);
@@ -36,7 +46,7 @@ const Indoor = () => {
     };
 
     fetchIndoorVenues();
-  }, []);
+  }, [token,selectedArea]);
 
   if (loading) {
     return (
@@ -58,14 +68,22 @@ const Indoor = () => {
   return (
     <PageHolder>
       <PageHeader>
-        <PageTitle>Event Indoor Halls in Lagos</PageTitle>
+        <PageTitle>Indoor Event Halls in Lagos</PageTitle>
         <PageSubtitle>{venues.length} venues available</PageSubtitle>
       </PageHeader>
 
       <IndoorGrid>
         {venues.length > 0 ? (
-          venues.map((venue) => <VenueCard key={venue.id} venue={venue} />)
-        ) : (
+          venues.map((venue) => <div> 
+<img src={venue.documents.images[0].url}/>
+<h3>{venue.venuename}</h3>
+        {console.log(venue)}
+<span>{venue.location.street}</span>
+<p>{venue.capacity.minimum}-</p>
+<p>{venue.capacity.maximum}</p>
+<p>#{venue.price}/day</p>
+          </div>)
+        )  : (
           <PageSubtitle>No indoor venues found</PageSubtitle>
         )}
       </IndoorGrid>
@@ -74,6 +92,8 @@ const Indoor = () => {
 };
 
 export default Indoor;
+
+// -------------------- STYLES --------------------
 
 const PageHolder = styled.div`
   max-width: 1400px;

@@ -66,7 +66,7 @@ const Login = () => {
       // if (response.data && response.data.token) {
       //   toast.success("Login successful 🎉");
 if (response.data && response.data.token && response.data.data) {
-  toast.success("Login successful 🎉");
+  toast.success("Login successful");
        
     const user = response.data.data;
   const userRole = user.role;
@@ -92,13 +92,9 @@ if (response.data && response.data.token && response.data.data) {
       }
     } catch (error) {
       console.error("Login error:", error);
-      if (error.response?.status === 401) {
-        toast.error("Invalid email or password");
-      } else if (error.response?.data?.message) {
-        toast.error(error.response.data.message);
-      } else {
-        toast.error("Network error. Please try again later.");
-      }
+    
+        toast.error(error.response?.data?.message  || "Something Went Wrong");
+      
     } finally {
       setLoading(false);
     }

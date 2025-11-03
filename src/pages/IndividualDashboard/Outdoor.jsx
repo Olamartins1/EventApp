@@ -1,32 +1,103 @@
 import React from "react";
 import styled from "styled-components";
-import { venuesData } from "../../data/venuesData";
-import VenueCard from "../../components/VenueCard";
+import axios from "axios";
+import {useArea} from "../../assets/AreaContext/AreaContext"
+import {useEffect, useState} from "react"
 
+
+ 
 const Outdoor = () => {
-  const selectedVenues = venuesData.filter(
-    (venue) => venue.name === "Lush Garden Paradise"
-  );
+const token = localStorage.getItem("authToken")
+  const [venues, setVenues] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+const {selectedArea}= useArea()
+  useEffect(() => {
+    const fetchIndoorVenues = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await axios.get(
+        `https://eventiq-final-project.onrender.com/api/v1/allvenues-outdoor?city=${selectedArea}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(`https://eventiq-final-project.onrender.com/api/v1/allvenues-outdoor?city=${selectedArea}`,
+)
+
+        // // Depending on API structure
+        // const allVenues = response.data.data || response.data;
+
+        // // Filter for indoor only
+        // const indoorVenues = allVenues.filter(
+        //   (venue) =>
+        //     venue.category?.toLowerCase() === "indoor" ||
+        //     venue.type?.toLowerCase() === "indoor"
+        // );
+
+       setVenues(response.data.data);
+      } catch (err) {
+        console.error("Error fetching indoor venues:", err);
+        setError("Failed to load indoor venues. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchIndoorVenues();
+  }, [token,selectedArea]);
+
+
+ if (loading) {
+    return (
+      <PageHolder>
+        <PageTitle>Loading Indoor Venues...</PageTitle>
+      </PageHolder>
+    );
+  }
+
+  if (error) {
+    return (
+      <PageHolder>
+        <PageTitle>Error</PageTitle>
+        <PageSubtitle>{error}</PageSubtitle>
+      </PageHolder>
+    );
+  }
+
   return (
-    <div>
-      <OutHoler>
-        <OutHeader>
-          <PageTitle>Event Indoor Halls in Lagos</PageTitle>
-          <PageSubtitle>{selectedVenues.length} venues available</PageSubtitle>
-        </OutHeader>
-        <IndoorGrid>
-          {selectedVenues.map((venue) => (
-            <VenueCard key={venue.id} venue={venue} />
-          ))}
-        </IndoorGrid>
-      </OutHoler>
-    </div>
+    <PageHolder>
+      <PageHeader>
+        <PageTitle>Indoor Event Halls in Lagos</PageTitle>
+        <PageSubtitle>{venues.length} venues available</PageSubtitle>
+      </PageHeader>
+
+      <IndoorGrid>
+        {venues.length > 0 ? (
+          venues.map((venue) => <div> 
+<img src={venue.documents.images[0].url}/>
+<h3>{venue.venuename}</h3>
+<span>{venue.location.street}</span>
+<p>{venue.capacity.minimum}-</p>
+<p>{venue.capacity.maximum}</p>
+<p>#{venue.price}/day</p>
+          </div>)
+        )  : (
+          <PageSubtitle>No indoor venues found</PageSubtitle>
+        )}
+      </IndoorGrid>
+    </PageHolder>
   );
+
 };
 
 export default Outdoor;
 
-const OutHoler = styled.div`
+const PageHolder = styled.div`
   max-width: 1400px;
   margin: 0 auto;
   padding: 1rem 3rem;
@@ -40,46 +111,22 @@ const OutHoler = styled.div`
   }
 `;
 
-const OutHeader = styled.div`
+const PageHeader = styled.div`
   margin-bottom: 2rem;
-
-  @media (max-width: 768px) {
-    margin-bottom: 1.5rem;
-  }
 `;
 
 const PageTitle = styled.h1`
   color: #0a0a0a;
   font-family: "Poppins";
   font-size: 30px;
-  font-style: normal;
   font-weight: 500;
-  line-height: 30px;
   margin-bottom: 0.5rem;
-
-  @media (max-width: 768px) {
-    font-size: 24px;
-    line-height: 28px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 20px;
-    line-height: 24px;
-  }
 `;
 
 const PageSubtitle = styled.p`
   color: #717182;
   font-family: "Poppins";
   font-size: 1.2rem;
-
-  @media (max-width: 768px) {
-    font-size: 1rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 0.9rem;
-  }
 `;
 
 const IndoorGrid = styled.div`
