@@ -7,7 +7,17 @@ const All_venues = () => {
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+    const token = localStorage.getItem("authToken")
+  console.log(token)
+// const AuthToken =()=>{
+  
 
+//     {
+//       Headers: {
+//         Authorization:`Bearer ${token}`
+//       }
+//         }
+//   }
   useEffect(() => {
     
     const fetchVenues = async () => {
@@ -16,7 +26,12 @@ const All_venues = () => {
         setError(null); 
 
         const response = await axios.get(
-          "https://eventiq-final-project.onrender.com/venues"
+          "https://eventiq-final-project.onrender.com/api/v1/venues",       {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        
         );
 
         
