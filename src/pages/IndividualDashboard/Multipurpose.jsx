@@ -1,81 +1,104 @@
-import { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import axios from "axios";
-import VenueCard from "../../components/VenueCard";
+import {useArea} from "../../assets/AreaContext/AreaContext"
+import {useEffect, useState} from "react"
 
+
+ 
 const Multipurpose = () => {
+const token = localStorage.getItem("authToken")
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+const {selectedArea}= useArea()
   useEffect(() => {
-    const fetchMultipurposeVenues = async () => {
+    const fetchIndoorVenues = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        
         const response = await axios.get(
-          "https://eventiq-final-project.onrender.com/venues"
+              `https://eventiq-final-project.onrender.com/api/v1/allvenues-multipurpose?city=${selectedArea}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
+        console.log(`https://eventiq-final-project.onrender.com/api/v1/allvenues-multipurpose?city=${selectedArea}`,
+)
 
-        
-        const multipurposeVenues = response.data.filter(
-          (venue) =>
-            venue.category?.toLowerCase() === "multipurpose" ||
-            venue.type?.toLowerCase() === "multipurpose"
-        );
+        // // Depending on API structure
+        // const allVenues = response.data.data || response.data;
 
-        setVenues(multipurposeVenues);
+        // // Filter for indoor only
+        // const indoorVenues = allVenues.filter(
+        //   (venue) =>
+        //     venue.category?.toLowerCase() === "indoor" ||
+        //     venue.type?.toLowerCase() === "indoor"
+        // );
+
+       setVenues(response.data.data);
       } catch (err) {
-        console.error(" Error fetching multipurpose venues:", err);
-        setError("Failed to load multipurpose venues. Please try again later.");
+        console.error("Error fetching indoor venues:", err);
+        setError("Failed to load indoor venues. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchMultipurposeVenues();
-  }, []);
+    fetchIndoorVenues();
+  }, [token, selectedArea]);
 
-  if (loading) {
+
+ if (loading) {
     return (
-      <MulHolder>
-        <PageTitle>Loading Multipurpose Venues...</PageTitle>
-      </MulHolder>
+      <PageHolder>
+        <PageTitle>Loading Indoor Venues...</PageTitle>
+      </PageHolder>
     );
   }
 
   if (error) {
     return (
-      <MulHolder>
+      <PageHolder>
         <PageTitle>Error</PageTitle>
         <PageSubtitle>{error}</PageSubtitle>
-      </MulHolder>
+      </PageHolder>
     );
   }
 
   return (
-    <MulHolder>
-      <MulHeader>
-        <PageTitle>Multipurpose Event Halls in Lagos</PageTitle>
+    <PageHolder>
+      <PageHeader>
+        <PageTitle>Multipurpose Halls in Lagos</PageTitle>
         <PageSubtitle>{venues.length} venues available</PageSubtitle>
-      </MulHeader>
+      </PageHeader>
 
       <IndoorGrid>
         {venues.length > 0 ? (
-          venues.map((venue) => <VenueCard key={venue.id} venue={venue} />)
-        ) : (
-          <PageSubtitle>No multipurpose venues found</PageSubtitle>
+          venues.map((venue) => <div> 
+<img src={venue.documents.images[0].url}/>
+<h3>{venue.venuename}</h3>
+<span>{venue.location.street}</span>
+<p>{venue.capacity.minimum}-</p>
+<p>{venue.capacity.maximum}</p>
+<p>#{venue.price}/day</p>
+          </div>)
+        )  : (
+          <PageSubtitle>No indoor venues found</PageSubtitle>
         )}
       </IndoorGrid>
-    </MulHolder>
+    </PageHolder>
   );
+
 };
 
 export default Multipurpose;
 
-const MulHolder = styled.div`
+const PageHolder = styled.div`
   max-width: 1400px;
   margin: 0 auto;
   padding: 1rem 3rem;
@@ -89,12 +112,8 @@ const MulHolder = styled.div`
   }
 `;
 
-const MulHeader = styled.div`
+const PageHeader = styled.div`
   margin-bottom: 2rem;
-
-  @media (max-width: 768px) {
-    margin-bottom: 1.5rem;
-  }
 `;
 
 const PageTitle = styled.h1`

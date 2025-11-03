@@ -26,16 +26,16 @@ const All_venues = () => {
         setError(null); 
 
         const response = await axios.get(
-          "https://eventiq-final-project.onrender.com/api/v1/venues",       {
+          "https://eventiq-final-project.onrender.com/api/v1/allvenues",       {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         
         );
-
+console.log(response.data.data)
         
-        setVenues(response.data);
+        setVenues(response.data.data);
       } catch (err) {
         console.error(" Error fetching venues:", err);
         setError(
@@ -78,7 +78,14 @@ const All_venues = () => {
 
       <VenuesGrid>
         {venues.length > 0 ? (
-          venues.map((venue) => <VenueCard key={venue.id} venue={venue} />)
+          venues.map((venue) => <div> 
+<img src={venue.documents.images[0].url}/>
+<h3>{venue.venuename}</h3>
+<span>{venue.location.street}</span>
+<p>{venue.capacity.minimum}-</p>
+<p>{venue.capacity.maximum}</p>
+<p>#{venue.price}/day</p>
+          </div>)
         ) : (
           <PageSubtitle>No venues found</PageSubtitle>
         )}
