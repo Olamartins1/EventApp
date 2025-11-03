@@ -1,0 +1,89 @@
+.dropdown-container {
+  position: relative;
+}
+
+.sign-up-btn {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background-color: #603379;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.sign-up-btn:hover {
+  background-color: #603379;
+  transform: scale(1.05);
+}
+
+.sign-up-btn:active {
+  transform: translateY(0);
+}
+
+.chevron-icon {
+  margin-left: 0.5rem;
+  width: 1rem;
+  height: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.chevron-open {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  margin-top: 0.5rem;
+  left: 0;
+  width: 14rem;
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  z-index: 50;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #faf5ff;
+}
+
+.dropdown-item-border {
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.dropdown-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #374151;
+  flex-shrink: 0;
+}
+
+.hall-owner-icon {
+  color: #d97706;
+}
+
+.dropdown-text {
+  color: #1f2937;
+  font-weight: 500;
+}
