@@ -25,6 +25,9 @@ import MyProfile from "./../pages/IndividualDashboard/Profile/MyProfile";
 import MyBooking from "./../pages/IndividualDashboard/Profile/MyBooking";
 import MyNotification from "./../pages/IndividualDashboard/Profile/MyNotification";
 import Setting from "./../pages/IndividualDashboard/Profile/Setting";
+import AdminDashboard from "../components/layout/AdminDashboard"
+import Overview from "../pages/admin/Overview";
+import AdminVenues from "../pages/admin/AdminVenues";
 
 export const Element = createHashRouter([
   {
@@ -123,4 +126,18 @@ export const Element = createHashRouter([
     path: "/signup-individual",
     element: <SignupIndividual />,
   },
+  {
+  path: "/admin-dashboard",
+    element: <AdminDashboard />,
+    children: [
+      {
+        index: true,
+        element: <Overview />,
+      },
+      {
+        path:"/admin-dashboard/venues",
+        element:<AdminVenues/>
+      }
+    ]
+  }
 ]);
