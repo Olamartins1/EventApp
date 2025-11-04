@@ -2,13 +2,29 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import VenueCard from "../../components/VenueCard";
+import { Navigate, useNavigate } from "react-router-dom";  
 
 const All_venues = () => {
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+<<<<<<< HEAD
   const token = localStorage.getItem("authToken");
   console.log(token);
+=======
+  const navigate = useNavigate(); 
+    const token = localStorage.getItem("authToken")
+  console.log(token)
+// const AuthToken =()=>{
+  
+
+//     {
+//       Headers: {
+//         Authorization:`Bearer ${token}`
+//       }
+//         }
+//   }
+>>>>>>> 27372590a0001a1d2f5faeafa96bd4fd5f732afc
   useEffect(() => {
     const fetchVenues = async () => {
       try {
@@ -63,8 +79,9 @@ const All_venues = () => {
         <PageSubtitle>{venues.length} venues available</PageSubtitle>
       </PageHeader>
 
-      <VenuesGrid>
+      <VenuesGrid >
         {venues.length > 0 ? (
+<<<<<<< HEAD
           venues.map((venue) => (
             <div className="img">
               <img className="mainImg" src={venue.documents.images[0].url} />
@@ -80,6 +97,18 @@ const All_venues = () => {
               </p>
             </div>
           ))
+=======
+          venues.map((venue) => <div
+onClick={() => navigate(`/individual-dashboard/venue/${venue._id}`)}  >
+         
+<img src={venue.documents.images[0].url}/>
+<h3>{venue.venuename}</h3>
+<span>{venue.location.street}</span>
+<p>{venue.capacity.minimum}-</p>
+<p>{venue.capacity.maximum}</p>
+<p>#{venue.price}/day</p>
+          </div>)
+>>>>>>> 27372590a0001a1d2f5faeafa96bd4fd5f732afc
         ) : (
           <PageSubtitle>No venues found</PageSubtitle>
         )}

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import {useArea} from "../../assets/AreaContext/AreaContext"
 import {useEffect, useState} from "react"
-
+import {Navigate, useNavigate} from "react-router-dom";
 
  
 const Multipurpose = () => {
@@ -11,6 +11,7 @@ const token = localStorage.getItem("authToken")
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
 const {selectedArea}= useArea()
   useEffect(() => {
@@ -79,7 +80,7 @@ const {selectedArea}= useArea()
 
       <IndoorGrid>
         {venues.length > 0 ? (
-          venues.map((venue) => <div> 
+          venues.map((venue) => <div onClick={() => navigate(`/individual-dashboard/venue/${venue._id}`)}> 
 <img src={venue.documents.images[0].url}/>
 <h3>{venue.venuename}</h3>
 <span>{venue.location.street}</span>

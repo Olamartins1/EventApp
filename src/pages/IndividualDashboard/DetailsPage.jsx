@@ -2,12 +2,37 @@ import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
 import { venuesData } from "../../data/venuesData";
 import { ChevronLeft, MapPin, Clock, AlertCircle, Check } from "lucide-react";
+import { useState,useEffect } from "react";
+import axios from "axios";
 
 const DetailsPage = () => {
   const { id } = useParams();
+  console.log("i am id", id)
   const navigate = useNavigate();
-  const venue = venuesData.find((v) => v.id === Number.parseInt(id));
+ const [venue, setVenue] = useState({}) 
+ const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(
+          `https://eventiq-final-project.onrender.com/api/v1/getOneVenue/${id}`
+        );
+        setVenue(res.data?.data || null);
+      } catch (error) {
+        console.error("Error fetching venue:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) fetchData();
+  }, [id]);
+  
+
+
+  if (loading) return <p>Loading venue...</p>;
+console.log("the venue",venue)
   if (!venue) {
     return (
       <DetailContainer>
@@ -27,34 +52,53 @@ const DetailsPage = () => {
         Back
       </BackButton>
 
-      <ImageGallery>
-        <MainImage
-          src={venue.images[0] || "/placeholder.svg"}
-          alt={venue.name}
-        />
-        {venue.images.slice(1, 5).map((img, idx) => (
-          <GalleryImage key={idx} src={img} alt={`${venue.name} ${idx + 2}`} />
-        ))}
-      </ImageGallery>
 
-      <ContentWrapper>
-        <MainContent>
-          <VenueHeader>
-            <VenueName>{venue.name}</VenueName>
+    <VenueHeader>
+            <VenueName>{
+            venue.venuename}
+            </VenueName>
             <VenueMetaInfo>
               <MetaItem>
-                ⭐ {venue.rating} ({venue.reviews} reviews)
+                {venue.status}
               </MetaItem>
+           
+              
+            </VenueMetaInfo>
+
               <MetaItem>
                 <MapPin size={16} />
-                {venue.location}
+                {venue.location.street },{venue.location.city },{venue.location.state}
               </MetaItem>
               <MetaItem>
                 <AlertCircle size={16} />
-                Verified
+              {venue.capacity.minimum}- {venue.capacity.maximum}
               </MetaItem>
-            </VenueMetaInfo>
           </VenueHeader>
+    <ImageGallery>
+  {/* Main Image */}
+  {venue?.documents?.images?.[0]?.url && (
+    <MainImage
+      src={venue.documents.images[0].url}
+      alt={venue.name || "Venue Image"}
+    />
+  )}
+
+  {/* Other Images (if more than one exists) */}
+  {venue?.documents?.images?.length > 1 && (
+    <>
+      {venue.documents.images.slice(1, 5).map((img, idx) => (
+        <GalleryImage
+          key={idx}
+          src={img.url}
+          alt={`${venue.name || "Venue"} ${idx + 2}`}
+        />
+      ))}
+    </>
+  )}
+</ImageGallery>
+      <ContentWrapper>
+        <MainContent>
+         
 
           <Section>
             <SectionTitle>About this venue</SectionTitle>
@@ -62,35 +106,41 @@ const DetailsPage = () => {
             <InfoGrid>
               <InfoCard>
                 <InfoLabel>Venue Size</InfoLabel>
-                <InfoValue>{venue.venueSize}</InfoValue>
+                <InfoValue>{venue.hallsize}</InfoValue>
               </InfoCard>
               <InfoCard>
                 <InfoLabel>
                   <Clock size={16} />
                   Open Hours
                 </InfoLabel>
-                <InfoValue>{venue.openHours}</InfoValue>
+                <InfoValue>{venue.openingtime}am - {venue.closingtime}pm</InfoValue>
               </InfoCard>
-              <InfoCard>
-                <InfoLabel>Guest Capacity</InfoLabel>
-                <InfoValue>{venue.guests}</InfoValue>
-              </InfoCard>
+             
               <InfoCard>
                 <InfoLabel>Caution Fee</InfoLabel>
-                <InfoValue>{venue.cautionFee}</InfoValue>
+                <InfoValue>#{venue.cautionfee}</InfoValue>
+              </InfoCard>
+                <InfoCard>
+                <InfoLabel>About this Venue</InfoLabel>
+                <InfoValue>{venue.description}</InfoValue>
+              </InfoCard>
+                <InfoCard>
+                <InfoLabel>Amenities and Facilities</InfoLabel>
+                <InfoValue>{venue.amenities}</InfoValue>
               </InfoCard>
             </InfoGrid>
+
           </Section>
 
           <Section>
             <SectionTitle>Amenities & Facilities</SectionTitle>
             <AmenitiesList>
-              {venue.amenities.map((amenity, idx) => (
+              {/* {venue.amenities.map((amenity, idx) => (
                 <AmenityItem key={idx}>
                   <Check size={18} color="#6b46c1" />
                   {amenity}
                 </AmenityItem>
-              ))}
+              ))} */}
             </AmenitiesList>
           </Section>
 
@@ -101,7 +151,11 @@ const DetailsPage = () => {
                 <AlertCircle size={18} />
                 Important Information
               </PolicyTitle>
-              <PolicyText>{venue.cancellationPolicy}</PolicyText>
+              <PolicyText>
+              <h2>Free cancellation up to 30 days before the event. 50% refund for cancellation made 15-30 days before. No refund for cancellation within 15 days of the event date. Caution fee is refundable upon successful event completion without any damages.</h2>
+
+
+              </PolicyText>
             </CancellationPolicy>
           </Section>
         </MainContent>
@@ -128,7 +182,7 @@ const DetailsPage = () => {
               <BreakdownItem>
                 <span>Service fee (5%)</span>
                 <span>
-                  ₦{Math.round(venue.pricePerDay * 0.05).toLocaleString()}
+                  ₦{Math.round(venue.price * 0.05).toLocaleString()}
                 </span>
               </BreakdownItem>
               <BreakdownItem>
@@ -136,7 +190,7 @@ const DetailsPage = () => {
                 <span>
                   ₦
                   {Math.round(
-                    venue.pricePerDay + venue.pricePerDay * 0.05
+                    venue.price * 0.05+ venue.price 
                   ).toLocaleString()}
                 </span>
               </BreakdownItem>
