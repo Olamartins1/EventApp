@@ -1,17 +1,18 @@
-
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import VenueCard from "../../components/VenueCard";
-import {useArea} from "../../assets/AreaContext/AreaContext"
-import { Navigate, useNavigate } from "react-router-dom"; 
+import {useArea} from "../../assets/AreaContext/AreaContext";
+import { useNavigate } from "react-router-dom";
+
 const Indoor = () => {
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate(); 
   const token = localStorage.getItem("authToken");
-const {selectedArea}= useArea()
+  const {selectedArea}= useArea()
+  
   useEffect(() => {
     const fetchIndoorVenues = async () => {
       try {
@@ -19,26 +20,16 @@ const {selectedArea}= useArea()
         setError(null);
 
         const response = await axios.get(
-        `https://eventiq-final-project.onrender.com/api/v1/allvenues-indoor?city=${selectedArea}`,
+          `https://eventiq-final-project.onrender.com/api/v1/allvenues-indoor?city=${selectedArea}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-console.log(`https://eventiq-final-project.onrender.com/api/v1/allvenues-indoor?city=${selectedArea}`,
-)
-        // // Depending on API structure
-        // const allVenues = response.data.data || response.data;
-
-        // // Filter for indoor only
-        // const indoorVenues = allVenues.filter(
-        //   (venue) =>
-        //     venue.category?.toLowerCase() === "indoor" ||
-        //     venue.type?.toLowerCase() === "indoor"
-        // );
-
-       setVenues(response.data.data);
+        console.log(`https://eventiq-final-project.onrender.com/api/v1/allvenues-indoor?city=${selectedArea}`)
+        
+        setVenues(response.data.data);
       } catch (err) {
         console.error("Error fetching indoor venues:", err);
         setError("Failed to load indoor venues. Please try again later.");
@@ -48,7 +39,7 @@ console.log(`https://eventiq-final-project.onrender.com/api/v1/allvenues-indoor?
     };
 
     fetchIndoorVenues();
-  }, [token,selectedArea]);
+  }, [token, selectedArea]);
 
   if (loading) {
     return (
@@ -70,23 +61,34 @@ console.log(`https://eventiq-final-project.onrender.com/api/v1/allvenues-indoor?
   return (
     <PageHolder>
       <PageHeader>
-        <PageTitle>Indoor Event Halls in Lagos</PageTitle>
+        <PageTitle>Indoor Halls in {selectedArea || "Lagos"}</PageTitle>
         <PageSubtitle>{venues.length} venues available</PageSubtitle>
       </PageHeader>
 
       <IndoorGrid>
         {venues.length > 0 ? (
-          venues.map((venue) => <div 
-onClick={() => navigate(`/individual-dashboard/venue/${venue._id}`)}> 
-<img src={venue.documents.images[0].url}/>
-<h3>{venue.venuename}</h3>
-        {console.log(venue)}
-<span>{venue.location.street}</span>
-<p>{venue.capacity.minimum}-</p>
-<p>{venue.capacity.maximum}</p>
-<p>#{venue.price}/day</p>
-          </div>)
-        )  : (
+          venues.map((venue) => (
+            <VenueCardStyled
+              key={venue._id}
+              onClick={() => navigate(`/individual-dashboard/venue/${venue._id}`)}
+            >
+              <VenueImage
+                src={venue?.documents?.images?.[0]?.url || ""}
+                alt={venue?.venuename || "Venue image"}
+              />
+              <VenueInfo>
+                <VenueName>{venue?.venuename || "Unnamed venue"}</VenueName>
+                <VenueLocation>{venue?.location?.street || "Location not specified"}</VenueLocation>
+                <VenueGuests>
+                  {venue?.capacity?.minimum ?? "-"}-{venue?.capacity?.maximum ?? "-"} guests
+                </VenueGuests>
+                <VenuePrice>
+                  ₦{(Number(venue?.price) || 0).toLocaleString()}/day
+                </VenuePrice>
+              </VenueInfo>
+            </VenueCardStyled>
+          ))
+        ) : (
           <PageSubtitle>No indoor venues found</PageSubtitle>
         )}
       </IndoorGrid>
@@ -101,7 +103,8 @@ export default Indoor;
 const PageHolder = styled.div`
   max-width: 1400px;
   margin: 0 auto;
-  padding: 1rem 3rem;
+  padding: 2rem 3rem;
+  background-color: #ffffff;
 
   @media (max-width: 768px) {
     padding: 1rem 1.5rem;
@@ -113,35 +116,95 @@ const PageHolder = styled.div`
 `;
 
 const PageHeader = styled.div`
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 `;
 
 const PageTitle = styled.h1`
   color: #0a0a0a;
-  font-family: "Poppins";
-  font-size: 30px;
-  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
   margin-bottom: 0.5rem;
 `;
 
 const PageSubtitle = styled.p`
   color: #717182;
-  font-family: "Poppins";
-  font-size: 1.2rem;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
 `;
 
 const IndoorGrid = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 25px;
-  height: 90%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
 
   @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
   }
 
   @media (max-width: 480px) {
-    gap: 15px;
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
+`;
+
+const VenueCardStyled = styled.div`
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+`;
+
+const VenueImage = styled.img`
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+`;
+
+const VenueInfo = styled.div`
+  padding: 16px;
+`;
+
+const VenueName = styled.h3`
+  color: #0a0a0a;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+`;
+
+const VenueLocation = styled.p`
+  color: #717182;
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+`;
+
+const VenueGuests = styled.p`
+  color: #0a0a0a;
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  margin: 0 0 8px 0;
+`;
+
+const VenuePrice = styled.p`
+  color: #7c3aed;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
 `;
