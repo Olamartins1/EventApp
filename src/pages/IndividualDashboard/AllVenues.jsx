@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import VenueCard from "../../components/VenueCard";
+import { Navigate, useNavigate } from "react-router-dom";  
 
 const All_venues = () => {
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate(); 
     const token = localStorage.getItem("authToken")
   console.log(token)
 // const AuthToken =()=>{
@@ -76,9 +78,11 @@ console.log(response.data.data)
         <PageSubtitle>{venues.length} venues available</PageSubtitle>
       </PageHeader>
 
-      <VenuesGrid>
+      <VenuesGrid >
         {venues.length > 0 ? (
-          venues.map((venue) => <div> 
+          venues.map((venue) => <div
+onClick={() => navigate(`/individual-dashboard/venue/${venue._id}`)}  >
+         
 <img src={venue.documents.images[0].url}/>
 <h3>{venue.venuename}</h3>
 <span>{venue.location.street}</span>

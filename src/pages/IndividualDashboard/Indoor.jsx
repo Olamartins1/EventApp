@@ -4,10 +4,12 @@ import styled from "styled-components";
 import axios from "axios";
 import VenueCard from "../../components/VenueCard";
 import {useArea} from "../../assets/AreaContext/AreaContext"
+import { Navigate, useNavigate } from "react-router-dom"; 
 const Indoor = () => {
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate(); 
   const token = localStorage.getItem("authToken");
 const {selectedArea}= useArea()
   useEffect(() => {
@@ -74,7 +76,8 @@ console.log(`https://eventiq-final-project.onrender.com/api/v1/allvenues-indoor?
 
       <IndoorGrid>
         {venues.length > 0 ? (
-          venues.map((venue) => <div> 
+          venues.map((venue) => <div 
+onClick={() => navigate(`/individual-dashboard/venue/${venue._id}`)}> 
 <img src={venue.documents.images[0].url}/>
 <h3>{venue.venuename}</h3>
         {console.log(venue)}
