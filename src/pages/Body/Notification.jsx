@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { FiPackage } from "react-icons/fi";
+"use client";
 
 const NotificationsContainer = styled.div`
   flex: 1;
@@ -171,6 +172,8 @@ const EmptyDescription = styled.p`
 `;
 
 const Notifications = () => {
+
+
   return (
     <NotificationsContainer>
       <Header>
@@ -195,3 +198,52 @@ const Notifications = () => {
 };
 
 export default Notifications;
+
+  // useEffect(() => {
+  //   const fetchVenues = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const token = localStorage.getItem("authToken");
+  //       const userData = localStorage.getItem("user");
+  //       const user = userData ? JSON.parse(userData) : null;
+  //       const userId = user?._id || user?.id;
+
+  //       const response = await axios.get(
+  //         "https://eventiq-final-project.onrender.com/api/v1/venues",
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+
+  //       if (response.data && response.data.data) {
+  //         const userVenues = userId
+  //           ? response.data.data.filter(
+  //               (venue) => venue.venueOwnerId === userId
+  //             )
+  //           : response.data.data;
+
+  //         setVenues(userVenues);
+  //         setError(null);
+  //       } else {
+  //         setError("Invalid response format");
+  //         toast.error("Failed to load venues");
+  //       }
+  //     } catch (err) {
+  //       console.error("Venues fetch error:", err);
+  //       setError(err.message);
+  //       if (err.response?.status === 401) {
+  //         toast.error("Unauthorized. Please login again.");
+  //       } else if (err.response?.data?.message) {
+  //         toast.error(err.response.data.message);
+  //       } else {
+  //         toast.error("Failed to load venues");
+  //       }
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchVenues();
+  // }, []);
