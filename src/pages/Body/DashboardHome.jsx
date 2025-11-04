@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import {
   BsBuilding,
   BsCalendar2Check,
@@ -22,74 +23,124 @@ import { IoTrendingUpOutline, IoAddCircleOutline } from "react-icons/io5";
 import { HiOutlineUserCircle } from "react-icons/hi";
 
 const DashboardHome = () => {
-  const statsData = [
-    {
-      title: "Total Venues",
-      value: "0",
-      icon: <BsBuilding />,
-      iconBg: "#e9d5ff",
-      iconColor: "purple",
-    },
-    {
-      title: "Active Bookings",
-      value: "0",
-      icon: <FiCalendar />,
-      iconBg: "#fef3c7",
-      iconColor: "#f59e0b",
-    },
-    {
-      title: "Revenue(This Month)",
-      value: "#0",
-      icon: <TbCurrencyNaira />,
-      iconBg: "#bbf7d0",
-      iconColor: "#22c55e",
-    },
-    {
-      title: "Occupancy Rate",
-      value: "0%",
-      icon: <IoTrendingUpOutline />,
-      iconBg: "#e0e7ff",
-      iconColor: "#6366f1",
-    },
-  ];
+  const [statsData, setStatsData] = useState({});
+  console.log("the data", statsData)
+  const [loading, setLoading] = useState(true)
+   const token = localStorage.getItem("authToken");
+  const user = JSON.parse(localStorage.getItem("user"))
 
-  return (
-    <Container>
-      <Wrapper>
-        <WelcomeSection>
-          <WelcomeText>Welcome, Success</WelcomeText>
-          <DateText>Friday, October 29, 2025</DateText>
-        </WelcomeSection>
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true)
+        const res = await axios.get("https://eventiq-final-project.onrender.com/api/v1/dashboard", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        console.log("the res data", res.data?.data)
+        setStatsData(res.data?.data || {}); 
+        
 
+      }catch(err){
+        console.log(err)
+      }finally{
+        setLoading(false)
+      }
+
+        
+
+    };
+    fetchData();
+  }, [token]);
+
+return (
+  <Container>
+    <Wrapper>
+      <WelcomeSection>
+        <WelcomeText>Welcome, {user.firstName}</WelcomeText>
+        <DateText>
+          {new Date().toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </DateText>
+      </WelcomeSection>
+
+      {loading ? (
+        <h1>Loading...</h1>
+      ) : (
         <StatsGrid>
-          {statsData.map((stat, index) => (
-            <StatCard key={index}>
-              <StatHeader>
-                <StatTitle>{stat.title}</StatTitle>
-                <StatIcon $bgColor={stat.iconBg} $color={stat.iconColor}>
-                  {stat.icon}
-                </StatIcon>
-              </StatHeader>
-              <StatValue>{stat.value}</StatValue>
-            </StatCard>
-          ))}
+          <StatCard>
+            <StatHeader>
+              <StatTitle>Total Venues</StatTitle>
+              <StatIcon
+                $bgColor={statsData.iconBg}
+                $color={statsData.iconColor}
+              >
+                {statsData.icon}
+              </StatIcon>
+            </StatHeader>
+            <StatValue>{statsData?.totalVenues?.total }</StatValue>
+          </StatCard>
+          <StatCard>
+            <StatHeader>
+              <StatTitle>Active Bookings</StatTitle>
+              <StatIcon
+                $bgColor={statsData.iconBg}
+                $color={statsData.iconColor}
+              >
+                {statsData.icon}
+              </StatIcon>
+            </StatHeader>
+            <StatValue>{statsData?.activeBooking?.confirmed }</StatValue>
+          </StatCard>
+           <StatCard>
+            <StatHeader>
+              <StatTitle>Revenue (this Month)</StatTitle>
+              <StatIcon
+                $bgColor={statsData.iconBg}
+                $color={statsData.iconColor}
+              >
+                {statsData.icon}
+              </StatIcon>
+            </StatHeader>
+            <StatValue>#{statsData?.revenue?.total }</StatValue>
+          </StatCard>
+           <StatCard>
+            <StatHeader>
+              <StatTitle>Occupancy Rate</StatTitle>
+              <StatIcon
+                $bgColor={statsData.iconBg}
+                $color={statsData.iconColor}
+              >
+                {statsData.icon}
+              </StatIcon>
+            </StatHeader>
+            <StatValue>{statsData?.occupancyRate?.total }%</StatValue>
+          </StatCard>
         </StatsGrid>
+      )}
 
-        <EmptyState>
-          <EmptyIcon>
-            <BsBox />
-          </EmptyIcon>
-          <EmptyTitle>No Records Yet</EmptyTitle>
-          <EmptyText>
-            Create your first venue to start managing bookings and events
-          </EmptyText>
-        </EmptyState>
-      </Wrapper>
-    </Container>
-  );
+      <EmptyState>
+        <EmptyIcon>
+          <BsBox />
+        </EmptyIcon>
+        <EmptyTitle>No Records Yet</EmptyTitle>
+        <EmptyText>
+          Create your first venue to start managing bookings and events
+        </EmptyText>
+      </EmptyState>
+    </Wrapper>
+  </Container>
+);
+
 };
 
 export default DashboardHome;
+
 
 const Container = styled.div`
   width: 100%;

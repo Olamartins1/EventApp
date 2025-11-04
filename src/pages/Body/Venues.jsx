@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
@@ -852,6 +850,7 @@ const VenueCardSkeletonLoader = () => (
 
 const Venues = () => {
   const [venues, setVenues] = useState([]);
+  console.log(venues)
   const [loading, setLoading] = useState(true);
   const [features, setFeatures] = useState([]);
   const [error, setError] = useState(null);
@@ -863,7 +862,8 @@ const Venues = () => {
   const [formData, setFormData] = useState({
     venuename: "",
     description: "",
-    capacity: "",
+    minimum: "",
+    maximum: "",
     price: "",
     type: "indoor",
     amenities: [],
@@ -875,19 +875,11 @@ const Venues = () => {
     city: "",
     state: "",
   });
+
   const [documentFiles, setDocumentFiles] = useState({
     cacCertificate: null,
     certificateOfOccupancy: null,
   });
-
-  // const fileToBase64 = (file) => {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader()
-  //     reader.readAsDataURL(file)
-  //     reader.onload = () => resolve(reader.result)
-  //     reader.onerror = (error) => reject(error)
-  //   })
-  // }
 
   useEffect(() => {
     const fetchVenues = async () => {
@@ -945,7 +937,8 @@ const Venues = () => {
       setFormData({
         venuename: venue.name || "",
         description: venue.description || "",
-        capacity: venue.capacity || "",
+        minimum: venue.minimum || "",
+        maximum: venue.maximum || "",
         price: venue.price || "",
         type: venue.type || "indoor",
         amenities: Array.isArray(venue.amenities)
@@ -954,8 +947,8 @@ const Venues = () => {
           ? venue.amenities.split(",").map((a) => a.trim())
           : [],
         cautionfee: venue.cautionfee || "",
-        openingtime: venue.openingtime || "08:00 AM",
-        closingtime: venue.closingtime || "11:00 PM",
+        openingtime: venue.openingtime || "",
+        closingtime: venue.closingtime || "",
         hallsize: venue.hallsize || "",
         street: venue.location?.street || "",
         city: venue.location?.city || "",
@@ -974,13 +967,16 @@ const Venues = () => {
       setFormData({
         venuename: "",
         description: "",
-        capacity: "",
+
+        minimum: "",
+        maximum: "",
+
         price: "",
         type: "indoor",
         amenities: [],
         cautionfee: "",
-        openingtime: "08:00 AM",
-        closingtime: "11:00 PM",
+        openingtime: "",
+        closingtime: "",
         hallsize: "",
         street: "",
         city: "",
@@ -1006,13 +1002,14 @@ const Venues = () => {
     setFormData({
       venuename: "",
       description: "",
-      capacity: "",
+      minimum: "",
+      maximum: "",
       price: "",
       type: "indoor",
       amenities: [],
       cautionfee: "",
-      openingtime: "08:00 AM",
-      closingtime: "11:00 PM",
+      openingtime: "",
+      closingtime: "",
       hallsize: "",
       street: "",
       city: "",
@@ -1036,6 +1033,11 @@ const Venues = () => {
         }
         return { ...prev, amenities: newAmenities };
       });
+    } else if (name === "minimum" || name === "maximum") {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
     } else {
       setFormData((prev) => ({
         ...prev,
@@ -1100,10 +1102,22 @@ const Venues = () => {
       !formData.street ||
       !formData.city ||
       !formData.state ||
-      !formData.capacity ||
-      !formData.price
+      !formData.minimum ||
+      !formData.maximum ||
+      !formData.price ||
+      !formData.hallsize
     ) {
       toast.error("Please fill in all required fields in Basic Info");
+      setActiveTab("basic");
+      return;
+    }
+    if (!formData.minimum) {
+      toast.error("Minimum capacity cannot be greater than maximum capacity");
+      setActiveTab("basic");
+      return;
+    }
+    if (Number(formData.minimum) > Number(formData.maximum)) {
+      toast.error("Minimum capacity cannot be greater than maximum capacity");
       setActiveTab("basic");
       return;
     }
@@ -1134,12 +1148,11 @@ const Venues = () => {
 
     try {
       const token = localStorage.getItem("authToken");
-
       const venueFormData = new FormData();
-
       venueFormData.append("venuename", formData.venuename);
       venueFormData.append("description", formData.description);
-      venueFormData.append("capacity", formData.capacity);
+      venueFormData.append("minimum", formData.minimum);
+      venueFormData.append("maximum", formData.maximum);
       venueFormData.append("price", formData.price);
       venueFormData.append("type", formData.type);
       venueFormData.append("amenities", formData.amenities.join(", "));
@@ -1164,11 +1177,12 @@ const Venues = () => {
         venueFormData.append("doc", documentFiles.certificateOfOccupancy);
       }
 
-      console.log("[v0] Submitting venue data with FormData");
+      console.log(" Submitting venue data with FormData", venueFormData);
 
       const venueResponse = await axios.post(
         "https://eventiq-final-project.onrender.com/api/v1/list-venue",
         venueFormData,
+
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -1177,7 +1191,7 @@ const Venues = () => {
         }
       );
 
-      console.log("[v0] Venue response:", venueResponse.data);
+      console.log("the venue is", venueFormData);
 
       if (venueResponse.data.data) {
         if (editingVenue) {
@@ -1197,32 +1211,7 @@ const Venues = () => {
         handleCloseModal();
       }, 500);
     } catch (err) {
-      console.error(
-        "[v0] Submission error:",
-        err.response?.data || err.message
-      );
-
-      if (err.code === "ERR_NETWORK") {
-        toast.error(
-          "Network error: Please check your connection and CORS settings"
-        );
-      } else if (err.response?.data?.message) {
-        toast.error(err.response.data.message);
-      } else if (err.response?.data) {
-        toast.error(
-          typeof err.response.data === "string"
-            ? err.response.data
-            : err.response.data.message || "Validation error"
-        );
-      } else if (err.response?.status === 401) {
-        toast.error("Unauthorized: Please login again");
-      } else if (err.response?.status === 404) {
-        toast.error(
-          "API endpoint not found. Please check backend configuration."
-        );
-      } else {
-        toast.error("Failed to submit venue and documents. Please try again.");
-      }
+      toast.error(err.response?.data || "something went wrong");
     } finally {
       setIsSubmitting(false);
     }
@@ -1324,8 +1313,6 @@ const Venues = () => {
           }
         );
 
-        console.log("📦 Raw API Response:", response);
-
         if (response.data && response.data.data) {
           console.log("✅ Features data received:", response.data.data);
           setFeatures(response.data.data);
@@ -1349,15 +1336,6 @@ const Venues = () => {
 
     fetchFeatures();
   }, []);
-
-  console.log(
-    "📊 Current state — loading:",
-    loading,
-    "error:",
-    error,
-    "features:",
-    features
-  );
 
   return (
     <VenuesContainer>
@@ -1394,9 +1372,10 @@ const Venues = () => {
             {venues.map((venue) => (
               <VenueCard key={venue._id}>
                 <VenueImageWrapper>
-                  {venue.image && venue.image.length > 0 ? (
+                  {venue.documents.images  ? (
                     <VenueImage
-                      src={venue.image[0]?.url || "/placeholder.svg"}
+                      src={venue.documents.images[0]?.url || "/placeholder.svg"}
+                     
                       alt={venue.venuename}
                       onError={(e) => {
                         e.target.style.display = "none";
@@ -1409,7 +1388,7 @@ const Venues = () => {
                   )}
                   <VerifiedBadge>
                     <MdVerified size={16} />
-                    verified
+                   {venue.status}
                   </VerifiedBadge>
                 </VenueImageWrapper>
                 <VenueContent>
@@ -1420,8 +1399,9 @@ const Venues = () => {
                   </VenueDetail>
                   <VenueDetail>
                     <FiUsers size={16} />
-                    Up to {venue.capacity} guests
+                    up to {venue.capacity.maximum } guests
                   </VenueDetail>
+
                   <VenueStats>
                     <StatItem>
                       <StatLabel>Price/Day</StatLabel>
@@ -1435,17 +1415,17 @@ const Venues = () => {
                     </StatItem>
                   </VenueStats>
                   <ViewDetailsButton onClick={() => handleOpenModal(venue)}>
-                    Edit Details
+                  view Details
                   </ViewDetailsButton>
                 </VenueContent>
-                <VenueActions>
+                {/* <VenueActions>
                   <ActionButton onClick={() => handleOpenModal(venue)}>
                     <FiUpload size={16} /> Edit
                   </ActionButton>
                   <DeleteButton onClick={() => handleDelete(venue._id)}>
                     <FiX size={16} /> Delete
                   </DeleteButton>
-                </VenueActions>
+                </VenueActions> */}
               </VenueCard>
             ))}
           </VenuesGrid>
@@ -1578,12 +1558,20 @@ const Venues = () => {
                     </Label>
                     <Input
                       type="number"
-                      name="capacity"
-                      value={formData.capacity}
+                      name="minimum"
+                      value={formData.minimum}
                       onChange={handleInputChange}
-                      placeholder="e.g. 200-500"
+                      placeholder="Minimum guests"
+                    />
+                    <Input
+                      type="number"
+                      name="maximum"
+                      value={formData.maximum}
+                      onChange={handleInputChange}
+                      placeholder="Maximum guests"
                     />
                   </FormGroup>
+
                   <FormGroup>
                     <Label>
                       Hall Size (sq ft) <span>*</span>
