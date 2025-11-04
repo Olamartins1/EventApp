@@ -1,7 +1,7 @@
 
 
 
-import { useState, useEffect } from "react";
+import { useState, useEffect ,useContext} from "react";
 import axios from "axios";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
@@ -10,8 +10,11 @@ import { LuUser } from "react-icons/lu";
 import SignupModal from "../../components/static/signupModal/signupModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AuthContext } from "../.././assets/AuthContext/AuthContext";
 
 const Login = () => {
+    const { login } = useContext(AuthContext);
+
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,7 +70,8 @@ const Login = () => {
       //   toast.success("Login successful 🎉");
 if (response.data && response.data.token && response.data.data) {
   toast.success("Login successful");
-       
+             login(response .data); 
+
     const user = response.data.data;
   const userRole = user.role;
         // localStorage.setItem("authToken", response.data.token);
