@@ -52,6 +52,28 @@ console.log("the venue",venue)
         Back
       </BackButton>
 
+
+    <VenueHeader>
+            <VenueName>{
+            venue.venuename}
+            </VenueName>
+            <VenueMetaInfo>
+              <MetaItem>
+                {venue.status}
+              </MetaItem>
+           
+              
+            </VenueMetaInfo>
+
+              <MetaItem>
+                <MapPin size={16} />
+                {venue.location.street },{venue.location.city },{venue.location.state}
+              </MetaItem>
+              <MetaItem>
+                <AlertCircle size={16} />
+              {venue.capacity.minimum}- {venue.capacity.maximum}
+              </MetaItem>
+          </VenueHeader>
     <ImageGallery>
   {/* Main Image */}
   {venue?.documents?.images?.[0]?.url && (
@@ -76,22 +98,7 @@ console.log("the venue",venue)
 </ImageGallery>
       <ContentWrapper>
         <MainContent>
-          <VenueHeader>
-            <VenueName>{venue.Venuename}</VenueName>
-            <VenueMetaInfo>
-              <MetaItem>
-                {venue.status}
-              </MetaItem>
-              <MetaItem>
-                <MapPin size={16} />
-                {venue.location.street },{venue.location.city },{venue.location.state}
-              </MetaItem>
-              <MetaItem>
-                <AlertCircle size={16} />
-              {venue.capacity.minimum}- {venue.capacity.maximum}
-              </MetaItem>
-            </VenueMetaInfo>
-          </VenueHeader>
+         
 
           <Section>
             <SectionTitle>About this venue</SectionTitle>
