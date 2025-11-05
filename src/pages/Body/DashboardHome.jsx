@@ -19,6 +19,7 @@ import {
   FiX,
 } from "react-icons/fi";
 import { TbCurrencyNaira } from "react-icons/tb";
+import { LuBuilding2 } from "react-icons/lu";
 import { IoTrendingUpOutline, IoAddCircleOutline } from "react-icons/io5";
 import { HiOutlineUserCircle } from "react-icons/hi";
 
@@ -75,55 +76,67 @@ return (
         <StatsGrid>
           <StatCard>
             <StatHeader>
-              <StatTitle>Total Venues</StatTitle>
+              <StatTitle>Total Venues  </StatTitle>
               <StatIcon
                 $bgColor={statsData.iconBg}
                 $color={statsData.iconColor}
               >
-                {statsData.icon}
+              <LuBuilding2 style={{color: "purple"}}/>
               </StatIcon>
             </StatHeader>
             <StatValue>{statsData?.totalVenues?.total }</StatValue>
           </StatCard>
           <StatCard>
             <StatHeader>
-              <StatTitle>Active Bookings</StatTitle>
+              <StatTitle>Active Bookings  </StatTitle>
               <StatIcon
                 $bgColor={statsData.iconBg}
                 $color={statsData.iconColor}
               >
-                {statsData.icon}
+                < FiCalendar style={{stroke: "yellow"}}/>
               </StatIcon>
             </StatHeader>
             <StatValue>{statsData?.activeBooking?.confirmed }</StatValue>
           </StatCard>
            <StatCard>
             <StatHeader>
-              <StatTitle>Revenue (this Month)</StatTitle>
+              <StatTitle>Revenue (this Month) </StatTitle>
               <StatIcon
                 $bgColor={statsData.iconBg}
                 $color={statsData.iconColor}
               >
-                {statsData.icon}
+               <TbCurrencyNaira style={{stroke: "green"}}/>
               </StatIcon>
             </StatHeader>
-            <StatValue>#{statsData?.revenue?.total }</StatValue>
+            <StatValue>₦{statsData?.revenue?.total }</StatValue>
           </StatCard>
            <StatCard>
             <StatHeader>
-              <StatTitle>Occupancy Rate</StatTitle>
+              <StatTitle>Occupancy Rate  </StatTitle>
               <StatIcon
                 $bgColor={statsData.iconBg}
                 $color={statsData.iconColor}
               >
-                {statsData.icon}
+                <IoTrendingUpOutline style={{stroke: "purple"}}/>
               </StatIcon>
             </StatHeader>
             <StatValue>{statsData?.occupancyRate?.total }%</StatValue>
           </StatCard>
         </StatsGrid>
       )}
+ <BookingCard>
+      <BookingInfo>
+        <VenueName>Grand Luxe Ballroom</VenueName>
+        <CustomerName>Chioma Adeleke • Oct 25, 2025</CustomerName>
+        <Occasion>Wedding Anniversary</Occasion>
+        <Price>₦250,000</Price>
+      </BookingInfo>
 
+      <Actions>
+        <AcceptButton>Accept Booking</AcceptButton>
+        <RejectButton>Reject</RejectButton>
+      </Actions>
+    </BookingCard>
       <EmptyState>
         <EmptyIcon>
           <BsBox />
@@ -148,6 +161,8 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   padding-top: 30px;
+  background: #f8f9fa;
+  gap: 1rem;
 
   @media (max-width: 768px) {
     padding-top: 20px;
@@ -159,12 +174,91 @@ const Wrapper = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  gap: 1rem;
 
   @media (max-width: 768px) {
     width: 90%;
   }
 `;
+ const BookingCard = styled.div`
+  background: #fff;
+  border-radius: 12px;
+  height: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.4rem;
+`;
 
+ const BookingInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+
+`;
+
+ const VenueName = styled.h3`
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e1e1e;
+`;
+
+ const CustomerName = styled.p`
+  font-size: 14px;
+  color: #666;
+`;
+
+ const Occasion = styled.p`
+  font-size: 14px;
+  color: #999;
+`;
+
+ const Price = styled.p`
+  font-size: 16px;
+  font-weight: 600;
+  color: #6b46c1;
+  margin-top: 4px;
+  
+`;
+
+ const Actions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+ const AcceptButton = styled.button`
+  background: #00c853;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #00b44a;
+  }
+`;
+
+ const RejectButton = styled.button`
+  background: transparent;
+  color: #e53935;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #e53935;
+  border-radius: 8px;
+  padding: 10px 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: red;
+    color: white
+  }
+`;
 const WelcomeSection = styled.div`
   display: flex;
   flex-direction: column;
@@ -267,6 +361,8 @@ const StatTitle = styled.h3`
   color: #6b7280;
   margin: 0;
   line-height: 1.4;
+  display: flex;
+  justify-content: space-between;
 
   @media (max-width: 480px) {
     font-size: 13px;
@@ -277,12 +373,13 @@ const StatIcon = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background-color: ${(props) => props.$bgColor};
-  color: ${(props) => props.$color};
+  /* background-color: ${(props) => props.$bgColor};
+  color: ${(props) => props.$color}; */
+  background: #F5E5C3;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 25px;
   flex-shrink: 0;
 
   @media (max-width: 480px) {
@@ -296,6 +393,7 @@ const StatValue = styled.div`
   font-size: 32px;
   font-weight: 700;
   color: #111827;
+
 
   @media (max-width: 768px) {
     font-size: 28px;
