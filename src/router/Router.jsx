@@ -28,8 +28,10 @@ import Setting from "./../pages/IndividualDashboard/Profile/Setting";
 import AdminDashboard from "../components/layout/AdminDashboard"
 import Overview from "../pages/admin/Overview";
 import AdminVenues from "../pages/admin/AdminVenues";
+import Protect from "./Protect"
 
 export const Element = createHashRouter([
+
   {
     path: "/",
     element: <LandingPageLayout />,
@@ -37,7 +39,7 @@ export const Element = createHashRouter([
   },
   {
     path: "/dashboardHome",
-    element: <Dashboardlayout />,
+    element: (<Protect><Dashboardlayout /></Protect>),
     children: [
       {
         index: true,
@@ -63,7 +65,8 @@ export const Element = createHashRouter([
   },
   {
     path: "/individual-dashboard",
-    element: <IndividualLayout />,
+    
+    element: (<Protect><IndividualLayout /></Protect>),
     children: [
       {
         index: true,
@@ -89,7 +92,7 @@ export const Element = createHashRouter([
   },
   {
     path: "/individual-dashboard/MyProfile",
-    element: <MyProfile />,
+    element: (<Protect><MyProfile /></Protect>),
     children: [
       {
         path: "/individual-dashboard/MyProfile/bookings",
@@ -128,7 +131,7 @@ export const Element = createHashRouter([
   },
   {
   path: "/admin-dashboard",
-    element: <AdminDashboard />,
+    element: (<Protect><AdminDashboard /></Protect>),
     children: [
       {
         index: true,
