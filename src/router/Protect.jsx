@@ -5,10 +5,6 @@ import { AuthContext } from "../assets/AuthContext/AuthContext";
 
 const Protect = ({ children }) => {
   const { user } = useContext(AuthContext);
-console.log("auth user check",user)
-
-
-
   if (!user) {
     return <Navigate to="/login" replace />;
   }
