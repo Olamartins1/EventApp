@@ -2,17 +2,17 @@ import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import VenueCard from "../../components/VenueCard";
-import {useArea} from "../../assets/AreaContext/AreaContext";
-import { useNavigate } from "react-router-dom";
+import { useArea } from "../../assets/AreaContext/AreaContext";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Indoor = () => {
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const token = localStorage.getItem("authToken");
-  const {selectedArea}= useArea()
-  
+  const { selectedArea } = useArea();
+
   useEffect(() => {
     const fetchIndoorVenues = async () => {
       try {
@@ -27,8 +27,10 @@ const Indoor = () => {
             },
           }
         );
-        console.log(`https://eventiq-final-project.onrender.com/api/v1/allvenues-indoor?city=${selectedArea}`)
-        
+        console.log(
+          `https://eventiq-final-project.onrender.com/api/v1/allvenues-indoor?city=${selectedArea}`
+        );
+
         setVenues(response.data.data);
       } catch (err) {
         console.error("Error fetching indoor venues:", err);
@@ -61,7 +63,7 @@ const Indoor = () => {
   return (
     <PageHolder>
       <PageHeader>
-        <PageTitle>Indoor Halls in {selectedArea || "Lagos"}</PageTitle>
+        <PageTitle>Indoor Halls in Lagos</PageTitle>
         <PageSubtitle>{venues.length} venues available</PageSubtitle>
       </PageHeader>
 
@@ -70,21 +72,21 @@ const Indoor = () => {
           venues.map((venue) => (
             <VenueCardStyled
               key={venue._id}
-              onClick={() => navigate(`/individual-dashboard/venue/${venue._id}`)}
+              onClick={() =>
+                navigate(`/individual-dashboard/venue/${venue._id}`)
+              }
             >
               <VenueImage
-                src={venue?.documents?.images?.[0]?.url || ""}
-                alt={venue?.venuename || "Venue image"}
+                src={venue.documents.images[0].url}
+                alt={venue.venuename}
               />
               <VenueInfo>
-                <VenueName>{venue?.venuename || "Unnamed venue"}</VenueName>
-                <VenueLocation>{venue?.location?.street || "Location not specified"}</VenueLocation>
+                <VenueName>{venue.venuename}</VenueName>
+                <VenueLocation>{venue.location.street}</VenueLocation>
                 <VenueGuests>
-                  {venue?.capacity?.minimum ?? "-"}-{venue?.capacity?.maximum ?? "-"} guests
+                  {venue.capacity.minimum}-{venue.capacity.maximum} guests
                 </VenueGuests>
-                <VenuePrice>
-                  ₦{(Number(venue?.price) || 0).toLocaleString()}/day
-                </VenuePrice>
+                <VenuePrice>₦{venue.price.toLocaleString()}/day</VenuePrice>
               </VenueInfo>
             </VenueCardStyled>
           ))
@@ -202,7 +204,7 @@ const VenueGuests = styled.p`
 `;
 
 const VenuePrice = styled.p`
-  color: #7c3aed;
+  color: #5b21b6;
   font-family: "Poppins", sans-serif;
   font-size: 16px;
   font-weight: 600;
