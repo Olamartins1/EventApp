@@ -72,7 +72,7 @@ if (response.data && response.data.token && response.data.data) {
   toast.success("Login successful");
              login(response .data); 
 
-    const user = response.data.data;
+    const user = response.data.data
   const userRole = user.role;
         // localStorage.setItem("authToken", response.data.token);
         // localStorage.setItem("user", JSON.stringify(response.data.user));
