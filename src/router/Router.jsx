@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 // import { createBrowserRouter } from "react-router-dom";
 import { createHashRouter } from "react-router-dom";
 
@@ -28,13 +28,10 @@ import Setting from "./../pages/IndividualDashboard/Profile/Setting";
 import AdminDashboard from "../components/layout/AdminDashboard"
 import Overview from "../pages/admin/Overview";
 import AdminVenues from "../pages/admin/AdminVenues";
+import { AuthContext } from "../assets/AuthContext/AuthContext";
 
 export const Element = createHashRouter([
-  {
-    path: "/",
-    element: <LandingPageLayout />,
-    children: [{ index: true, element: <HomePage /> }],
-  },
+
   {
     path: "/dashboardHome",
     element: <Dashboardlayout />,
