@@ -193,7 +193,7 @@ const LogoSection = styled.div`
 const Logo = styled.h1`
   font-family: "Brush Script MT", cursive;
   font-size: 32px;
-  color: #9333ea;
+  color: purple;
   margin: 0;
   font-weight: 400;
   font-style: italic;
@@ -219,13 +219,13 @@ const MenuItem = styled.div`
   padding: 12px 20px;
   cursor: pointer;
   transition: all 0.2s ease;
-  background-color: ${(props) => (props.$active ? "#9333ea" : "transparent")};
+  background-color: ${(props) => (props.$active ? "purple" : "transparent")};
   color: ${(props) => (props.$active ? "white" : "#6b7280")};
   margin: 0 12px 4px 12px;
   border-radius: 8px;
 
   &:hover {
-    background-color: ${(props) => (props.$active ? "#9333ea" : "#f3f4f6")};
+    background-color: ${(props) => (props.$active ? "purple" : "#f3f4f6")};
   }
 
   @media (max-width: 480px) {

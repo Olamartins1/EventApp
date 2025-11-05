@@ -8,7 +8,7 @@ const Individual_subHeader = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-const { selectedArea, setSelectedArea } = useArea();
+  const { selectedArea, setSelectedArea } = useArea();
 
   const isActive = (path) => location.pathname === path;
 
@@ -40,47 +40,77 @@ const { selectedArea, setSelectedArea } = useArea();
   };
 
   return (
-    
     <SubHeaderContainer>
       <SubHeaderContent>
-        {/* Navigation buttons */}
-        <NavButton
-          active={isActive("/individual-dashboard")}
-          onClick={() => navigate("/individual-dashboard")}
-        >
-          <IconWrapper>{getIcon("all-venues")}</IconWrapper>
-          <Label>All Venues</Label>
-        </NavButton>
-        <NavButton
-          active={isActive("/individual-dashboard/indoor")}
-          onClick={() => navigate("/individual-dashboard/indoor")}
-        >
-          <IconWrapper>{getIcon("indoor-halls")}</IconWrapper>
-          <Label>Indoor Halls</Label>
-        </NavButton>
-        <NavButton
-          active={isActive("/individual-dashboard/outdoor")}
-          onClick={() => navigate("/individual-dashboard/outdoor")}
-        >
-          <IconWrapper>{getIcon("outdoor-halls")}</IconWrapper>
-          <Label>Outdoor Venues</Label>
-        </NavButton>
-        <NavButton
-          active={isActive("/individual-dashboard/multipurpose")}
-          onClick={() => navigate("/individual-dashboard/multipurpose")}
-        >
-          <IconWrapper>{getIcon("multipurpose")}</IconWrapper>
-          <Label>Multipurpose</Label>
-        </NavButton>
+        <NavButtonsWrapper>
+          <NavButton
+            active={isActive("/individual-dashboard")}
+            onClick={() => navigate("/individual-dashboard")}
+          >
+            <IconWrapper>{getIcon("all-venues")}</IconWrapper>
+            <Label>All Venues</Label>
+          </NavButton>
+          <NavButton
+            active={isActive("/individual-dashboard/indoor")}
+            onClick={() => navigate("/individual-dashboard/indoor")}
+          >
+            <IconWrapper>{getIcon("indoor-halls")}</IconWrapper>
+            <Label>Indoor Halls</Label>
+          </NavButton>
+          <NavButton
+            active={isActive("/individual-dashboard/outdoor")}
+            onClick={() => navigate("/individual-dashboard/outdoor")}
+          >
+            <IconWrapper>{getIcon("outdoor-halls")}</IconWrapper>
+            <Label>Outdoor</Label>
+          </NavButton>
+          <NavButton
+            active={isActive("/individual-dashboard/multipurpose")}
+            onClick={() => navigate("/individual-dashboard/multipurpose")}
+          >
+            <IconWrapper>{getIcon("multipurpose")}</IconWrapper>
+            <Label>Multipurpose</Label>
+          </NavButton>
 
-        {/* Filter dropdown */}
-        <FilterSection>
+          {/* Filter dropdown - desktop position */}
+          <FilterSection className="desktop-filter">
+            <FilterButton
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              isOpen={isDropdownOpen}
+            >
+              <MapPin size={18} />
+              <span>{selectedArea}</span>
+              <ChevronIcon isOpen={isDropdownOpen}>
+                <ChevronDown size={16} />
+              </ChevronIcon>
+            </FilterButton>
+
+            {isDropdownOpen && (
+              <DropdownMenu>
+                {areas.map((area, index) => (
+                  <DropdownItem
+                    key={index}
+                    onClick={() => {
+                      setSelectedArea(area);
+                      setIsDropdownOpen(false);
+                    }}
+                  >
+                    {area}
+                  </DropdownItem>
+                ))}
+              </DropdownMenu>
+            )}
+          </FilterSection>
+        </NavButtonsWrapper>
+
+        {/* Filter dropdown - mobile position (separate row) */}
+        <FilterSection className="mobile-filter">
           <FilterButton
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             isOpen={isDropdownOpen}
           >
             <MapPin size={18} />
-            <span>{selectedArea}</span> {/* ✅ Show selected area */}
+            <span>{selectedArea}</span>
             <ChevronIcon isOpen={isDropdownOpen}>
               <ChevronDown size={16} />
             </ChevronIcon>
@@ -92,7 +122,7 @@ const { selectedArea, setSelectedArea } = useArea();
                 <DropdownItem
                   key={index}
                   onClick={() => {
-                    setSelectedArea(area); // ✅ Save selected area
+                    setSelectedArea(area);
                     setIsDropdownOpen(false);
                   }}
                 >
@@ -109,10 +139,9 @@ const { selectedArea, setSelectedArea } = useArea();
 
 export default Individual_subHeader;
 
-
 const SubHeaderContainer = styled.div`
   background-color: #ffffff;
-  border-bottom: 1px solid #9d9d9d;
+  border-bottom: 1px solid #e5e7eb;
   padding: 0 4rem;
   
   position: sticky;
@@ -129,7 +158,7 @@ const SubHeaderContainer = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding: 0 0.5rem;
+    padding: 0;
     top: 80px;
   }
 `;
@@ -138,22 +167,49 @@ const SubHeaderContent = styled.div`
   max-width: 1400px;
   margin: 0 auto;
   display: flex;
-  align-items: center;
-  gap: 2rem;
-  padding-top: 1em;
-  padding-bottom: 1rem;
+  flex-direction: column;
+  gap: 0;
+  padding: 1rem 0;
 
   @media (max-width: 1024px) {
-    gap: 1rem;
+    padding: 0.75rem 0;
   }
 
   @media (max-width: 768px) {
-    gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    gap: 0;
+  }
+
+  @media (max-width: 480px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    gap: 0;
+  }
+`;
+
+const NavButtonsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+
+  @media (max-width: 1024px) {
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    gap: 0.75rem;
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    padding: 0.75rem 1rem;
 
     &::-webkit-scrollbar {
       display: none;
@@ -161,8 +217,9 @@ const SubHeaderContent = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    justify-content: center;
   }
 `;
 
@@ -171,32 +228,51 @@ const NavButton = styled.button`
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1.25rem;
   background: none;
-  border: 2px solid ${(props) => (props.active ? "#6b46c1" : "transparent")};
+  border: none;
   border-radius: 0.5rem;
   cursor: pointer;
   font-size: 0.95rem;
   font-weight: 500;
   color: ${(props) => (props.active ? "#6b46c1" : "#6b7280")};
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   white-space: nowrap;
   background-color: ${(props) => (props.active ? "#f3e8ff" : "transparent")};
   flex-shrink: 0;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -1rem;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: ${(props) => (props.active ? "#6b46c1" : "transparent")};
+    transition: background-color 0.2s ease;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
 
   @media (max-width: 1024px) {
-    padding: 0.5rem 0.75rem;
+    padding: 0.6rem 1rem;
     font-size: 0.9rem;
+    gap: 0.4rem;
   }
 
   @media (max-width: 768px) {
-    padding: 0.5rem 0.6rem;
+    padding: 0.5rem 0.75rem;
     gap: 0.3rem;
+    min-width: 80px;
   }
 
   @media (max-width: 480px) {
-    padding: 0.4rem 0.5rem;
+    padding: 0.4rem 0.6rem;
     min-width: 70px;
+    gap: 0.25rem;
   }
 `;
 
@@ -208,45 +284,66 @@ const IconWrapper = styled.div`
 
   svg {
     @media (max-width: 768px) {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
     }
 
     @media (max-width: 480px) {
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
     }
   }
 `;
 
 const Label = styled.span`
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #0a0a0a;
+  font-size: 0.813rem;
+  font-weight: 500;
+  color: inherit;
 
   @media (max-width: 1024px) {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
   }
 
   @media (max-width: 768px) {
-    font-size: 0.65rem;
+    font-size: 0.7rem;
   }
 
   @media (max-width: 480px) {
-    font-size: 0.6rem;
+    font-size: 0.65rem;
   }
 `;
 
 const FilterSection = styled.div`
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
   position: relative;
   flex-shrink: 0;
 
-  @media (max-width: 768px) {
-    margin-left: 0.5rem;
+  /* Desktop version - inline with nav buttons */
+  &.desktop-filter {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  /* Mobile version - separate row below nav buttons */
+  &.mobile-filter {
+    display: none;
+
+    @media (max-width: 768px) {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      padding: 0 1rem 0.75rem 1rem;
+      border-top: 1px solid #f3f4f6;
+    }
+
+    @media (max-width: 480px) {
+      padding: 0 1rem 0.75rem 1rem;
+      height: 60px;
+    }
   }
 `;
 
@@ -255,44 +352,50 @@ const FilterButton = styled.button`
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background-color: ${(props) => (props.isOpen ? "#f3e8ff" : "#f3f4f6")};
-  border: 2px solid ${(props) => (props.isOpen ? "#6b46c1" : "#e5e7eb")};
+  background-color: ${(props) => (props.isOpen ? "#f3e8ff" : "transparent")};
+  border: 1px solid ${(props) => (props.isOpen ? "#6b46c1" : "#d1d5db")};
   border-radius: 0.5rem;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   color: ${(props) => (props.isOpen ? "#6b46c1" : "#374151")};
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   white-space: nowrap;
 
   &:hover {
-    background-color: ${(props) => (props.isOpen ? "#f3e8ff" : "#e5e7eb")};
-    border-color: ${(props) => (props.isOpen ? "#6b46c1" : "#d1d5db")};
+    background-color: ${(props) => (props.isOpen ? "#f3e8ff" : "#f9fafb")};
   }
 
   @media (max-width: 1024px) {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.85rem;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.813rem;
   }
 
   @media (max-width: 768px) {
-    padding: 0.4rem 0.6rem;
-    font-size: 0.8rem;
-    gap: 0.3rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.813rem;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 100%;
+    justify-content: center;
   }
 
   @media (max-width: 480px) {
-    padding: 0.4rem 0.5rem;
+    padding: 0.45rem 0.75rem;
     font-size: 0.75rem;
-
-    span {
-      display: none;
-    }
+    gap: 0.4rem;
   }
 
   svg {
+    flex-shrink: 0;
+
     @media (max-width: 768px) {
       width: 16px;
       height: 16px;
+    }
+
+    @media (max-width: 480px) {
+      width: 15px;
+      height: 15px;
     }
   }
 `;
@@ -300,14 +403,20 @@ const FilterButton = styled.button`
 const ChevronIcon = styled.div`
   display: flex;
   align-items: center;
-  transition: transform 0.3s ease;
+  transition: transform 0.2s ease;
   transform: ${(props) => (props.isOpen ? "rotate(180deg)" : "rotate(0deg)")};
   color: inherit;
+  flex-shrink: 0;
 
   svg {
     @media (max-width: 768px) {
       width: 14px;
       height: 14px;
+    }
+
+    @media (max-width: 480px) {
+      width: 12px;
+      height: 12px;
     }
   }
 `;
@@ -315,61 +424,56 @@ const ChevronIcon = styled.div`
 const DropdownMenu = styled.div`
   position: absolute;
   right: 0;
-  top: 100%;
-  margin-top: 0.5rem;
+  top: calc(100% + 0.5rem);
   width: 12rem;
   background-color: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  z-index: 50;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 100;
   overflow: hidden;
   max-height: 300px;
   overflow-y: auto;
 
   @media (max-width: 768px) {
-    width: 10rem;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: calc(100% - 2rem);
+    max-width: 280px;
     max-height: 250px;
   }
 
   @media (max-width: 480px) {
-    width: 9rem;
+    max-width: 240px;
     max-height: 200px;
-    right: -1rem;
   }
 `;
 
 const DropdownItem = styled.button`
   width: 100%;
   text-align: left;
-  padding: 0.5rem 1rem;
+  padding: 0.625rem 1rem;
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   color: #374151;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 
   &:hover {
     background-color: #f3e8ff;
     color: #6b46c1;
   }
 
-  &:first-child {
-    border-radius: 0.5rem 0.5rem 0 0;
-  }
-
-  &:last-child {
-    border-radius: 0 0 0.5rem 0.5rem;
-  }
-
   @media (max-width: 768px) {
-    padding: 0.4rem 0.75rem;
-    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.813rem;
   }
 
   @media (max-width: 480px) {
-    padding: 0.4rem 0.6rem;
-    font-size: 0.8rem;
+    padding: 0.5rem 0.65rem;
+    font-size: 0.75rem;
   }
 `;

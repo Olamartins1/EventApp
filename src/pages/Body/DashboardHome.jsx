@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import {
   BsBuilding,
   BsCalendar2Check,
@@ -18,78 +19,141 @@ import {
   FiX,
 } from "react-icons/fi";
 import { TbCurrencyNaira } from "react-icons/tb";
+import { LuBuilding2 } from "react-icons/lu";
 import { IoTrendingUpOutline, IoAddCircleOutline } from "react-icons/io5";
 import { HiOutlineUserCircle } from "react-icons/hi";
 
 const DashboardHome = () => {
-  const statsData = [
-    {
-      title: "Total Venues",
-      value: "0",
-      icon: <BsBuilding />,
-      iconBg: "#e9d5ff",
-      iconColor: "purple",
-    },
-    {
-      title: "Active Bookings",
-      value: "0",
-      icon: <FiCalendar />,
-      iconBg: "#fef3c7",
-      iconColor: "#f59e0b",
-    },
-    {
-      title: "Revenue(This Month)",
-      value: "#0",
-      icon: <TbCurrencyNaira />,
-      iconBg: "#bbf7d0",
-      iconColor: "#22c55e",
-    },
-    {
-      title: "Occupancy Rate",
-      value: "0%",
-      icon: <IoTrendingUpOutline />,
-      iconBg: "#e0e7ff",
-      iconColor: "#6366f1",
-    },
-  ];
+  const [statsData, setStatsData] = useState({});
+  console.log("the data", statsData)
+  const [loading, setLoading] = useState(true)
+   const token = localStorage.getItem("authToken");
+  const user = JSON.parse(localStorage.getItem("user"))
 
-  return (
-    <Container>
-      <Wrapper>
-        <WelcomeSection>
-          <WelcomeText>Welcome, Success</WelcomeText>
-          <DateText>Friday, October 29, 2025</DateText>
-        </WelcomeSection>
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true)
+        const res = await axios.get("https://eventiq-final-project.onrender.com/api/v1/dashboard", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        console.log("the res data", res.data?.data)
+        setStatsData(res.data?.data || {}); 
+        
 
+      }catch(err){
+        console.log(err)
+      }finally{
+        setLoading(false)
+      }
+
+        
+
+    };
+    fetchData();
+  }, [token]);
+
+return (
+  <Container>
+    <Wrapper>
+      <WelcomeSection>
+        <WelcomeText>Welcome, {user.firstName}</WelcomeText>
+        <DateText>
+          {new Date().toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </DateText>
+      </WelcomeSection>
+
+      {loading ? (
+        <h1>Loading...</h1>
+      ) : (
         <StatsGrid>
-          {statsData.map((stat, index) => (
-            <StatCard key={index}>
-              <StatHeader>
-                <StatTitle>{stat.title}</StatTitle>
-                <StatIcon $bgColor={stat.iconBg} $color={stat.iconColor}>
-                  {stat.icon}
-                </StatIcon>
-              </StatHeader>
-              <StatValue>{stat.value}</StatValue>
-            </StatCard>
-          ))}
+          <StatCard>
+            <StatHeader>
+              <StatTitle>Total Venues  </StatTitle>
+              <StatIcon
+                $bgColor={statsData.iconBg}
+                $color={statsData.iconColor}
+              >
+              <LuBuilding2 style={{color: "purple"}}/>
+              </StatIcon>
+            </StatHeader>
+            <StatValue>{statsData?.totalVenues?.total }</StatValue>
+          </StatCard>
+          <StatCard>
+            <StatHeader>
+              <StatTitle>Active Bookings  </StatTitle>
+              <StatIcon
+                $bgColor={statsData.iconBg}
+                $color={statsData.iconColor}
+              >
+                < FiCalendar style={{stroke: "yellow"}}/>
+              </StatIcon>
+            </StatHeader>
+            <StatValue>{statsData?.activeBooking?.confirmed }</StatValue>
+          </StatCard>
+           <StatCard>
+            <StatHeader>
+              <StatTitle>Revenue (this Month) </StatTitle>
+              <StatIcon
+                $bgColor={statsData.iconBg}
+                $color={statsData.iconColor}
+              >
+               <TbCurrencyNaira style={{stroke: "green"}}/>
+              </StatIcon>
+            </StatHeader>
+            <StatValue>₦{statsData?.revenue?.total }</StatValue>
+          </StatCard>
+           <StatCard>
+            <StatHeader>
+              <StatTitle>Occupancy Rate  </StatTitle>
+              <StatIcon
+                $bgColor={statsData.iconBg}
+                $color={statsData.iconColor}
+              >
+                <IoTrendingUpOutline style={{stroke: "purple"}}/>
+              </StatIcon>
+            </StatHeader>
+            <StatValue>{statsData?.occupancyRate?.total }%</StatValue>
+          </StatCard>
         </StatsGrid>
+      )}
+ <BookingCard>
+      <BookingInfo>
+        <VenueName>Grand Luxe Ballroom</VenueName>
+        <CustomerName>Chioma Adeleke • Oct 25, 2025</CustomerName>
+        <Occasion>Wedding Anniversary</Occasion>
+        <Price>₦250,000</Price>
+      </BookingInfo>
 
-        <EmptyState>
-          <EmptyIcon>
-            <BsBox />
-          </EmptyIcon>
-          <EmptyTitle>No Records Yet</EmptyTitle>
-          <EmptyText>
-            Create your first venue to start managing bookings and events
-          </EmptyText>
-        </EmptyState>
-      </Wrapper>
-    </Container>
-  );
+      <Actions>
+        <AcceptButton>Accept Booking</AcceptButton>
+        <RejectButton>Reject</RejectButton>
+      </Actions>
+    </BookingCard>
+      <EmptyState>
+        <EmptyIcon>
+          <BsBox />
+        </EmptyIcon>
+        <EmptyTitle>No Records Yet</EmptyTitle>
+        <EmptyText>
+          Create your first venue to start managing bookings and events
+        </EmptyText>
+      </EmptyState>
+    </Wrapper>
+  </Container>
+);
+
 };
 
 export default DashboardHome;
+
 
 const Container = styled.div`
   width: 100%;
@@ -97,6 +161,8 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   padding-top: 30px;
+  background: #f8f9fa;
+  gap: 1rem;
 
   @media (max-width: 768px) {
     padding-top: 20px;
@@ -108,12 +174,91 @@ const Wrapper = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  gap: 1rem;
 
   @media (max-width: 768px) {
     width: 90%;
   }
 `;
+ const BookingCard = styled.div`
+  background: #fff;
+  border-radius: 12px;
+  height: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.4rem;
+`;
 
+ const BookingInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+
+`;
+
+ const VenueName = styled.h3`
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e1e1e;
+`;
+
+ const CustomerName = styled.p`
+  font-size: 14px;
+  color: #666;
+`;
+
+ const Occasion = styled.p`
+  font-size: 14px;
+  color: #999;
+`;
+
+ const Price = styled.p`
+  font-size: 16px;
+  font-weight: 600;
+  color: #6b46c1;
+  margin-top: 4px;
+  
+`;
+
+ const Actions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+ const AcceptButton = styled.button`
+  background: #00c853;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: #00b44a;
+  }
+`;
+
+ const RejectButton = styled.button`
+  background: transparent;
+  color: #e53935;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #e53935;
+  border-radius: 8px;
+  padding: 10px 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: red;
+    color: white
+  }
+`;
 const WelcomeSection = styled.div`
   display: flex;
   flex-direction: column;
@@ -216,6 +361,8 @@ const StatTitle = styled.h3`
   color: #6b7280;
   margin: 0;
   line-height: 1.4;
+  display: flex;
+  justify-content: space-between;
 
   @media (max-width: 480px) {
     font-size: 13px;
@@ -226,12 +373,13 @@ const StatIcon = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background-color: ${(props) => props.$bgColor};
-  color: ${(props) => props.$color};
+  /* background-color: ${(props) => props.$bgColor};
+  color: ${(props) => props.$color}; */
+  background: #F5E5C3;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 25px;
   flex-shrink: 0;
 
   @media (max-width: 480px) {
@@ -245,6 +393,7 @@ const StatValue = styled.div`
   font-size: 32px;
   font-weight: 700;
   color: #111827;
+
 
   @media (max-width: 768px) {
     font-size: 28px;

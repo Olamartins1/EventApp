@@ -501,6 +501,7 @@ const Halls_container = styled.div`
   gap: 15px;
   width: 100%;
   height: 100%;
+
 justify-content: center;
 align-items: center;
 

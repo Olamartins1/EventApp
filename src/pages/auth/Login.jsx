@@ -94,7 +94,6 @@ if (response.data && response.data.token && response.data.data) {
   }, 2000);
       } else {
         toast.error("Invalid response from server");
-            setLoading(false);
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -113,7 +112,7 @@ if (response.data && response.data.token && response.data.data) {
   } else {
     toast.error(message || "Something went wrong. Please try again.");
   }
-
+} finally {
   setLoading(false);
 }
   };
