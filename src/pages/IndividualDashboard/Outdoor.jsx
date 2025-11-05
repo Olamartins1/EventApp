@@ -7,10 +7,10 @@ import {useEffect, useState} from "react"
 
  
 const Outdoor = () => {
-const token = localStorage.getItem("authToken")
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const token = localStorage.getItem("authToken")
 const {selectedArea}= useArea()
   useEffect(() => {
     const fetchIndoorVenues = async () => {

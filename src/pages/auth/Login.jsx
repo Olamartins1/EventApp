@@ -10,11 +10,14 @@ import { LuUser } from "react-icons/lu";
 import SignupModal from "../../components/static/signupModal/signupModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import VerificationModal from "../../components/static/VerificationModal/VerificationModal";
+import Loading from "../../components/static/Loading/Loading"
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
+
   const navigate = useNavigate();
 
  
@@ -75,6 +78,7 @@ if (response.data && response.data.token && response.data.data) {
  localStorage.setItem("authToken", response.data.token);
   localStorage.setItem("user", JSON.stringify(user));
   localStorage.setItem("userRole", userRole);
+  localStorage.setItem("signupPassword", formData.password);
        
         // setTimeout(() => navigate("/dashboardHome"), 2000);
          setTimeout(() => {
@@ -86,29 +90,66 @@ if (response.data && response.data.token && response.data.data) {
       // fallback (if role missing or new role added)
       navigate("/individual-dashboard");
     }
-  }, 1500);
+    setLoading(false);
+  }, 2000);
       } else {
         toast.error("Invalid response from server");
+            setLoading(false);
       }
     } catch (error) {
       console.error("Login error:", error);
+
+        const message = error.response?.data?.message;
     
-        toast.error(error.response?.data?.message  || "Something Went Wrong");
+  //       toast.error(error.response?.data?.message  || "Something Went Wrong");
       
-    } finally {
-      setLoading(false);
-    }
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+    if (message?.toLowerCase().includes("verify")) {
+    toast.warn("Please verify your account before logging in.");
+    openVerificationModal();
+  } else {
+    toast.error(message || "Something went wrong. Please try again.");
+  }
+
+  setLoading(false);
+}
   };
+
+  const resendVerificationCode = async (email) => {
+  try {
+    await axios.post(
+      "https://eventiq-final-project.onrender.com/api/v1/resendOtp",
+      { email }
+    );
+    toast.info("A new verification code has been sent to your email.");
+  } catch (error) {
+    console.error("Resend OTP error:", error);
+    toast.error("Failed to resend verification code. Please try again.");
+  }
+};
 
   // Modal controls
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  // const openVerificationModal = () => setShowVerificationModal(true);
+
+  const openVerificationModal = async () => {
+  setShowVerificationModal(true);
+  await resendVerificationCode(formData.email);
+};
+const closeVerificationModal = () => setShowVerificationModal(false);
+
 
   useEffect(() => {
     document.body.style.overflow = isModalOpen ? "hidden" : "unset";
   }, [isModalOpen]);
 
   return (
+    <>
+        {loading && <Loading />}
     <section className="signup-container-Login">
       <ToastContainer position="top-right" autoClose={3000} />
 
@@ -207,9 +248,13 @@ if (response.data && response.data.token && response.data.data) {
             {/* Signup Link */}
             <p className="login-text-Login">
               Don't have an account? <a onClick={openModal}>Sign Up</a>
-              {isModalOpen && <SignupModal onClose={closeModal} />}
+        
             </p>
           </form>
+                  {isModalOpen && <SignupModal onClose={closeModal} />}
+              {showVerificationModal && (
+  <VerificationModal email={formData.email} onClose={closeVerificationModal} />
+)}
 
           <div className="security-note-Login">
             <svg
@@ -231,6 +276,7 @@ if (response.data && response.data.token && response.data.data) {
         </div>
       </section>
     </section>
+  </>
   );
 };
 

@@ -25,6 +25,7 @@ import MyProfile from "./../pages/IndividualDashboard/Profile/MyProfile";
 import MyBooking from "./../pages/IndividualDashboard/Profile/MyBooking";
 import MyNotification from "./../pages/IndividualDashboard/Profile/MyNotification";
 import Setting from "./../pages/IndividualDashboard/Profile/Setting";
+import Loading from "../components/static/Loading/Loading";
 
 export const Element = createHashRouter([
   {
@@ -59,6 +60,7 @@ export const Element = createHashRouter([
     ],
   },
   {
+    
     path: "/individual-dashboard",
     element: <IndividualLayout />,
     children: [
@@ -123,4 +125,8 @@ export const Element = createHashRouter([
     path: "/signup-individual",
     element: <SignupIndividual />,
   },
+  {
+  path: "/test-loading",
+  element: <Loading />,
+},
 ]);

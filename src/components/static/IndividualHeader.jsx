@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import { Search } from "lucide-react";
 import { FiLogOut } from "react-icons/fi";
 import styled from "styled-components";
- const User = localStorage.getItem("user");
-const parsedUser = JSON.parse(User)
+
 const Individual_header = () => {
+
+   const User = localStorage.getItem("user");
+const parsedUser = JSON.parse(User)
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
   const toggleDropdown = () => {

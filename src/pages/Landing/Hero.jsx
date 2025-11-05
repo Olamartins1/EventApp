@@ -215,6 +215,7 @@ const Container = styled.div`
   overflow: hidden;
   padding-top: 100px;
   padding-bottom: 130px;
+  
 
   @media (max-width: 1024px) {
     padding-top: 80px;
