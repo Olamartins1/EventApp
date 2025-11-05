@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 
 const Outdoor = () => {
+
   const token = localStorage.getItem("authToken");
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);

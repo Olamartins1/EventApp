@@ -143,8 +143,9 @@ const SubHeaderContainer = styled.div`
   background-color: #ffffff;
   border-bottom: 1px solid #e5e7eb;
   padding: 0 4rem;
+  
   position: sticky;
-  top: 121px;
+  top: 95px;
   z-index: 99;
 
   @media (max-width: 1024px) {

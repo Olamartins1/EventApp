@@ -73,14 +73,14 @@
 }
 
 .code-input:focus {
-  border-color: #7c3aed;
+  border-color: #603379;
   outline: none;
 }
 
 
 .verify-btn {
   width: 100%;
-  background-color: #7c3aed;
+  background-color: #603379;
   color: white;
   font-weight: 500;
   padding: 0.75rem;
@@ -93,7 +93,7 @@
 }
 
 .verify-btn:hover {
-  background-color: #6d28d9;
+  background-color:#29083b;
 }
 
 /* Resend Text */
@@ -116,8 +116,8 @@
 
 .resend-btn {
   background-color: transparent;
-  border: 2px solid #7c3aed;
-  color: #7c3aed;
+  border: 2px solid #603379;
+  color: #603379;
   font-weight: 600;
   font-size: 1rem;
   padding: 0.5rem 1.25rem;
@@ -127,7 +127,7 @@
 }
 
 .resend-btn:hover {
-  background-color: #7c3aed;
+  background-color: #29083b;
   color: white;
   transform: translateY(-2px);
 }

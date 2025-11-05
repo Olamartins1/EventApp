@@ -174,6 +174,7 @@ const Container = styled.div`
   padding: 5rem 1.25rem;
   text-align: center;
 
+
   h2 {
     font-size: 1.875rem;
     font-weight: 600;

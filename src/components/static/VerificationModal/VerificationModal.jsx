@@ -1,39 +1,44 @@
 
 
 
-
 // import { useState, useRef, useEffect } from "react";
 // import { X } from "lucide-react";
 // import "./VerificationModal.css";
 // import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 // import { toast } from "react-toastify";
+// import Loading from "../../../components/static/Loading/Loading";
 
 // const VerificationModal = ({ email, onClose }) => {
 //   const [code, setCode] = useState(["", "", "", "", "", ""]);
-//    const [timeLeft, setTimeLeft] = useState(600);
+//   const [timer, setTimer] = useState(59);
 //   const [isResending, setIsResending] = useState(false);
 //   const inputRefs = useRef([]);
-//    const email = user?.email || (localStorage.getItem("signupEmail") ?? "");
-//   const nav = useNavigate();
+// const [isLoading, setIsLoading] = useState(false);
+//   const navigate = useNavigate();
 
+//   // ✅ Use email safely
+//   const userEmail = email || localStorage.getItem("signupEmail");
+//     const savedPassword = localStorage.getItem("signupPassword");
+//   const userRole = localStorage.getItem("userRole");
+//   if (!userEmail) {
+//     console.warn("⚠️ No email found for verification.");
+//   }
 
+//   // Countdown timer
 //   useEffect(() => {
-//     const interval = setInterval(() => {
-//       setTimer((prev) => (prev > 0 ? prev - 1 : 0));
-//     }, 1000);
+//     if (timer <= 0) return;
+//     const interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
 //     return () => clearInterval(interval);
-//   }, []);
+//   }, [timer]);
 
-
+//   // Handle input change
 //   const handleChange = (index, value) => {
-//     if (value.length > 1) value = value.slice(-1);
-//     if (/^\d*$/.test(value)) {
-//       const newCode = [...code];
-//       newCode[index] = value;
-//       setCode(newCode);
-//       if (value && index < 5) inputRefs.current[index + 1]?.focus();
-//     }
+//     if (!/^\d*$/.test(value)) return;
+//     const newCode = [...code];
+//     newCode[index] = value.slice(-1);
+//     setCode(newCode);
+//     if (value && index < 5) inputRefs.current[index + 1]?.focus();
 //   };
 
 //   const handleKeyDown = (index, e) => {
@@ -47,147 +52,92 @@
 //     if (/^\d+$/.test(pasted)) {
 //       const newCode = pasted.split("");
 //       setCode([...newCode, ...Array(6 - newCode.length).fill("")]);
-//       inputRefs.current[Math.min(pasted.length, 5)]?.focus();
 //     }
 //   };
 
 //   const formatTime = (seconds) => {
 //     const mins = Math.floor(seconds / 60);
 //     const secs = seconds % 60;
-//     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+//     return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
 //   };
 
+//   // ✅ Verify OTP
 //   const handleVerify = async () => {
 //     const verificationCode = code.join("");
+
 //     if (verificationCode.length < 6) {
 //       toast.error("Please enter the 6-digit code");
 //       return;
 //     }
 
-//     try {
-  
-//     await axios.post("https://eventiq-final-project.onrender.com/api/v1/verify", {
-//   otp: verificationCode,
-//   email: userEmail,
-// });
-
-// toast.success("Account created and verified successfully! 🎉");
-// setTimeout(() => {
-//   navigate("/dashboardHome");
-//   onClose();
-// }, 1500);
-//   } catch (error) {
-//     toast.error(error.response?.data?.message || "Invalid or expired code");
-//   }
-// };
-//   const handleResend = async () => {
 //     if (!userEmail) {
+//       toast.error("Email not found — please sign up again");
+//       return;
+//     }
+//       setIsLoading(true);
+
+//     try {
+//       const res = await axios.post(
+//         "https://eventiq-final-project.onrender.com/api/v1/verify",
+//         {
+//           email: userEmail,
+//           otp: verificationCode,
+//         }
+//       );
+
+//       toast.success(res.data.message || "Account verified successfully!");
+//       localStorage.removeItem("signupEmail");
+
+//       // ✅ Close modal and navigate after short delay
+//       setTimeout(() => {
+//         onClose?.();
+//         // navigate("/dashboardHome");
+
+
+//   if (userRole === "venue-owner") {
+//     navigate("/dashboardHome");
+//   } else {
+//     navigate("/individual-dashboard");
+//   }
+
+//       }, 1500);
+//     } catch (error) {
+//       const errMsg = error.response?.data?.message || "Verification failed";
+//       toast.error(errMsg);
+//       console.error("Verification error:", error);
+//     }finally{
+//       setIsLoading(false)
+//     }
+//   };
+
+//   // ✅ Resend OTP
+//   const handleResend = async () => {
+//     if (!email) {
 //       toast.error("Email not found — please sign up again");
 //       return;
 //     }
 
 //     setIsResending(true);
 //     try {
-//       await axios.post("https://eventiq-final-project.onrender.com/api/v1/resendOtp", {
-//         email: userEmail,
-//       });
-//       toast.success("A new verification code has been sent!");
+//       const res = await axios.post(
+//         "https://eventiq-final-project.onrender.com/api/v1/resendOtp",
+//         { email }
+//       );
+//       toast.success(res.data.message || "New code sent to your email!");
 //       setTimer(59);
-//     } catch (error) {
-//       toast.error(error.response?.data?.message || "Failed to resend code");
-//     } finally {
-//       setIsResending(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     if (timeLeft <= 0) return;
-
-//     const interval = setInterval(() => {
-//       setTimeLeft((prev) => prev - 1);
-//     }, 1000);
-
-//     return () => clearInterval(interval);
-//   }, [timeLeft]);
-
-//   const formatTime = (seconds) => {
-//     const mins = Math.floor(seconds / 60);
-//     const secs = seconds % 60;
-//     return `${mins}: ${secs < 10 ? "0" : ""}${secs}`;
-//   };
-
-//   const handleChange = (value, index) => {
-//     if (!/^\d*$/.test(value)) return;
-
-//     const newCode = [...code];
-//     newCode[index] = value.slice(-1);
-//     setCode(newCode);
-
-//     if (value && index < code.length - 1) {
-//       const nextInput = document.getElementById(`code-${index + 1}`);
-//       if (nextInput) nextInput.focus();
-//     }
-//   };
-
-//   const verifyCode = async () => {
-//     const enteredCode = code.join("");
-//     console.log("Verifying:", { email, otp: enteredCode });
-//     setLoading(true);
-//     setMessage("");
-//     console.log("Code entered:", enteredCode);
-//     console.log("Verifying for email:", email, "and OTP:", enteredCode);
-//       if (!email) {
-//     toast.error("❌ No email found. Please sign up again.");
-//     return;
-//   }
-
-//     try {
-//       const res = await axios.post("https://eventiq-final-project.onrender.com/api/v1/verify", {
-//         email,
-//         otp: enteredCode,
-//       });
-
-//       if (res.data) {
-//         setMessage(res.data);
-//         toast.success("✅ Response:" + res.data.message);
-//         localStorage.removeItem("pendingEmail");
-//          nav("/");
-//         openLoginModal();
-//       }
-//     } catch (error) {
-//       const errMsg = error.response?.data?.message || "Verification failed";
-//       setMessage(errMsg);
-//       toast.error("❌ Verification failed:" + errMsg);
-//     } finally {
-//       setIsResending(false);
-//     }
-
-//     console.log("Verifying for email:", email);
-//   };
-
-//   const resendCode = async () => {
-//     setCode(["", "", "", "", "", ""]);
-//     setTimeLeft(100);
-//     console.log("Resend code triggered");
-//     console.log("Resending to email:", email);
-//       if (!email) {
-//     toast.error("❌ No email found. Please sign up again.");
-//     return;
-//   }
-
-//     try {
-//       const res = await axios.post("https://eventiq-final-project.onrender.com/api/v1/resendOtp", {
-//         email,
-//       });
-//       toast.success("📩 A new verification code has been sent to your email.");
-//       console.log("Resend response:", res.data);
+//       setCode(["", "", "", "", "", ""]);
 //     } catch (error) {
 //       const errMsg = error.response?.data?.message || "Failed to resend code";
-//       toast.error("❌ " + errMsg);
+//       toast.error(errMsg);
+//       console.error("Resend error:", error);
+//     } finally {
+//       setIsResending(false);
 //     }
 //   };
 
-//   const isCodeComplete = code.every((digit) => digit !== "");
+//     if (isLoading) {
+//     return <Loading />;
+//   }
 
 //   return (
 //     <div className="modal-overlay">
@@ -198,7 +148,7 @@
 
 //         <h2 className="modal-title">Verification</h2>
 //         <p className="modal-description">
-//           A verification code has been sent to your email address.
+//           A verification code has been sent to <b>{email}</b>. Please enter it below.
 //         </p>
 
 //         <div className="code-inputs">
@@ -249,19 +199,23 @@ import "./VerificationModal.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Loading from "../../../components/static/Loading/Loading";
 
 const VerificationModal = ({ email, onClose }) => {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [timer, setTimer] = useState(59);
   const [isResending, setIsResending] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const inputRefs = useRef([]);
   const navigate = useNavigate();
 
-  // ✅ Use email safely
+  // ✅ Use saved email + password for auto-login
   const userEmail = email || localStorage.getItem("signupEmail");
-  const userRole = localStorage.getItem("userRole");
+  const savedPassword = localStorage.getItem("signupPassword"); // must be saved during signup
+  // const userRole = localStorage.getItem("userRole");
+
   if (!userEmail) {
-    console.warn("⚠️ No email found for verification.");
+    console.warn("No email found for verification.");
   }
 
   // Countdown timer
@@ -300,7 +254,7 @@ const VerificationModal = ({ email, onClose }) => {
     return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
-  // ✅ Verify OTP
+  // Verify OTP and then Auto-login
   const handleVerify = async () => {
     const verificationCode = code.join("");
 
@@ -314,8 +268,11 @@ const VerificationModal = ({ email, onClose }) => {
       return;
     }
 
+    setIsLoading(true);
+
     try {
-      const res = await axios.post(
+      // Step 1: Verify the user
+      const verifyRes = await axios.post(
         "https://eventiq-final-project.onrender.com/api/v1/verify",
         {
           email: userEmail,
@@ -323,32 +280,60 @@ const VerificationModal = ({ email, onClose }) => {
         }
       );
 
-      toast.success(res.data.message || "Account verified successfully!");
+      toast.success(verifyRes.data.message || "Account verified successfully!");
       localStorage.removeItem("signupEmail");
 
-      // ✅ Close modal and navigate after short delay
-      setTimeout(() => {
+      // Step 2: Automatically log in the user
+      // Ensure you have the saved password from signup
+      if (!savedPassword) {
+        toast.info("Please log in manually — password not saved.");
         onClose?.();
-        // navigate("/dashboardHome");
+        navigate("/login");
+        return;
+      }
 
+      const loginRes = await axios.post(
+        "https://eventiq-final-project.onrender.com/api/v1/login",
+        {
+          email: userEmail,
+          password: savedPassword,
+        }
+      );
 
-  if (userRole === "venue-owner") {
-    navigate("/dashboardHome");
-  } else {
-    navigate("/individual-dashboard");
-  }
+      // Step 3: Save token & user info, then redirect
+      if (loginRes.data && loginRes.data.token && loginRes.data.data) {
+        const user = loginRes.data.data;
+        const role = user.role;
 
-      }, 1500);
+        localStorage.setItem("authToken", loginRes.data.token);
+        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("userRole", role);
+
+        toast.success("Verification complete! Logging you in...");
+
+        setTimeout(() => {
+          onClose?.();
+          if (role === "venue-owner") {
+            navigate("/dashboardHome");
+          } else {
+            navigate("/individual-dashboard");
+          }
+        }, 1500);
+      } else {
+        toast.error("Login failed after verification. Please try again.");
+      }
     } catch (error) {
       const errMsg = error.response?.data?.message || "Verification failed";
       toast.error(errMsg);
       console.error("Verification error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   // ✅ Resend OTP
   const handleResend = async () => {
-    if (!email) {
+    if (!userEmail) {
       toast.error("Email not found — please sign up again");
       return;
     }
@@ -357,7 +342,7 @@ const VerificationModal = ({ email, onClose }) => {
     try {
       const res = await axios.post(
         "https://eventiq-final-project.onrender.com/api/v1/resendOtp",
-        { email }
+        { email: userEmail }
       );
       toast.success(res.data.message || "New code sent to your email!");
       setTimer(59);
@@ -371,6 +356,10 @@ const VerificationModal = ({ email, onClose }) => {
     }
   };
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div className="modal-overlay">
       <div className="modal-container">
@@ -380,7 +369,7 @@ const VerificationModal = ({ email, onClose }) => {
 
         <h2 className="modal-title">Verification</h2>
         <p className="modal-description">
-          A verification code has been sent to <b>{email}</b>. Please enter it below.
+          A verification code has been sent to <b>{userEmail}</b>. Please enter it below.
         </p>
 
         <div className="code-inputs">

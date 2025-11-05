@@ -24,7 +24,8 @@ const LandingpageFooter = () => {
             <p>Connecting venues and events seamlessly.</p>
           </Footer_brand>
 
-          <Footer_section>
+<Footer_flex_Quicklegal>         
+  <Footer_section>
             <h3>Quick Links</h3>
             <Footer_list>
               <li>
@@ -45,7 +46,7 @@ const LandingpageFooter = () => {
             </Footer_list>
           </Footer_section>
 
-          <Footer_section>
+          <Footer_section0>
             <h3>Legal</h3>
             <Footer_list>
               <li>
@@ -55,9 +56,11 @@ const LandingpageFooter = () => {
                 <Footer_link href="#">Privacy Policy</Footer_link>
               </li>
             </Footer_list>
-          </Footer_section>
+          </Footer_section0>
+          </Footer_flex_Quicklegal>
+ 
 
-          <Footer_section>
+          <Footer_section1>
             <h3>Contact</h3>
             <Footer_email href="mailto:eventiq@gmail.com">
               eventiq@gmail.com
@@ -125,10 +128,11 @@ const LandingpageFooter = () => {
                 </svg>
               </Social_icon>
             </Social_icons>
-          </Footer_section>
+          </Footer_section1>
         </Footer_flex>
-
+    
         <Footer_divider>
+      <Line><hr></hr></Line>
           <p>© Eventiq 2025. All rights reserved.</p>
         </Footer_divider>
       </Container>
@@ -139,14 +143,52 @@ const LandingpageFooter = () => {
 export default LandingpageFooter;
 const Footer_divider = styled.div`
   margin-top: 70px;
-  border-top: 1px solid #27272a;
+  // border-top: 3px solid #27272a;
   padding-top: 2rem;
   p {
     text-align: center;
     color: #ffffff;
     font-size: 0.875rem;
-    margin: 0;
+    margin: 0 auto;
   }
+
+     @media (max-width: 1024px) {
+ 
+  }
+
+  @media (max-width: 768px) {
+  
+  }
+
+  @media (max-width: 480px) {
+width: 300px;
+ 
+p {
+    margin: auto;
+    margin-left: -25px;
+ 
+    
+  }
+    
+  }
+`;
+
+const Line = styled.div`
+
+     @media (max-width: 1024px) {
+ 
+  }
+
+  @media (max-width: 768px) {
+  
+  }
+
+  @media (max-width: 480px) {
+width: 350px;
+margin: auto;
+    margin-left: -40px;
+  }
+
 `;
 const Social_icon = styled.a`
   width: 2.5rem;
@@ -197,6 +239,71 @@ const Footer_section = styled.div`
     font-weight: 500;
     margin-bottom: 1rem;
   }
+
+  
+    @media (max-width: 1024px) {
+ 
+  }
+
+  @media (max-width: 768px) {
+  
+  }
+
+  @media (max-width: 480px) {
+
+  
+   
+  }
+`;
+
+const Footer_section0 = styled.div`
+  margin-bottom: 1rem;
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  
+    @media (max-width: 1024px) {
+ 
+  }
+
+  @media (max-width: 768px) {
+  
+  }
+
+  @media (max-width: 480px) {
+
+  
+   
+  }
+`;
+
+
+const Footer_section1 = styled.div`
+  margin-bottom: 1rem;
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  
+    @media (max-width: 1024px) {
+ 
+  }
+
+  @media (max-width: 768px) {
+  
+  }
+
+  @media (max-width: 480px) {
+
+
+  
+    
+  }
 `;
 const Footer_brand = styled.div`
   margin-bottom: 1rem;
@@ -218,14 +325,53 @@ const Footer_flex = styled.div`
   margin-bottom: 2rem;
   width: 100%;
   justify-content: space-between;
+   @media (max-width: 1024px) {
+ 
+  }
+
+  @media (max-width: 768px) {
+  
+  }
+
+  @media (max-width: 480px) {
+flex-direction: column;
+  
+   
+  }
+`;
+
+const Footer_flex_Quicklegal = styled.div`
+
+  @media (max-width: 480px) {
+  display:flex;
+  gap: 5rem;
+flex-direction: row;
+    
+  }
+
 `;
 const Container = styled.div`
   max-width: 80rem;
+
   margin: 0 auto;
   padding-left: 130px;
   padding-top: 30px;
   padding-bottom: 30px;
   padding-right: 130px;
+
+    @media (max-width: 1024px) {
+ 
+  }
+
+  @media (max-width: 768px) {
+  
+  }
+
+  @media (max-width: 480px) {
+  margin-left: -70px;
+  
+    
+  }
 `;
 const Footer = styled.footer`
   background-color: #18181b;
