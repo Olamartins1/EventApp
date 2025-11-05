@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { AuthContext } from "../../assets/AuthContext/AuthContext";
 import {
   FiPlus,
   FiPackage,
@@ -883,6 +884,8 @@ const Venues = () => {
 
   useEffect(() => {
     const fetchVenues = async () => {
+  const user = useContext(AuthContext)
+
       try {
         setLoading(true);
         const token = localStorage.getItem("authToken");
@@ -891,7 +894,7 @@ const Venues = () => {
         const userId = user?._id || user?.id;
 
         const response = await axios.get(
-          "https://eventiq-final-project.onrender.com/api/v1/venues",
+          `https://eventiq-final-project.onrender.com/api/v1/venues${user._id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1297,13 +1300,14 @@ const Venues = () => {
 
   useEffect(() => {
     const fetchFeatures = async () => {
+      const user = useContext(AuthContext)
       try {
         setLoading(true);
         const token = localStorage.getItem("authToken");
         console.log("🔑 Token from localStorage:", token);
 
         const response = await axios.get(
-          "https://eventiq-final-project.onrender.com/api/v1/features",
+          `https://eventiq-final-project.onrender.com/api/v1/venueowner${user._id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
