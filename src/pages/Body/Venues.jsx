@@ -967,10 +967,8 @@ const Venues = () => {
       setFormData({
         venuename: "",
         description: "",
-
         minimum: "",
         maximum: "",
-
         price: "",
         type: "indoor",
         amenities: [],
@@ -1596,7 +1594,7 @@ const Venues = () => {
                       <option value="indoor">Select type</option>
                       <option value="indoor">Indoor</option>
                       <option value="outdoor">Outdoor</option>
-                      <option value="hybrid">Hybrid</option>
+                      <option value="Multipurpose">Multipurpose</option>
                     </Select>
                   </FormGroup>
                 </FormRow>
