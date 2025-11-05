@@ -1,7 +1,4 @@
-
-
-
-import { useState, useEffect ,useContext} from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
@@ -13,25 +10,22 @@ import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "../.././assets/AuthContext/AuthContext";
 
 const Login = () => {
-    const { login } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
- 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
 
   const validateForm = () => {
     if (!formData.email.trim()) {
@@ -49,7 +43,6 @@ const Login = () => {
     return true;
   };
 
- 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -68,37 +61,38 @@ const Login = () => {
       // Backend should return a token or user info
       // if (response.data && response.data.token) {
       //   toast.success("Login successful 🎉");
-if (response.data && response.data.token && response.data.data) {
-  toast.success("Login successful");
-             login(response .data); 
+      if (response.data && response.data.token && response.data.data) {
+        toast.success("Login successful");
+        
+        login(response.data);
 
-    const user = response.data.data
-  const userRole = user.role;
+        const user = response.data.data;
+        const userRole = user.role;
+        console.log("User Role:", userRole);
         // localStorage.setItem("authToken", response.data.token);
         // localStorage.setItem("user", JSON.stringify(response.data.user));
- localStorage.setItem("authToken", response.data.token);
-  localStorage.setItem("user", JSON.stringify(user));
-  localStorage.setItem("userRole", userRole);
-       
+        // localStorage.setItem("authToken", response.data.token);
+        // localStorage.setItem("user", JSON.stringify(user));
+        // localStorage.setItem("userRole", userRole);
+
         // setTimeout(() => navigate("/dashboardHome"), 2000);
-         setTimeout(() => {
-    if (userRole === "venue-owner") {
-      navigate("/dashboardHome");
-    } else if (userRole === "client") {
-      navigate("/individual-dashboard");
-    } else {
-      // fallback (if role missing or new role added)
-      navigate("/individual-dashboard");
-    }
-  }, 1500);
+        setTimeout(() => {
+          if (userRole === "venue-owner") {
+            navigate("/dashboardHome");
+          } else if (userRole === "client") {
+            navigate("/individual-dashboard");
+          } else {
+            // fallback (if role missing or new role added)
+            navigate("/individual-dashboard");
+          }
+        }, 1500);
       } else {
         toast.error("Invalid response from server");
       }
     } catch (error) {
       console.error("Login error:", error);
-    
-        toast.error(error.response?.data?.message  || "Something Went Wrong");
-      
+
+      toast.error(error.response?.data?.message || "Something Went Wrong");
     } finally {
       setLoading(false);
     }
@@ -120,10 +114,16 @@ if (response.data && response.data.token && response.data.data) {
       <div className="left-section3">
         <div
           className="bg-image3"
-          style={{ backgroundImage: "url('https://res.cloudinary.com/depuy7bkr/image/upload/v1761918729/left_side_log_in_evenitq1_rpxkvp.png')" }}
+          style={{
+            backgroundImage:
+              "url('https://res.cloudinary.com/depuy7bkr/image/upload/v1761918729/left_side_log_in_evenitq1_rpxkvp.png')",
+          }}
         ></div>
 
-        <button className="back-btn3" onClick={() => navigate("/", { replace: true })}>
+        <button
+          className="back-btn3"
+          onClick={() => navigate("/", { replace: true })}
+        >
           <svg
             width="20"
             height="20"
@@ -141,7 +141,8 @@ if (response.data && response.data.token && response.data.data) {
             Log In to <br /> Continue.
           </h1>
           <p>
-            Manage your event halls with ease and get more bookings, all on Eventiq.
+            Manage your event halls with ease and get more bookings, all on
+            Eventiq.
           </p>
         </div>
       </div>
@@ -175,7 +176,8 @@ if (response.data && response.data.token && response.data.data) {
             {/* Password Field */}
             <div className="input-group-Login_password password-field-Login">
               <label>
-                <Lock size={14} className="label-icon-Login_password" /> Password
+                <Lock size={14} className="label-icon-Login_password" />{" "}
+                Password
               </label>
               <div className="password-box-Login">
                 <input
@@ -185,7 +187,10 @@ if (response.data && response.data.token && response.data.data) {
                   onChange={handleChange}
                   placeholder="Enter your password"
                 />
-                <button type="button" onClick={() => setShowPassword(!showPassword)}>
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
                   {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
                 </button>
               </div>
@@ -239,4 +244,3 @@ if (response.data && response.data.token && response.data.data) {
 };
 
 export default Login;
-
