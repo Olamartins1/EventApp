@@ -68,9 +68,7 @@ const All_venues = () => {
           venues.map((venue, index) => (
             <VenueCard
               key={venue._id}
-              onClick={() =>
-                navigate(`/individual-dashboard/venue/${venue._id}`)
-              }
+              onClick={() => Link(`/individual-dashboard/venue/${venue._id}`)}
             >
               <ImageWrapper>
                 <VenueImage
