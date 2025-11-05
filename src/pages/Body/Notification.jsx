@@ -1,65 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { FiPackage } from "react-icons/fi";
+import axios from "axios";
 
 const NotificationsContainer = styled.div`
   flex: 1;
   background-color: #f8f9fa;
   padding: 2rem;
   min-height: 100vh;
-
-  @media (max-width: 768px) {
-    padding: 1.5rem;
-  }
-
-  @media (max-width: 480px) {
-    padding: 1rem;
-  }
 `;
 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 3rem;
-  gap: 1rem;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
-  }
-`;
-
-const HeaderContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  margin-bottom: 2rem;
 `;
 
 const Title = styled.h1`
   font-size: 1.75rem;
   font-weight: 600;
   color: #1a1a1a;
-  margin: 0;
-
-  @media (max-width: 768px) {
-    font-size: 1.5rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 1.25rem;
-  }
 `;
 
 const Subtitle = styled.p`
   font-size: 0.95rem;
   color: #999;
   margin: 0;
-
-  @media (max-width: 480px) {
-    font-size: 0.875rem;
-  }
 `;
 
 const Badge = styled.div`
@@ -69,129 +35,161 @@ const Badge = styled.div`
   padding: 0.35rem 0.9rem;
   font-size: 0.875rem;
   font-weight: 500;
-  white-space: nowrap;
-  align-self: flex-start;
+`;
 
-  @media (max-width: 768px) {
-    align-self: flex-start;
-  }
+const NotificationList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+`;
 
-  @media (max-width: 480px) {
-    font-size: 0.8rem;
-    padding: 0.3rem 0.8rem;
-  }
+const NotificationItem = styled.div`
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+`;
+
+const EventTitle = styled.h3`
+  font-size: 1rem;
+  color: #1a1a1a;
+  margin: 0 0 0.25rem 0;
+  font-weight: 600;
+`;
+
+const EventDetails = styled.p`
+  font-size: 0.9rem;
+  color: #777;
+  margin: 0 0 0.25rem 0;
+`;
+
+const TimeAgo = styled.span`
+  font-size: 0.8rem;
+  color: #aaa;
+`;
+
+const Loading = styled.div`
+  text-align: center;
+  font-size: 1rem;
+  color: #555;
+  margin-top: 3rem;
 `;
 
 const EmptyState = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 400px;
-  gap: 1rem;
-  padding: 2rem;
-
-  @media (max-width: 768px) {
-    min-height: 300px;
-    padding: 1.5rem;
-  }
-
-  @media (max-width: 480px) {
-    min-height: 250px;
-    padding: 1rem;
-    gap: 0.75rem;
-  }
-`;
-
-const IconWrapper = styled.div`
-  font-size: 4rem;
-  color: #666;
-  margin-bottom: 0.5rem;
-
-  @media (max-width: 768px) {
-    font-size: 3.5rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 3rem;
-  }
-`;
-
-const EmptyTitle = styled.h2`
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: #333;
-  margin: 0;
   text-align: center;
-
-  .SideNote {
-    width: 60px;
-    height: 26px;
-    background: purple;
-    border-radius: 10px;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 14px;
-    font-weight: 400;
-  }
-
-  .Text {
-    width: 20%;
-    height: 70px;
-    background: purple;
-    margin-left: 0;
-  }
-
-  h4 {
-    font-size: 20px;
-    font-weight: 400;
-    color: #fff;
-    margin-top: 0;
-  }
-`;
-
-const EmptyDescription = styled.p`
-  font-size: 0.95rem;
-  color: #999;
-  margin: 0;
-  text-align: center;
-  max-width: 500px;
-
-  @media (max-width: 768px) {
-    font-size: 0.9rem;
-    max-width: 400px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 0.85rem;
-    max-width: 300px;
-  }
+  color: #777;
+  margin-top: 4rem;
 `;
 
 const Notifications = () => {
+  const [notifications, setNotifications] = useState({});
+  console.log("the notification", notifications)
+  const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("authToken");
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(
+          "https://eventiq-final-project.onrender.com/api/v1/venueowner-notifications",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        console.log("the res data:", res.data?.data); 
+        setNotifications(res.data?.data || {}); 
+      } catch (error) {
+        console.log("Error fetching notifications:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNotifications();
+  }, [token]);
+
+
+
   return (
     <NotificationsContainer>
       <Header>
-        <HeaderContent>
+        <div>
           <Title>Notifications</Title>
           <Subtitle>Stay updated with your latest activities</Subtitle>
-        </HeaderContent>
-        <Badge>0 New</Badge>
+        </div>
+        <Badge>{notifications.length} New</Badge>
       </Header>
 
-      <EmptyState>
-        <IconWrapper>
-          <FiPackage />
-        </IconWrapper>
-        <EmptyTitle>Nothing to show yet</EmptyTitle>
-        <EmptyDescription>
-          Notifications from bookings and payment will appear hear
-        </EmptyDescription>
-      </EmptyState>
+      {loading ? (
+        <Loading>Loading notifications...</Loading>
+      ) : notifications.length > 0 ? (
+        <NotificationList>
+          {notifications.map((note, index) => (
+            <NotificationItem key={index}>
+              <EventTitle>Upcoming Event</EventTitle>
+              <EventDetails>{note.message}</EventDetails>
+              <TimeAgo>{note.timeAgo || "Just now"}</TimeAgo>
+            </NotificationItem>
+          ))}
+        </NotificationList>
+      ) : (
+        <EmptyState>No notifications yet</EmptyState>
+      )}
     </NotificationsContainer>
   );
 };
 
 export default Notifications;
+
+  // useEffect(() => {
+  //   const fetchVenues = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const token = localStorage.getItem("authToken");
+  //       const userData = localStorage.getItem("user");
+  //       const user = userData ? JSON.parse(userData) : null;
+  //       const userId = user?._id || user?.id;
+
+  //       const response = await axios.get(
+  //         "https://eventiq-final-project.onrender.com/api/v1/venues",
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+
+  //       if (response.data && response.data.data) {
+  //         const userVenues = userId
+  //           ? response.data.data.filter(
+  //               (venue) => venue.venueOwnerId === userId
+  //             )
+  //           : response.data.data;
+
+  //         setVenues(userVenues);
+  //         setError(null);
+  //       } else {
+  //         setError("Invalid response format");
+  //         toast.error("Failed to load venues");
+  //       }
+  //     } catch (err) {
+  //       console.error("Venues fetch error:", err);
+  //       setError(err.message);
+  //       if (err.response?.status === 401) {
+  //         toast.error("Unauthorized. Please login again.");
+  //       } else if (err.response?.data?.message) {
+  //         toast.error(err.response.data.message);
+  //       } else {
+  //         toast.error("Failed to load venues");
+  //       }
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchVenues();
+  // }, []);
