@@ -1,4 +1,7 @@
-import { useState, useEffect, useContext } from "react";
+
+
+
+import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
@@ -7,25 +10,28 @@ import { LuUser } from "react-icons/lu";
 import SignupModal from "../../components/static/signupModal/signupModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AuthContext } from "../.././assets/AuthContext/AuthContext";
-
+import VerificationModal from "../../components/static/VerificationModal/VerificationModal";
+import Loading from "../../components/static/Loading/Loading"
 const Login = () => {
-  const { login } = useContext(AuthContext);
-
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
+
   const navigate = useNavigate();
 
+ 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
 
   const validateForm = () => {
     if (!formData.email.trim()) {
@@ -43,6 +49,7 @@ const Login = () => {
     return true;
   };
 
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -61,52 +68,87 @@ const Login = () => {
       // Backend should return a token or user info
       // if (response.data && response.data.token) {
       //   toast.success("Login successful 🎉");
-      if (response.data && response.data.token && response.data.data) {
-        toast.success("Login successful");
-        
-        login(response.data);
-
-        const user = response.data.data;
-        const userRole = user.role;
-        console.log("User Role:", userRole);
+if (response.data && response.data.token && response.data.data) {
+  toast.success("Login successful");
+       
+    const user = response.data.data;
+  const userRole = user.role;
         // localStorage.setItem("authToken", response.data.token);
         // localStorage.setItem("user", JSON.stringify(response.data.user));
-        // localStorage.setItem("authToken", response.data.token);
-        // localStorage.setItem("user", JSON.stringify(user));
-        // localStorage.setItem("userRole", userRole);
-
+ localStorage.setItem("authToken", response.data.token);
+  localStorage.setItem("user", JSON.stringify(user));
+  localStorage.setItem("userRole", userRole);
+  localStorage.setItem("signupPassword", formData.password);
+       
         // setTimeout(() => navigate("/dashboardHome"), 2000);
-        setTimeout(() => {
-          if (userRole === "venue-owner") {
-            navigate("/dashboardHome");
-          } else if (userRole === "client") {
-            navigate("/individual-dashboard");
-          } else {
-            // fallback (if role missing or new role added)
-            navigate("/individual-dashboard");
-          }
-        }, 1500);
+         setTimeout(() => {
+    if (userRole === "venue-owner") {
+      navigate("/dashboardHome");
+    } else if (userRole === "client") {
+      navigate("/individual-dashboard");
+    } else {
+      // fallback (if role missing or new role added)
+      navigate("/individual-dashboard");
+    }
+    setLoading(false);
+  }, 2000);
       } else {
         toast.error("Invalid response from server");
       }
     } catch (error) {
       console.error("Login error:", error);
 
-      toast.error(error.response?.data?.message || "Something Went Wrong");
-    } finally {
-      setLoading(false);
-    }
+        const message = error.response?.data?.message;
+    
+  //       toast.error(error.response?.data?.message  || "Something Went Wrong");
+      
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+    if (message?.toLowerCase().includes("verify")) {
+    toast.warn("Please verify your account before logging in.");
+    openVerificationModal();
+  } else {
+    toast.error(message || "Something went wrong. Please try again.");
+  }
+} finally {
+  setLoading(false);
+}
   };
+
+  const resendVerificationCode = async (email) => {
+  try {
+    await axios.post(
+      "https://eventiq-final-project.onrender.com/api/v1/resendOtp",
+      { email }
+    );
+    toast.info("A new verification code has been sent to your email.");
+  } catch (error) {
+    console.error("Resend OTP error:", error);
+    toast.error("Failed to resend verification code. Please try again.");
+  }
+};
 
   // Modal controls
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  // const openVerificationModal = () => setShowVerificationModal(true);
+
+  const openVerificationModal = async () => {
+  setShowVerificationModal(true);
+  await resendVerificationCode(formData.email);
+};
+const closeVerificationModal = () => setShowVerificationModal(false);
+
 
   useEffect(() => {
     document.body.style.overflow = isModalOpen ? "hidden" : "unset";
   }, [isModalOpen]);
 
   return (
+    <>
+        {loading && <Loading />}
     <section className="signup-container-Login">
       <ToastContainer position="top-right" autoClose={3000} />
 
@@ -114,16 +156,10 @@ const Login = () => {
       <div className="left-section3">
         <div
           className="bg-image3"
-          style={{
-            backgroundImage:
-              "url('https://res.cloudinary.com/depuy7bkr/image/upload/v1761918729/left_side_log_in_evenitq1_rpxkvp.png')",
-          }}
+          style={{ backgroundImage: "url('https://res.cloudinary.com/depuy7bkr/image/upload/v1761918729/left_side_log_in_evenitq1_rpxkvp.png')" }}
         ></div>
 
-        <button
-          className="back-btn3"
-          onClick={() => navigate("/", { replace: true })}
-        >
+        <button className="back-btn3" onClick={() => navigate("/", { replace: true })}>
           <svg
             width="20"
             height="20"
@@ -141,8 +177,7 @@ const Login = () => {
             Log In to <br /> Continue.
           </h1>
           <p>
-            Manage your event halls with ease and get more bookings, all on
-            Eventiq.
+            Manage your event halls with ease and get more bookings, all on Eventiq.
           </p>
         </div>
       </div>
@@ -176,8 +211,7 @@ const Login = () => {
             {/* Password Field */}
             <div className="input-group-Login_password password-field-Login">
               <label>
-                <Lock size={14} className="label-icon-Login_password" />{" "}
-                Password
+                <Lock size={14} className="label-icon-Login_password" /> Password
               </label>
               <div className="password-box-Login">
                 <input
@@ -187,10 +221,7 @@ const Login = () => {
                   onChange={handleChange}
                   placeholder="Enter your password"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
+                <button type="button" onClick={() => setShowPassword(!showPassword)}>
                   {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
                 </button>
               </div>
@@ -216,9 +247,13 @@ const Login = () => {
             {/* Signup Link */}
             <p className="login-text-Login">
               Don't have an account? <a onClick={openModal}>Sign Up</a>
-              {isModalOpen && <SignupModal onClose={closeModal} />}
+        
             </p>
           </form>
+                  {isModalOpen && <SignupModal onClose={closeModal} />}
+              {showVerificationModal && (
+  <VerificationModal email={formData.email} onClose={closeVerificationModal} />
+)}
 
           <div className="security-note-Login">
             <svg
@@ -240,7 +275,9 @@ const Login = () => {
         </div>
       </section>
     </section>
+  </>
   );
 };
 
 export default Login;
+

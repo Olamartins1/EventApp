@@ -168,6 +168,7 @@ import MyProfile from "./../pages/IndividualDashboard/Profile/MyProfile";
 import MyBooking from "./../pages/IndividualDashboard/Profile/MyBooking";
 import MyNotification from "./../pages/IndividualDashboard/Profile/MyNotification";
 import Setting from "./../pages/IndividualDashboard/Profile/Setting";
+import Loading from "../components/static/Loading/Loading";
 import AdminDashboard from "../components/layout/AdminDashboard";
 import Overview from "../pages/admin/Overview";
 import AdminVenues from "../pages/admin/AdminVenues";
@@ -210,6 +211,7 @@ export const Element = createHashRouter([
     ],
   },
   {
+    
     path: "/individual-dashboard",
 
     element: (
@@ -284,6 +286,10 @@ export const Element = createHashRouter([
     element: <SignupIndividual />,
   },
   {
+  path: "/test-loading",
+  element: <Loading />,
+},
+{ 
     path: "/admin-dashboard",
     element: (
       <Protect>

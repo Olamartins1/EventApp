@@ -7,10 +7,10 @@ import {Navigate, useNavigate} from "react-router-dom";
 
  
 const Multipurpose = () => {
-const token = localStorage.getItem("authToken")
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+ const token = localStorage.getItem("authToken")
   const navigate = useNavigate();
 
 const {selectedArea}= useArea()

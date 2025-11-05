@@ -253,9 +253,7 @@ const SignupIndividual = () => {
               {loading ? "Creating Account..." : "Create Account"}
             </button>
 
-            {/* <p className="login-text-ind">
-              Already have an account? <a href="/login">Log in</a>
-            </p> */}
+         
             <p className="login-text-client">
               Already have an account? <Link to="/login">Log in</Link>
             </p>
