@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
 import { venuesData } from "../../data/venuesData";
 import { ChevronLeft, MapPin, Clock, AlertCircle, Check } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect ,useContext} from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -10,6 +10,7 @@ import { AuthContext } from "../../assets/AuthContext/AuthContext";
 
 const DetailsPage = () => {
   const { id } = useParams();
+      const token = useContext(AuthContext);
 
   const navigate = useNavigate();
   const [venue, setVenue] = useState({});
@@ -28,7 +29,7 @@ const DetailsPage = () => {
         const res = await axios.get(
           `https://eventiq-final-project.onrender.com/api/v1/getOneVenue/${id}`
         );
-        setVenue(res.data?.data || null);
+        setVenue(res.data?.data);
       } catch (error) {
         console.error("Error fetching venue:", error);
       } finally {
@@ -53,7 +54,6 @@ const DetailsPage = () => {
     }
 
     try {
-      const token = useContext(AuthContext);
       console.log({
         servicecharge: venue.price * 0.05,
         total: venue.price * 0.05 + venue.price,
@@ -77,8 +77,8 @@ const DetailsPage = () => {
       toast.success(res.data.message);
       setShowPopup(true);
     } catch (error) {
-      console.log(error.response.data.message);
-      toast.error(error.response.data.message || "Somethin went wrong");
+      console.log(error);
+      // toast.error(error.res.data.message || "Somethin went wrong");
     }
   };
   const handleDateChange = (e) => {
@@ -113,8 +113,9 @@ const DetailsPage = () => {
     );
   }
 
-  return venue ? (
-    <DetailContainer>
+  return  (
+    <>
+   {!venue ? <><DetailContainer>
       <BackButton onClick={() => navigate(-1)}>
         <ChevronLeft size={20} />
         Back
@@ -123,8 +124,8 @@ const DetailsPage = () => {
         <h2>Venue not found!</h2>
         <p>Venues may have been removed or is currently unavailable.</p>
       </ErrorBox>
-    </DetailContainer>
-  ) : (
+    </DetailContainer></>:<>
+      : (
     <DetailContainer>
       <BackButton onClick={() => navigate(-1)}>
         <ChevronLeft size={20} />
@@ -132,37 +133,38 @@ const DetailsPage = () => {
       </BackButton>
 
       <VenueHeader>
-        <VenueName>{venue.venuename}</VenueName>
+        <VenueName>{venue?.venuename}</VenueName>
         <VenueMetaInfo>
-          <MetaItem>{venue.status}</MetaItem>
+          <MetaItem>{venue?.status}</MetaItem>
         </VenueMetaInfo>
 
         <MetaItem>
           <MapPin size={16} />
-          {venue.location.street},{venue.location.city},{venue.location.state}
+          {venue?.location?.street},{venue?.location?.city},
+          {venue?.location?.state}
         </MetaItem>
         <MetaItem>
           <AlertCircle size={16} />
-          {venue.capacity.minimum}- {venue.capacity.maximum}
+          {venue?.capacity?.minimum}- {venue?.capacity?.maximum}
         </MetaItem>
       </VenueHeader>
       <ImageGallery>
         {/* Main Image */}
         {venue?.documents?.images?.[0]?.url && (
           <MainImage
-            src={venue.documents.images[0].url}
-            alt={venue.name || "Venue Image"}
+            src={venue?.documents?.images[0].url}
+            alt={venue?.name || "Venue Image"}
           />
         )}
 
         {/* Other Images (if more than one exists) */}
         {venue?.documents?.images?.length > 1 && (
           <>
-            {venue.documents.images.slice(1, 5).map((img, idx) => (
+            {venue?.documents?.images.slice(1, 5).map((img, idx) => (
               <GalleryImage
                 key={idx}
                 src={img.url}
-                alt={`${venue.name || "Venue"} ${idx + 2}`}
+                alt={`${venue?.name || "Venue"} ${idx + 2}`}
               />
             ))}
           </>
@@ -172,11 +174,11 @@ const DetailsPage = () => {
         <MainContent>
           <Section>
             <SectionTitle>About this venue</SectionTitle>
-            <SectionDescription>{venue.description}</SectionDescription>
+            <SectionDescription>{venue?.description}</SectionDescription>
             <InfoGrid>
               <InfoCard>
                 <InfoLabel>Venue Size</InfoLabel>
-                <InfoValue>{venue.hallsize}</InfoValue>
+                <InfoValue>{venue?.hallsize}</InfoValue>
               </InfoCard>
               <InfoCard>
                 <InfoLabel>
@@ -184,21 +186,21 @@ const DetailsPage = () => {
                   Open Hours
                 </InfoLabel>
                 <InfoValue>
-                  {venue.openingtime}am - {venue.closingtime}pm
+                  {venue?.openingtime}am - {venue?.closingtime}pm
                 </InfoValue>
               </InfoCard>
 
               <InfoCard>
                 <InfoLabel>Caution Fee</InfoLabel>
-                <InfoValue>#{venue.cautionfee}</InfoValue>
+                <InfoValue>#{venue?.cautionfee}</InfoValue>
               </InfoCard>
               <InfoCard>
                 <InfoLabel>About this Venue</InfoLabel>
-                <InfoValue>{venue.description}</InfoValue>
+                <InfoValue>{venue?.description}</InfoValue>
               </InfoCard>
               <InfoCard>
                 <SectionTitle>Amenities & Facilities</SectionTitle>
-                <InfoValue>{venue.amenities}</InfoValue>
+                <InfoValue>{venue?.amenities}</InfoValue>
               </InfoCard>
             </InfoGrid>
           </Section>
@@ -222,13 +224,13 @@ const DetailsPage = () => {
                 Important Information
               </PolicyTitle>
               <PolicyText>
-                <h2>
+                <span>
                   Free cancellation up to 30 days before the event. 50% refund
                   for cancellation made 15-30 days before. No refund for
                   cancellation within 15 days of the event date. Caution fee is
                   refundable upon successful event completion without any
                   damages.
-                </h2>
+                </span>
               </PolicyText>
             </CancellationPolicy>
           </Section>
@@ -237,7 +239,7 @@ const DetailsPage = () => {
         <Sidebar>
           <PricingCard>
             <PriceDisplay>
-              <PriceAmount>{venue.price}</PriceAmount>
+              <PriceAmount>{venue?.price}</PriceAmount>
               <PriceLabel>/day</PriceLabel>
             </PriceDisplay>
 
@@ -279,18 +281,18 @@ const DetailsPage = () => {
             <PricingBreakdown>
               <BreakdownItem>
                 <span>Venue rental</span>
-                <span>{venue.price}</span>
+                <span>{venue?.price}</span>
               </BreakdownItem>
               <BreakdownItem>
                 <span>Service fee (5%)</span>
-                <span>₦{Math.round(venue.price * 0.05).toLocaleString()}</span>
+                <span>₦{Math.round(venue?.price * 0.05).toLocaleString()}</span>
               </BreakdownItem>
               <BreakdownItem>
                 <span>Total</span>
                 <span>
                   ₦
                   {Math.round(
-                    venue.price * 0.05 + venue.price
+                    venue?.price * 0.05 + venue?.price
                   ).toLocaleString()}
                 </span>
               </BreakdownItem>
@@ -314,6 +316,10 @@ const DetailsPage = () => {
       )}
     </DetailContainer>
   );
+    </>
+  }
+  </>
+  ) 
 };
 
 export default DetailsPage;
