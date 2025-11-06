@@ -341,7 +341,8 @@ flex-direction: column;
 `;
 
 const Footer_flex_Quicklegal = styled.div`
-
+display:flex;
+gap: 5rem;
   @media (max-width: 480px) {
   display:flex;
   gap: 5rem;

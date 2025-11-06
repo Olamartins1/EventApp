@@ -25,6 +25,7 @@ const Container = styled.div`
   position: sticky;
   top: 0;
   z-index: 999;
+  background-color: white;
 `;
 
 const Wrapper = styled.div`
