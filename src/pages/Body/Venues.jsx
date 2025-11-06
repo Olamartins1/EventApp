@@ -11,7 +11,7 @@ import {
   FiCheck,
   FiUpload,
 } from "react-icons/fi";
-import { MdVerified } from "react-icons/md";
+import { FaClock } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 const VenuesContainer = styled.div`
@@ -181,8 +181,8 @@ const VerifiedBadge = styled.div`
   position: absolute;
   top: 12px;
   right: 12px;
-  background: rgba(34, 197, 94, 0.95);
-  color: white;
+  background: yellow;
+  color: black;
   padding: 6px 12px;
   border-radius: 20px;
   display: flex;
@@ -850,6 +850,8 @@ const VenueCardSkeletonLoader = () => (
 );
 
 const Venues = () => {
+const {user}= useContext(AuthContext)
+  const {token}= useContext(AuthContext)
   const [venues, setVenues] = useState([]);
   console.log(venues)
   const [loading, setLoading] = useState(true);
@@ -877,61 +879,44 @@ const Venues = () => {
     state: "",
   });
 
+  
+
   const [documentFiles, setDocumentFiles] = useState({
     cacCertificate: null,
     certificateOfOccupancy: null,
   });
 
-  useEffect(() => {
+   useEffect(() => {
     const fetchVenues = async () => {
-  const user = useContext(AuthContext)
-
       try {
+        if (!user || !user._id) {
+          console.warn("User not available yet");
+          return;
+        }
+
         setLoading(true);
-        const token = localStorage.getItem("authToken");
-        const userData = localStorage.getItem("user");
-        const user = userData ? JSON.parse(userData) : null;
-        const userId = user?._id || user?.id;
+        const userId = user._id;
+        console.log("User ID:", userId);
 
         const response = await axios.get(
-          `https://eventiq-final-project.onrender.com/api/v1/venues${user._id}`,
+          `https://eventiq-final-project.onrender.com/api/v1/venues/${user._id}`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
 
-        if (response.data && response.data.data) {
-          const userVenues = userId
-            ? response.data.data.filter(
-                (venue) => venue.venueOwnerId === userId
-              )
-            : response.data.data;
-
-          setVenues(userVenues);
-          setError(null);
-        } else {
-          setError("Invalid response format");
-          toast.error("Failed to load venues");
-        }
+        setVenues(response.data.data);
+        setError(null);
       } catch (err) {
-        console.error("Venues fetch error:", err);
-        setError(err.message);
-        if (err.response?.status === 401) {
-          toast.error("Unauthorized. Please login again.");
-        } else if (err.response?.data?.message) {
-          toast.error(err.response.data.message);
-        } else {
-          toast.error("Failed to load venues");
-        }
+        console.error("Error fetching venues:", err);
+        setError("Failed to load venues");
       } finally {
         setLoading(false);
       }
     };
 
     fetchVenues();
-  }, []);
+  }, [user, token]); 
 
   const handleOpenModal = (venue = null) => {
     setActiveTab("basic");
@@ -1148,7 +1133,7 @@ const Venues = () => {
     setIsSubmitting(true);
 
     try {
-      const token = localStorage.getItem("authToken");
+      
       const venueFormData = new FormData();
       venueFormData.append("venuename", formData.venuename);
       venueFormData.append("description", formData.description);
@@ -1221,7 +1206,7 @@ const Venues = () => {
   const handleDelete = async (venueId) => {
     if (window.confirm("Are you sure you want to delete this venue?")) {
       try {
-        const token = localStorage.getItem("authToken");
+        
 
         await axios.delete(
           `https://eventiq-final-project.onrender.com/api/v1/venues/${venueId}`,
@@ -1247,7 +1232,7 @@ const Venues = () => {
 
   const handleSubscribe = async (featureId) => {
     try {
-      const token = localStorage.getItem("authToken");
+
 
       if (!token) {
         toast.error("Please login to subscribe");
@@ -1297,40 +1282,31 @@ const Venues = () => {
       }
     }
   };
+  // const user = useContext(AuthContext)
 
   useEffect(() => {
     const fetchFeatures = async () => {
-      const user = useContext(AuthContext)
+    
       try {
         setLoading(true);
-        const token = localStorage.getItem("authToken");
-        console.log("🔑 Token from localStorage:", token);
+      
+      
 
         const response = await axios.get(
-          `https://eventiq-final-project.onrender.com/api/v1/venueowner${user._id}`,
+          `https://eventiq-final-project.onrender.com/api/v1/ownervenue`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-
-        if (response.data && response.data.data) {
-          console.log("✅ Features data received:", response.data.data);
-          setFeatures(response.data.data);
-          setError(null);
-        } else {
-          console.warn("⚠ Invalid response format:", response.data);
-          setError("Invalid response format");
-          toast.error("Failed to load features");
-        }
+setVenues(response.data.data)
+       
+        
       } catch (err) {
         console.error("❌ Features fetch error:", err);
-        const errorMessage = axios.isAxiosError(err)
-          ? err.response?.data?.message || err.message
-          : "Failed to load features";
-        setError(errorMessage);
-        toast.error(errorMessage);
+       
+        toast.error(err.response.data.message)
       } finally {
         setLoading(false);
       }
@@ -1389,7 +1365,7 @@ const Venues = () => {
                     </VenueImagePlaceholder>
                   )}
                   <VerifiedBadge>
-                    <MdVerified size={16} />
+                    <FaClock size={16} />
                    {venue.status}
                   </VerifiedBadge>
                 </VenueImageWrapper>
@@ -1416,9 +1392,9 @@ const Venues = () => {
                       <StatValue>2</StatValue>
                     </StatItem>
                   </VenueStats>
-                  <ViewDetailsButton onClick={() => handleOpenModal(venue)}>
+                  {/* <ViewDetailsButton onClick={() => handleOpenModal(venue)}>
                   view Details
-                  </ViewDetailsButton>
+                  </ViewDetailsButton> */}
                 </VenueContent>
                 {/* <VenueActions>
                   <ActionButton onClick={() => handleOpenModal(venue)}>
