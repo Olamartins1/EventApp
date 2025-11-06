@@ -2,19 +2,17 @@ import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
 import { venuesData } from "../../data/venuesData";
 import { ChevronLeft, MapPin, Clock, AlertCircle, Check } from "lucide-react";
-import { useState, useEffect ,useContext} from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../../assets/AuthContext/AuthContext";
 
 const DetailsPage = () => {
   const { id } = useParams();
-      const token = useContext(AuthContext);
+  const token = useContext(AuthContext);
 
   const navigate = useNavigate();
   const [venue, setVenue] = useState({});
-
   const [loading, setLoading] = useState(true);
   const [eventDate, setEventDate] = useState("");
   const [days, setDays] = useState("");
@@ -103,7 +101,7 @@ const DetailsPage = () => {
           Back
         </BackButton>
         <ErrorBox>
-          <h2> Oops!</h2>
+          <h2>⚠️ Oops!</h2>
           <p>{error}</p>
           <RetryButton onClick={() => window.location.reload()}>
             Retry
@@ -113,137 +111,142 @@ const DetailsPage = () => {
     );
   }
 
-  return  (
+  return (
     <>
-   {!venue ? <><DetailContainer>
-      <BackButton onClick={() => navigate(-1)}>
-        <ChevronLeft size={20} />
-        Back
-      </BackButton>
-      <ErrorBox>
-        <h2>Venue not found!</h2>
-        <p>Venues may have been removed or is currently unavailable.</p>
-      </ErrorBox>
-    </DetailContainer></>:<>
-      : (
-    <DetailContainer>
-      <BackButton onClick={() => navigate(-1)}>
-        <ChevronLeft size={20} />
-        Back
-      </BackButton>
+      {!venue ? (
+        <>
+          <DetailContainer>
+            <BackButton onClick={() => navigate(-1)}>
+              <ChevronLeft size={20} />
+              Back
+            </BackButton>
+            <ErrorBox>
+              <h2>Venue not found!</h2>
+              <p>Venues may have been removed or is currently unavailable.</p>
+            </ErrorBox>
+          </DetailContainer>
+        </>
+      ) : (
+        <>
+          : (
+          <DetailContainer>
+            <BackButton onClick={() => navigate(-1)}>
+              <ChevronLeft size={20} />
+              Back
+            </BackButton>
 
-      <VenueHeader>
-        <VenueName>{venue?.venuename}</VenueName>
-        <VenueMetaInfo>
-          <MetaItem>{venue?.status}</MetaItem>
-        </VenueMetaInfo>
+            <VenueHeader>
+              <VenueName>{venue?.venuename}</VenueName>
+              <VenueMetaInfo>
+                <MetaItem>{venue?.status}</MetaItem>
+              </VenueMetaInfo>
 
-        <MetaItem>
-          <MapPin size={16} />
-          {venue?.location?.street},{venue?.location?.city},
-          {venue?.location?.state}
-        </MetaItem>
-        <MetaItem>
-          <AlertCircle size={16} />
-          {venue?.capacity?.minimum}- {venue?.capacity?.maximum}
-        </MetaItem>
-      </VenueHeader>
-      <ImageGallery>
-        {/* Main Image */}
-        {venue?.documents?.images?.[0]?.url && (
-          <MainImage
-            src={venue?.documents?.images[0].url}
-            alt={venue?.name || "Venue Image"}
-          />
-        )}
+              <MetaItem>
+                <MapPin size={16} />
+                {venue?.location?.street},{venue?.location?.city},
+                {venue?.location?.state}
+              </MetaItem>
+              <MetaItem>
+                <AlertCircle size={16} />
+                {venue?.capacity?.minimum}- {venue?.capacity?.maximum}
+              </MetaItem>
+            </VenueHeader>
+            <ImageGallery>
+              {/* Main Image */}
+              {venue?.documents?.images?.[0]?.url && (
+                <MainImage
+                  src={venue?.documents?.images[0].url}
+                  alt={venue?.name || "Venue Image"}
+                />
+              )}
 
-        {/* Other Images (if more than one exists) */}
-        {venue?.documents?.images?.length > 1 && (
-          <>
-            {venue?.documents?.images.slice(1, 5).map((img, idx) => (
-              <GalleryImage
-                key={idx}
-                src={img.url}
-                alt={`${venue?.name || "Venue"} ${idx + 2}`}
-              />
-            ))}
-          </>
-        )}
-      </ImageGallery>
-      <ContentWrapper>
-        <MainContent>
-          <Section>
-            <SectionTitle>About this venue</SectionTitle>
-            <SectionDescription>{venue?.description}</SectionDescription>
-            <InfoGrid>
-              <InfoCard>
-                <InfoLabel>Venue Size</InfoLabel>
-                <InfoValue>{venue?.hallsize}</InfoValue>
-              </InfoCard>
-              <InfoCard>
-                <InfoLabel>
-                  <Clock size={16} />
-                  Open Hours
-                </InfoLabel>
-                <InfoValue>
-                  {venue?.openingtime}am - {venue?.closingtime}pm
-                </InfoValue>
-              </InfoCard>
+              {/* Other Images (if more than one exists) */}
+              {venue?.documents?.images?.length > 1 && (
+                <>
+                  {venue?.documents?.images.slice(1, 5).map((img, idx) => (
+                    <GalleryImage
+                      key={idx}
+                      src={img.url}
+                      alt={`${venue?.name || "Venue"} ${idx + 2}`}
+                    />
+                  ))}
+                </>
+              )}
+            </ImageGallery>
+            <ContentWrapper>
+              <MainContent>
+                <Section>
+                  <SectionTitle>About this venue</SectionTitle>
+                  <SectionDescription>{venue?.description}</SectionDescription>
+                  <InfoGrid>
+                    <InfoCard>
+                      <InfoLabel>Venue Size</InfoLabel>
+                      <InfoValue>{venue?.hallsize}</InfoValue>
+                    </InfoCard>
+                    <InfoCard>
+                      <InfoLabel>
+                        <Clock size={16} />
+                        Open Hours
+                      </InfoLabel>
+                      <InfoValue>
+                        {venue?.openingtime}am - {venue?.closingtime}pm
+                      </InfoValue>
+                    </InfoCard>
 
-              <InfoCard>
-                <InfoLabel>Caution Fee</InfoLabel>
-                <InfoValue>#{venue?.cautionfee}</InfoValue>
-              </InfoCard>
-              <InfoCard>
-                <InfoLabel>About this Venue</InfoLabel>
-                <InfoValue>{venue?.description}</InfoValue>
-              </InfoCard>
-              <InfoCard>
-                <SectionTitle>Amenities & Facilities</SectionTitle>
-                <InfoValue>{venue?.amenities}</InfoValue>
-              </InfoCard>
-            </InfoGrid>
-          </Section>
+                    <InfoCard>
+                      <InfoLabel>Caution Fee</InfoLabel>
+                      <InfoValue>#{venue?.cautionfee}</InfoValue>
+                    </InfoCard>
+                    <InfoCard>
+                      <InfoLabel>About this Venue</InfoLabel>
+                      <InfoValue>{venue?.description}</InfoValue>
+                    </InfoCard>
+                    <InfoCard>
+                      <SectionTitle>Amenities & Facilities</SectionTitle>
+                      <InfoValue>{venue?.amenities}</InfoValue>
+                    </InfoCard>
+                  </InfoGrid>
+                </Section>
 
-          {/* <Section>
+                {/* <Section>
             <AmenitiesList> */}
-          {/* {venue.amenities.map((amenity, idx) => (
+                {/* {venue.amenities.map((amenity, idx) => (
                 <AmenityItem key={idx}>
                   <Check size={18} color="#6b46c1" />
                   {amenity}
                 </AmenityItem>
               ))} */}
-          {/* </AmenitiesList>
+                {/* </AmenitiesList>
           </Section> */}
 
-          <Section>
-            <SectionTitle>Cancellation Policy</SectionTitle>
-            <CancellationPolicy>
-              <PolicyTitle>
-                <AlertCircle size={18} />
-                Important Information
-              </PolicyTitle>
-              <PolicyText>
-                <span>
-                  Free cancellation up to 30 days before the event. 50% refund
-                  for cancellation made 15-30 days before. No refund for
-                  cancellation within 15 days of the event date. Caution fee is
-                  refundable upon successful event completion without any
-                  damages.
-                </span>
-              </PolicyText>
-            </CancellationPolicy>
-          </Section>
-        </MainContent>
+                <Section>
+                  <SectionTitle>Cancellation Policy</SectionTitle>
+                  <CancellationPolicy>
+                    <PolicyTitle>
+                      <AlertCircle size={18} />
+                      Important Information
+                    </PolicyTitle>
+                    <PolicyText>
+                      <span>
+                        Free cancellation up to 30 days before the event. 50%
+                        refund for cancellation made 15-30 days before. No
+                        refund for cancellation within 15 days of the event
+                        date. Caution fee is refundable upon successful event
+                        completion without any damages.
+                      </span>
+                    </PolicyText>
+                  </CancellationPolicy>
+                </Section>
+              </MainContent>
 
-        <Sidebar>
-          <PricingCard>
-            <PriceDisplay>
-              <PriceAmount>{venue?.price}</PriceAmount>
-              <PriceLabel>/day</PriceLabel>
-            </PriceDisplay>
+              <Sidebar>
+                <PricingCard>
+                  <PriceDisplay>
+                    <PriceAmount>{venue?.price}</PriceAmount>
+                    <PriceLabel>/day</PriceLabel>
+                  </PriceDisplay>
 
-            {/* <DateSelector>
+                  {/* <DateSelector>
               <DateLabel>Event Date</DateLabel>
               <DateInput
                 type="date"
@@ -253,81 +256,80 @@ const DetailsPage = () => {
               type="date" value={eventDate} onChange={handleDateChange}
             </DateSelector> */}
 
-            <DateSelector>
-              <DateLabel>Event Date</DateLabel>
-              <DateInput type="date" onChange={handleDateChange} />
-            </DateSelector>
+                  <DateSelector>
+                    <DateLabel>Event Date</DateLabel>
+                    <DateInput type="date" onChange={handleDateChange} />
+                  </DateSelector>
 
-            <EventContainer>
-              <EventType>Event Type</EventType>
-              <input
-                type="text"
-                placeholder="e.g: birthday, graduation, wedding"
-                onChange={handleEventTypeChange}
-              />
-              <NumberType>Number of Days</NumberType>
-              <input
-                type="text"
-                placeholder="e.g: 1,2,3,4,5,"
-                onChange={handleDaysChange}
-              />
-            </EventContainer>
+                  <EventContainer>
+                    <EventType>Event Type</EventType>
+                    <input
+                      type="text"
+                      placeholder="e.g: birthday, graduation, wedding"
+                      onChange={handleEventTypeChange}
+                    />
+                    <NumberType>Number of Days</NumberType>
+                    <input
+                      type="text"
+                      placeholder="e.g: 1,2,3,4,5,"
+                      onChange={handleDaysChange}
+                    />
+                  </EventContainer>
 
-            {/* <Bo <DateLabel>Event Date</DateLabel>okButton onClick={bookVenue(venue._id)}>
+                  {/* <Bo <DateLabel>Event Date</DateLabel>okButton onClick={bookVenue(venue._id)}>
               Book This Venue
             </BookButton> */}
-            <BookButton onClick={bookVenue}>Book This Venue</BookButton>
+                  <BookButton onClick={bookVenue}>Book This Venue</BookButton>
 
-            <PricingBreakdown>
-              <BreakdownItem>
-                <span>Venue rental</span>
-                <span>{venue?.price}</span>
-              </BreakdownItem>
-              <BreakdownItem>
-                <span>Service fee (5%)</span>
-                <span>₦{Math.round(venue?.price * 0.05).toLocaleString()}</span>
-              </BreakdownItem>
-              <BreakdownItem>
-                <span>Total</span>
-                <span>
-                  ₦
-                  {Math.round(
-                    venue?.price * 0.05 + venue?.price
-                  ).toLocaleString()}
-                </span>
-              </BreakdownItem>
-            </PricingBreakdown>
-          </PricingCard>
-        </Sidebar>
-      </ContentWrapper>
-      {showPopup && (
-        <PopupOverlay>
-          <PopupBox>
-            <h2>🎉 Thank you for choosing Eventiq!</h2>
-            <p>Your booking request has been submitted successfully.</p>
-            <p>
-              Please note that it’s currently pending admin approval. You’ll
-              receive an email once it’s approved.
-            </p>
+                  <PricingBreakdown>
+                    <BreakdownItem>
+                      <span>Venue rental</span>
+                      <span>{venue?.price}</span>
+                    </BreakdownItem>
+                    <BreakdownItem>
+                      <span>Service fee (5%)</span>
+                      <span>
+                        ₦{Math.round(venue?.price * 0.05).toLocaleString()}
+                      </span>
+                    </BreakdownItem>
+                    <BreakdownItem>
+                      <span>Total</span>
+                      <span>
+                        ₦
+                        {Math.round(
+                          venue?.price * 0.05 + venue?.price
+                        ).toLocaleString()}
+                      </span>
+                    </BreakdownItem>
+                  </PricingBreakdown>
+                </PricingCard>
+              </Sidebar>
+            </ContentWrapper>
+            {showPopup && (
+              <PopupOverlay>
+                <PopupBox>
+                  <h2>🎉 Thank you for choosing Eventiq!</h2>
+                  <p>Your booking request has been submitted successfully.</p>
+                  <p>
+                    Please note that it’s currently pending admin approval.
+                    You’ll receive an email once it’s approved.
+                  </p>
 
-            <CloseButton onClick={() => setShowPopup(false)}>Close</CloseButton>
-          </PopupBox>
-        </PopupOverlay>
+                  <CloseButton onClick={() => setShowPopup(false)}>
+                    Close
+                  </CloseButton>
+                </PopupBox>
+              </PopupOverlay>
+            )}
+          </DetailContainer>
+          );
+        </>
       )}
-    </DetailContainer>
-  );
     </>
-  }
-  </>
-  ) 
+  );
 };
 
 export default DetailsPage;
-
-const ErrorBox = styled.div`
-  width: 100%;
-  height: 50%;
-`;
 
 const EventContainer = styled.div`
   width: 100%;
