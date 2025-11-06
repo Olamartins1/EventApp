@@ -51,7 +51,7 @@ const DetailsPage = () => {
     }
 
     try {
-      const token = localStorage.getItem("authToken");
+      const token = useContext(AuthContext);
       console.log({
         servicecharge: venue.price * 0.05,
         total: venue.price * 0.05 + venue.price,
