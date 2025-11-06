@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { FiCamera, FiCheck, FiX } from "react-icons/fi";
+import { AuthContext } from "../../assets/AuthContext/AuthContext";
+import axios from "axios";
 
 const ProfileSettings = () => {
+    const {user} = useContext(AuthContext)
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -24,10 +28,16 @@ const ProfileSettings = () => {
   });
 
   const [profileImage, setProfileImage] = useState(null);
+  const [phonenumbeer, setPhonenumber] = useState(null)
   const [isEditMode, setIsEditMode] = useState(false);
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
+  const [fetchuser, setFetchuser] = useState({})
 
+
+
+
+  console.log("line 39", user._id)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -36,6 +46,58 @@ const ProfileSettings = () => {
       setErrors({ ...errors, [name]: "" });
     }
   };
+
+//   useEffect(()=>{
+//     const fetchData = async()=>{
+
+//       console.log("i am  line 52", user._id)
+//       try {
+//         const res = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/venueowner/${user._id}`)
+//         setFetchuser(res.data)
+     
+// console.log("i am res.data", res.data)
+//       } catch (error) {
+//         console.log(error)
+//       }
+//     }
+// fetchData()
+// }
+
+//   , [])
+useEffect(() => {
+  const fetchData = async () => {
+    if (!user?._id) return; 
+
+    console.log("Fetching user data for:", user._id);
+
+    try {
+      const res = await axios.get(
+        `https://eventiq-final-project.onrender.com/api/v1/venueowner/${user._id}` 
+      );
+
+      setFetchuser(res.data.data);
+     
+    } catch (error) {
+      console.error("Error fetching venue owner:", error);
+    }
+  };
+
+  fetchData();
+}, [user?._id]);
+console.log("the fetchuser", fetchuser)
+
+
+
+  const Updateprofile = async ()=>{
+    try {
+      const res = await axios.put(
+        
+      )
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -53,7 +115,7 @@ const ProfileSettings = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setProfileImage(reader.result);
-        showSuccessMessage("Profile picture updated successfully!");
+        
       };
       reader.readAsDataURL(file);
     }
@@ -62,13 +124,6 @@ const ProfileSettings = () => {
   const validatePersonalInfo = () => {
     const newErrors = {};
 
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = "First name is required";
-    }
-
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = "Last name is required";
-    }
 
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
@@ -213,38 +268,30 @@ const ProfileSettings = () => {
           <FormGroup>
             <Label>First name</Label>
             <Input
-              type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              disabled={!isEditMode}
+
+              disabled
+              placeholder={fetchuser.firstName}
               hasError={errors.firstName}
             />
             {errors.firstName && <ErrorText>{errors.firstName}</ErrorText>}
           </FormGroup>
           <FormGroup>
-            <Label>Last name</Label>
+            <Label>Surname</Label>
             <Input
-              type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              disabled={!isEditMode}
-              hasError={errors.lastName}
+        
+              disabled
+              placeholder={fetchuser.surname}
+             
             />
             {errors.lastName && <ErrorText>{errors.lastName}</ErrorText>}
           </FormGroup>
-          <FormGroup>
-            <Label>Business Email Address</Label>
+           <FormGroup>
+            <Label>Email</Label>
             <Input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              disabled={!isEditMode}
-              hasError={errors.email}
+              disabled
+              placeholder={fetchuser.email}
             />
-            {errors.email && <ErrorText>{errors.email}</ErrorText>}
+            {errors.lastName && <ErrorText>{errors.email}</ErrorText>}
           </FormGroup>
           <FormGroup>
             <Label>Phone Number</Label>
@@ -254,74 +301,16 @@ const ProfileSettings = () => {
               value={formData.phone}
               onChange={handleChange}
               disabled={!isEditMode}
+              placeholder={fetchuser.phoneNumber}
               hasError={errors.phone}
             />
             {errors.phone && <ErrorText>{errors.phone}</ErrorText>}
           </FormGroup>
         </FormGrid>
+
       </Section>
 
-      <Section>
-        <SectionTitle>Business Information</SectionTitle>
-        <FormGrid>
-          <FormGroup>
-            <Label>Business Name</Label>
-            <Input
-              type="text"
-              name="businessName"
-              placeholder="Enter Business Name"
-              value={formData.businessName}
-              onChange={handleChange}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label>RC Number</Label>
-            <Input
-              type="text"
-              name="rcNumber"
-              value={formData.rcNumber}
-              onChange={handleChange}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label>State</Label>
-            <Input
-              type="text"
-              name="state"
-              value={formData.state}
-              onChange={handleChange}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label>Local Government Area</Label>
-            <Input
-              type="text"
-              name="localGovt"
-              value={formData.localGovt}
-              onChange={handleChange}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label>Business Phone Number</Label>
-            <Input
-              type="tel"
-              name="businessPhone"
-              value={formData.businessPhone}
-              onChange={handleChange}
-            />
-          </FormGroup>
-        </FormGrid>
-        <FormGroup style={{ marginTop: "20px" }}>
-          <Label>Business Address</Label>
-          <TextArea
-            name="businessAddress"
-            placeholder="Enter Business Address"
-            value={formData.businessAddress}
-            onChange={handleChange}
-            rows={4}
-          />
-        </FormGroup>
-      </Section>
+
 
       <Section>
         <SectionTitle>Bank Details</SectionTitle>
@@ -346,13 +335,18 @@ const ProfileSettings = () => {
             />
           </FormGroup>
           <FormGroup>
-            <Label>Account type</Label>
-            <Input
-              type="text"
-              name="accountType"
-              value={formData.accountType}
-              onChange={handleChange}
-            />
+            <Label>Account type </Label>
+            <Select
+                      name="type"
+                      value={formData.type}
+                      onChange={handleChange}
+                    >
+                      <option value="Select type">Select type</option>
+                      <option value="Savings">Savings</option>
+                      <option value="Fixed">Fixed</option>
+                       <option value="Current">Current</option>
+                        <option value="Corporate">Corporate</option>
+                    </Select>
           </FormGroup>
           <FormGroupFull>
             <Label>Account Name</Label>
@@ -365,7 +359,7 @@ const ProfileSettings = () => {
           </FormGroupFull>
         </FormGrid>
       </Section>
-
+<Button>Submit</Button>
       <Section>
         <SectionTitle>Security</SectionTitle>
         <form onSubmit={handlePasswordChange}>
@@ -419,6 +413,7 @@ const ProfileSettings = () => {
         </form>
       </Section>
     </Container>
+    
   );
 };
 
@@ -470,6 +465,19 @@ const SuccessMessage = styled.div`
 const Header = styled.div`
   margin-bottom: 40px;
 `;
+const Select = styled.select`
+  padding: 0.75rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  }
+`;
 
 const Title = styled.h1`
   font-size: 24px;
@@ -490,7 +498,16 @@ const Subtitle = styled.p`
 
 const Section = styled.div`
   margin-bottom: 40px;
+
 `;
+const Button = styled.div`
+text-align: center;
+width: 10%;
+border-radius: 0.5rem;
+  background:  #9476a5;
+  padding: 0.5rem;
+  cursor: pointer;
+  `
 
 const SectionHeader = styled.div`
   display: flex;

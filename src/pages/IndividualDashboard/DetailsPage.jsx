@@ -6,12 +6,14 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../assets/AuthContext/AuthContext";
 
 const DetailsPage = () => {
   const { id } = useParams();
 
   const navigate = useNavigate();
   const [venue, setVenue] = useState({});
+
   const [loading, setLoading] = useState(true);
   const [eventDate, setEventDate] = useState("");
   const [days, setDays] = useState("");
@@ -51,7 +53,7 @@ const DetailsPage = () => {
     }
 
     try {
-      const token = localStorage.getItem("authToken");
+      const token = useContext(AuthContext);
       console.log({
         servicecharge: venue.price * 0.05,
         total: venue.price * 0.05 + venue.price,
@@ -101,7 +103,7 @@ const DetailsPage = () => {
           Back
         </BackButton>
         <ErrorBox>
-          <h2>⚠️ Oops!</h2>
+          <h2> Oops!</h2>
           <p>{error}</p>
           <RetryButton onClick={() => window.location.reload()}>
             Retry
@@ -111,36 +113,18 @@ const DetailsPage = () => {
     );
   }
 
-  if (!venue) {
-    return (
-      <DetailContainer>
-        <BackButton onClick={() => navigate(-1)}>
-          <ChevronLeft size={20} />
-          Back
-        </BackButton>
-        <ErrorBox>
-          <h2>Venue not found</h2>
-          <p>This venue may have been removed or is currently unavailable.</p>
-        </ErrorBox>
-      </DetailContainer>
-    );
-  }
-
-  // if (loading) return <p>Loading venue...</p>;
-
-  // if (!venue) {
-  //   return (
-  //     <DetailContainer>
-  //       <BackButton onClick={() => navigate(-1)}>
-  //         <ChevronLeft size={20} />
-  //         Back
-  //       </BackButton>
-  //       <div>Venue not found</div>
-  //     </DetailContainer>
-  //   );
-  // }
-
-  return (
+  return venue ? (
+    <DetailContainer>
+      <BackButton onClick={() => navigate(-1)}>
+        <ChevronLeft size={20} />
+        Back
+      </BackButton>
+      <ErrorBox>
+        <h2>Venue not found!</h2>
+        <p>Venues may have been removed or is currently unavailable.</p>
+      </ErrorBox>
+    </DetailContainer>
+  ) : (
     <DetailContainer>
       <BackButton onClick={() => navigate(-1)}>
         <ChevronLeft size={20} />
@@ -333,6 +317,11 @@ const DetailsPage = () => {
 };
 
 export default DetailsPage;
+
+const ErrorBox = styled.div`
+  width: 100%;
+  height: 50%;
+`;
 
 const EventContainer = styled.div`
   width: 100%;
