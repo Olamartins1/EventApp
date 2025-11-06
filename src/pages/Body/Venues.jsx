@@ -12,6 +12,7 @@ import {
   FiUpload,
 } from "react-icons/fi";
 import { FaClock } from "react-icons/fa";
+import { MdVerified } from "react-icons/md";
 import { toast } from "react-toastify";
 
 const VenuesContainer = styled.div`
@@ -1364,10 +1365,18 @@ setVenues(response.data.data)
                       <FiPackage />
                     </VenueImagePlaceholder>
                   )}
-                  <VerifiedBadge>
-                    <FaClock size={16} />
-                   {venue.status}
-                  </VerifiedBadge>
+               <VerifiedBadge>
+  {venue?.status?.toLowerCase() === "pending" ? (
+    <>
+      <FaClock /> Pending
+    </>
+  ) : (
+    <>
+      <MdVerified /> Verified
+    </>
+  )}
+</VerifiedBadge>
+
                 </VenueImageWrapper>
                 <VenueContent>
                   <VenueName>{venue.venuename}</VenueName>
