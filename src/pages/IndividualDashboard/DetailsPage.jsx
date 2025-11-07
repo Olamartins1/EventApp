@@ -20,6 +20,7 @@ const DetailsPage = () => {
   const [eventType, setEventType] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [error, setError] = useState("");
+  const [isBooking, setIsBooking] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,6 +54,7 @@ const DetailsPage = () => {
     }
 
     try {
+      setIsBooking(true);
       console.log({
         servicecharge: venue.price * 0.05,
         total: venue.price * 0.05 + venue.price,
@@ -78,6 +80,8 @@ const DetailsPage = () => {
     } catch (error) {
       console.log(error);
       // toast.error(error.res.data.message || "Somethin went wrong");
+    } finally {
+      setIsBooking(false); // re-enable button after request
     }
   };
   const handleDateChange = (e) => {
@@ -233,7 +237,11 @@ const DetailsPage = () => {
                   </PriceDisplay>
                   <DateSelector>
                     <DateLabel>Event Date</DateLabel>
-                    <DateInput type="date" onChange={handleDateChange} />
+                    <DateInput
+                      type="date"
+                      min={new Date().toISOString().split("T")[0]} // disables past dates
+                      onChange={handleDateChange}
+                    />
                   </DateSelector>
 
                   <EventContainer>
@@ -250,7 +258,9 @@ const DetailsPage = () => {
                       onChange={handleDaysChange}
                     />
                   </EventContainer>
-                  <BookButton onClick={bookVenue}>Book This Venue</BookButton>
+                  <BookButton onClick={bookVenue} disabled={isBooking}>
+                    {isBooking ? "Booking..." : "Book This Venue"}
+                  </BookButton>
                   <PricingBreakdown>
                     <BreakdownItem>
                       <span>Venue rental</span>
