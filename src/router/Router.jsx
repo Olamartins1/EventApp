@@ -297,9 +297,7 @@ export const Element = createHashRouter([
 { 
     path: "/admin-dashboard",
     element: (
-      // <Protect>
         <AdminDashboard />
-      // </Protect>
     ),
     children: [
       {
