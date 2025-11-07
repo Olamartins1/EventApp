@@ -173,6 +173,7 @@ import AdminDashboard from "../components/layout/AdminDashboard";
 import Overview from "../pages/admin/Overview";
 import AdminVenues from "../pages/admin/AdminVenues";
 import Protect from "./Protect";
+import IndividualPayment from "../pages/IndividualDashboard/IndividualPayment";
 
 export const Element = createHashRouter([
   {
@@ -267,6 +268,10 @@ export const Element = createHashRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+    {
+    path: "/IndividualPayment/:id",
+    element: <IndividualPayment />,
   },
 
   {
