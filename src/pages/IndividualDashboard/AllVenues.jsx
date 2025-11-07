@@ -643,7 +643,7 @@ const AllVenues = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const token = useContext(AuthContext)
+  const {token} = useContext(AuthContext)
 
   useEffect(() => {
     const fetchVenues = async () => {
