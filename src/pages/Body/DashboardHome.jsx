@@ -32,9 +32,11 @@ const DashboardHome = () => {
   console.log("my booking", booking)
   const [loading, setLoading] = useState(true)
   const [rejectionReason, setRejectionReason] = useState("");
+  
 
    const {token} = useContext(AuthContext)
   const {user} = useContext(AuthContext)
+
 
 
 
@@ -69,6 +71,30 @@ const DashboardHome = () => {
       try {
         setLoading(true)
         const res = await axios.get("https://eventiq-final-project.onrender.com/api/v1/allbooking", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        console.log("the am the booking", res)
+        setBooking(res.data?.data || []); 
+        
+
+      }catch(err){
+        console.log(err)
+      }finally{
+        setLoading(false)
+      }
+
+        
+
+    };
+    fetchBooking();
+  }, [token]);
+   useEffect(() => {
+    const acceptBooking = async () => {
+      try {
+        setLoading(true)
+        const res = await axios.get("https://eventiq-final-project.onrender.com/api/v1/acceptbooking", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -160,119 +186,116 @@ return (
         </StatsGrid>
       )}
  <BookingCard>
-     
-
-        
-        {
-        booking.map((item, index)=>
-        (
-          <>
-          <VenueName>{item.venueId.venuename}</VenueName>
-          <div style={{display: "flex", gap: "7px"}}>
+  {loading ? (
+    <h3 style={{ textAlign: "center", color: "#555" }}>Loading bookings...</h3>
+  ) : booking.length > 0 ? (
+    booking.map((item, index) => (
+      <div key={index} style={{ marginBottom: "1.5rem" }}>
+        <VenueName>{item.venueId.venuename}</VenueName>
+        <div style={{ display: "flex", gap: "7px" }}>
           <CustomerName>{item.clientId.firstName}</CustomerName>
-           <CustomerName>{item.clientId.surname}</CustomerName>
-           </div>
-           <p>{item.date}</p>
-          <Occasion>{item.eventType}</Occasion>
-          <Price>#{item.venueId.price}</Price>
-          </>
+          <CustomerName>{item.clientId.surname}</CustomerName>
+        </div>
+        <p>{new Date(item.date).toLocaleDateString()}</p>
+        <Occasion>{item.eventType}</Occasion>
+        <Price>₦{item.venueId.price}</Price>
 
-        )
-          )}
-          
-        
-      
+        <Actions style={{ justifyContent: "flex-end", marginTop: "10px" }}>
+          <AcceptButton>Accept Booking</AcceptButton>
+          <RejectButton onClick={() => setShowPopup(true)}>Reject</RejectButton>
+        </Actions>
+      </div>
+    ))
+  ) : (
+    <p style={{ textAlign: "center", color: "#777", fontSize: "15px" }}>
+      No bookings available at the moment.
+    </p>
+  )}
 
-      <Actions style={{justifyContent: "flex-end"}}>
-        <AcceptButton>Accept Booking</AcceptButton>
-       <RejectButton onClick={() => setShowPopup(true)}>Reject</RejectButton>
-
-{showPopup && (
-  <div
-    style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      width: "100vw",
-      height: "100vh",
-      background: "rgba(0,0,0,0.4)",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      zIndex: 2000,
-    }}
-  >
+  {showPopup && (
     <div
       style={{
-        background: "#fff",
-        width: "360px",
-        padding: "2rem",
-        borderRadius: "10px",
-        textAlign: "center",
-        boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.2)",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        background: "rgba(0,0,0,0.4)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 2000,
       }}
     >
-      <h3 style={{ marginBottom: "1rem" }}>Reject Booking</h3>
-      <p style={{ color: "#555", marginBottom: "1.5rem" }}>
-        Please provide a reason for rejection:
-      </p>
-
-      <input
-        type="text"
-        placeholder="Enter reason..."
-        value={rejectionReason}
-        onChange={(e) => setRejectionReason(e.target.value)}
+      <div
         style={{
-          width: "100%",
-          height: "70px",
-          padding: "10px",
-          border: "1px solid #ccc",
-          borderRadius: "6px",
-          marginBottom: "1.5rem",
-          justifyContent: "flex-start"
+          background: "#fff",
+          width: "360px",
+          padding: "2rem",
+          borderRadius: "10px",
+          textAlign: "center",
+          boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.2)",
         }}
-      />
+      >
+        <h3 style={{ marginBottom: "1rem" }}>Reject Booking</h3>
+        <p style={{ color: "#555", marginBottom: "1.5rem" }}>
+          Please provide a reason for rejection:
+        </p>
 
-      <div style={{ display: "flex", gap: "1rem" }}>
-        <button
+        <input
+          type="text"
+          placeholder="Enter reason..."
+          value={rejectionReason}
+          onChange={(e) => setRejectionReason(e.target.value)}
           style={{
-            background: "#e53935",
-            color: "#fff",
-            border: "none",
-            padding: "10px 20px",
+            width: "100%",
+            height: "70px",
+            padding: "10px",
+            border: "1px solid #ccc",
             borderRadius: "6px",
-            cursor: "pointer",
+            marginBottom: "1.5rem",
           }}
-          onClick={() => {
-            setShowPopup(false);
-          }}
-        >
-          Submit
-        </button>
+        />
 
-        <button
-          style={{
-            background: "#f1f1f1",
-            color: "#333",
-            border: "none",
-            padding: "10px 20px",
-            borderRadius: "6px",
-            cursor: "pointer",
-          }}
-          onClick={() => {
-            setRejectionReason(""); 
-            setShowPopup(false); 
-          }}
-        >
-          Cancel
-        </button>
+        <div style={{ display: "flex", gap: "1rem" }}>
+          <button
+            style={{
+              background: "#e53935",
+              color: "#fff",
+              border: "none",
+              padding: "10px 20px",
+              borderRadius: "6px",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              setShowPopup(false);
+            }}
+          >
+            Submit
+          </button>
+
+          <button
+            style={{
+              background: "#f1f1f1",
+              color: "#333",
+              border: "none",
+              padding: "10px 20px",
+              borderRadius: "6px",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              setRejectionReason("");
+              setShowPopup(false);
+            }}
+          >
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-)}
+  )}
+</BookingCard>
 
-      </Actions>
-    </BookingCard>
       <EmptyState>
         <EmptyIcon>
           <BsBox />
