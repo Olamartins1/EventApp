@@ -65,9 +65,10 @@ const {login} = useContext(AuthContext)
           password: formData.password,
         }
       );
+
  login(response.data)
   localStorage.setItem("userRole", response.data.data.role);
-
+toast.success(response?.data?.message)
        const userRole = response.data.data.role
         // setTimeout(() => navigate("/dashboardHome"), 2000);
          setTimeout(() => {
@@ -80,6 +81,7 @@ const {login} = useContext(AuthContext)
       navigate("/individual-dashboard");
     }
     setLoading(false);
+
   }, 2000);
     
     } catch (error) {

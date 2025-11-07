@@ -24,20 +24,21 @@ import { IoTrendingUpOutline, IoAddCircleOutline } from "react-icons/io5";
 import { HiOutlineUserCircle } from "react-icons/hi";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
 import { Key } from "lucide-react";
-
+import { toast } from "react-toastify";
 const DashboardHome = () => {
   const [statsData, setStatsData] = useState({});
     const [showPopup, setShowPopup] = useState(false); 
   const [booking, setBooking] = useState([])
-  console.log("my booking", booking)
+
   const [loading, setLoading] = useState(true)
   const [rejectionReason, setRejectionReason] = useState("");
-  
+  const [bookingstatus, setBookingstatus] = useState(false)
+
 
    const {token} = useContext(AuthContext)
   const {user} = useContext(AuthContext)
 
-
+const [deleteid, setDeleteid] = useState("")
 
 
   useEffect(() => {
@@ -75,10 +76,8 @@ const DashboardHome = () => {
               Authorization: `Bearer ${token}`,
             },
           });
-        console.log("the am the booking", res)
         setBooking(res.data?.data || []); 
-        
-
+     
       }catch(err){
         console.log(err)
       }finally{
@@ -90,17 +89,18 @@ const DashboardHome = () => {
     };
     fetchBooking();
   }, [token]);
-   useEffect(() => {
-    const acceptBooking = async () => {
+  
+    const acceptBooking = async (bookingid) => {
       try {
         setLoading(true)
-        const res = await axios.get("https://eventiq-final-project.onrender.com/api/v1/acceptbooking", {
+        const res = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/acceptbooking/${bookingid}`, 
+          {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
         console.log("the am the booking", res)
-        setBooking(res.data?.data || []); 
+     toast.success(res?.data?.message)
         
 
       }catch(err){
@@ -112,8 +112,30 @@ const DashboardHome = () => {
         
 
     };
-    fetchBooking();
-  }, [token]);
+       const rejectBooking = async () => {
+      try {
+        setLoading(true)
+        const res = await axios.post(`https://eventiq-final-project.onrender.com/api/v1/rejectbooking/${deleteid}`,{reason:rejectionReason}, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+console.log("the mess",res.data.message)
+toast.error(res?.data?.message)
+     
+        
+
+      }catch(err){
+        toast.error(err?.res?.data?.message)
+
+      }finally{
+        setLoading(false)
+      }
+
+        
+
+    };
+ 
 
 return (
   <Container>
@@ -145,7 +167,6 @@ return (
               </StatIcon>
             </StatHeader>
             <StatValue>{statsData?.totalVenues }</StatValue>
-         {/* { console.log("my data",statsData)} */}
           </StatCard>
           <StatCard>
             <StatHeader>
@@ -185,27 +206,53 @@ return (
           </StatCard>
         </StatsGrid>
       )}
- <BookingCard>
+<BookingCard>
   {loading ? (
     <h3 style={{ textAlign: "center", color: "#555" }}>Loading bookings...</h3>
   ) : booking.length > 0 ? (
-    booking.map((item, index) => (
-      <div key={index} style={{ marginBottom: "1.5rem" }}>
-        <VenueName>{item.venueId.venuename}</VenueName>
-        <div style={{ display: "flex", gap: "7px" }}>
-          <CustomerName>{item.clientId.firstName}</CustomerName>
-          <CustomerName>{item.clientId.surname}</CustomerName>
-        </div>
-        <p>{new Date(item.date).toLocaleDateString()}</p>
-        <Occasion>{item.eventType}</Occasion>
-        <Price>₦{item.venueId.price}</Price>
+    booking.map((item, index) => {
+      const isPending = item.bookingstatus === "pending";
+      const buttonText = item.bookingstatus === "confirmed" ? "Accepted" : "Accept";
+
+      return (
+        <div key={index} style={{ marginBottom: "1.5rem" }}>
+          <VenueName>{item.venueId.venuename}</VenueName>
+
+          <div style={{ display: "flex", gap: "7px" }}>
+            <CustomerName>{item.clientId.firstName}</CustomerName>
+            <CustomerName>{item.clientId.surname}</CustomerName>
+          </div>
+
+          <p>{new Date(item.date).toLocaleDateString()}</p>
+          <Occasion>{item.eventType}</Occasion>
+          <Price>₦{item.venueId.price}</Price>
 
         <Actions style={{ justifyContent: "flex-end", marginTop: "10px" }}>
-          <AcceptButton>Accept Booking</AcceptButton>
-          <RejectButton onClick={() => setShowPopup(true)}>Reject</RejectButton>
-        </Actions>
-      </div>
-    ))
+  <AcceptButton
+    disabled={!isPending}
+    onClick={() => {
+      acceptBooking(item._id);
+      window.location.reload();
+    }}
+  >
+              {buttonText}
+            </AcceptButton>
+
+            {/* ✅ Only show Reject button when status is "pending" */}
+            {isPending && (
+              <RejectButton
+                onClick={() => {
+                  setDeleteid(item._id);
+                  setShowPopup(true);
+                }}
+              >
+                Reject
+              </RejectButton>
+            )}
+          </Actions>
+        </div>
+      );
+    })
   ) : (
     <p style={{ textAlign: "center", color: "#777", fontSize: "15px" }}>
       No bookings available at the moment.
@@ -268,7 +315,9 @@ return (
               cursor: "pointer",
             }}
             onClick={() => {
+              rejectBooking();
               setShowPopup(false);
+              window.location.reload();
             }}
           >
             Submit
@@ -400,6 +449,17 @@ const Wrapper = styled.div`
   &:hover {
     background: #00b44a;
   }
+
+  &:hover:not(:disabled) {
+    background-color: #43a047;
+  }
+
+  &:disabled {
+    background-color: #c8e6c9;
+    color: #666;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
 `;
 
  const RejectButton = styled.button`
@@ -416,6 +476,16 @@ const Wrapper = styled.div`
   &:hover {
     background: red;
     color: white
+  }
+      &:hover:not(:disabled) {
+    background-color: #e53935;
+  }
+
+  &:disabled {
+    background-color: #e53935;
+    color: white;
+    cursor: not-allowed;
+    opacity: 0.7;
   }
 `;
 const WelcomeSection = styled.div`

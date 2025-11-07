@@ -182,7 +182,7 @@ const VerifiedBadge = styled.div`
   position: absolute;
   top: 12px;
   right: 12px;
-  background: yellow;
+  // background: yellow;
   color: black;
   padding: 6px 12px;
   border-radius: 20px;
@@ -887,37 +887,37 @@ const {user}= useContext(AuthContext)
     certificateOfOccupancy: null,
   });
 
-   useEffect(() => {
-    const fetchVenues = async () => {
-      try {
-        if (!user || !user._id) {
-          console.warn("User not available yet");
-          return;
-        }
+  //  useEffect(() => {
+  //   const fetchVenues = async () => {
+  //     try {
+  //       if (!user || !user._id) {
+  //         console.warn("User not available yet");
+  //         return;
+  //       }
 
-        setLoading(true);
-        const userId = user._id;
-        console.log("User ID:", userId);
+  //       setLoading(true);
+  //       const userId = user._id;
+  //       console.log("User ID:", userId);
 
-        const response = await axios.get(
-          `https://eventiq-final-project.onrender.com/api/v1/venues/${user._id}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+  //       const response = await axios.get(
+  //         `https://eventiq-final-project.onrender.com/api/v1/venues/${userId}`,
+  //         {
+  //           headers: { Authorization: `Bearer ${token}` },
+  //         }
+  //       );
 
-        setVenues(response.data.data);
-        setError(null);
-      } catch (err) {
-        console.error("Error fetching venues:", err);
-        setError("Failed to load venues");
-      } finally {
-        setLoading(false);
-      }
-    };
+  //       // setVenues(response.data.data);
+  //       setError(null);
+  //     } catch (err) {
+  //       console.error("Error fetching venues:", err);
+  //       setError("Failed to load venues");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchVenues();
-  }, [user, token]); 
+  //   fetchVenues();
+  // }, [user, token]); 
 
   const handleOpenModal = (venue = null) => {
     setActiveTab("basic");
@@ -1365,7 +1365,14 @@ setVenues(response.data.data)
                       <FiPackage />
                     </VenueImagePlaceholder>
                   )}
-               <VerifiedBadge>
+          <VerifiedBadge
+  style={{
+    color:
+      venue?.status?.toLowerCase() === "pending"
+        ? "gold"
+        : "green", 
+  }}
+>
   {venue?.status?.toLowerCase() === "pending" ? (
     <>
       <FaClock /> Pending
@@ -1376,6 +1383,7 @@ setVenues(response.data.data)
     </>
   )}
 </VerifiedBadge>
+
 
                 </VenueImageWrapper>
                 <VenueContent>
