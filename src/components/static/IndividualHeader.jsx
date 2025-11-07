@@ -5,11 +5,8 @@ import { FiLogOut } from "react-icons/fi";
 import styled from "styled-components";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
 const Individual_header = () => {
-
+ 
    const {user} = useContext(AuthContext);
-
-   
-console.log("th ussdd", user)
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
   const toggleDropdown = () => {

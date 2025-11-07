@@ -37,6 +37,14 @@ const statsData = [
 ];
 
 const Overview = () => {
+  const resendVerificationCode = async (email) => {
+    try {
+      await axios.post(
+        "https://eventiq-final-project.onrender.com/api/v1/resendOtp"
+      );
+    } catch (error) {}
+  };
+
   return (
     <Container>
       <Wrapper>
