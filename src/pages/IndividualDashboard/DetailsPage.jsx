@@ -47,8 +47,8 @@ const DetailsPage = () => {
   };
 
   const bookVenue = async () => {
-    if (!eventDate) {
-      toast.error("Please select an event date");
+    if (!eventDate || !eventType || !days) {
+      toast.error("Please input these fields");
       return;
     }
 
