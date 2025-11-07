@@ -3,10 +3,12 @@ import { createContext, useState, useEffect } from "react";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || null)
- const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("user")) || null
+  );
+  const [token, setToken] = useState(localStorage.getItem("token") || null);
 
-    useEffect(() => {
+  useEffect(() => {
     const savedUser = localStorage.getItem("user");
     const savedToken = localStorage.getItem("token");
     if (savedUser && savedToken) {
@@ -15,14 +17,13 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-
   const login = (data) => {
     localStorage.setItem("token", data.token);
     console.log(data);
     localStorage.setItem("user", JSON.stringify(data.data));
 
     setUser(data.data);
-    setToken(data.token)
+    setToken(data.token);
   };
 
   const logout = () => {
