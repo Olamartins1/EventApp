@@ -34,7 +34,7 @@ const DashboardHome = () => {
   const [rejectionReason, setRejectionReason] = useState("");
 
    const {token} = useContext(AuthContext)
-  const user = JSON.parse(localStorage.getItem("user"))
+  const {user} = useContext(AuthContext)
 
 
 
