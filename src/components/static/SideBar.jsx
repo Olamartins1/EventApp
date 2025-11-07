@@ -30,7 +30,7 @@ const Sidebar = () => {
 
   const toggleSidebar = () => setIsOpen(!isOpen);
 
-  const handleLogoutClick = () => setShowLogoutPopup(true); // ✅ open popup
+  const handleLogoutClick = () => setShowLogoutPopup(true);
   const confirmLogout = () => {
     logout();
     setShowLogoutPopup(false);
@@ -78,7 +78,6 @@ const Sidebar = () => {
         </LogoutSection>
       </Container>
 
-      {/* ✅ Popup (no new styled-components, just inline minimal JSX) */}
       {showLogoutPopup && (
         <div
           style={{

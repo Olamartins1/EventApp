@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
@@ -10,12 +10,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import VerificationModal from "../../components/static/VerificationModal/VerificationModal";
 import Loading from "../../components/static/Loading/Loading"
+import { AuthContext } from "../../assets/AuthContext/AuthContext";
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showVerificationModal, setShowVerificationModal] = useState(false);
-
+const {login} = useContext(AuthContext)
   const navigate = useNavigate();
 
  
@@ -62,22 +63,10 @@ const Login = () => {
           password: formData.password,
         }
       );
+ login(response.data)
+  localStorage.setItem("userRole", response.data.data.role);
 
-      // Backend should return a token or user info
-      // if (response.data && response.data.token) {
-      //   toast.success("Login successful 🎉");
-if (response.data && response.data.token && response.data.data) {
-  toast.success("Login successful");
-       
-    const user = response.data.data;
-  const userRole = user.role;
-        // localStorage.setItem("authToken", response.data.token);
-        // localStorage.setItem("user", JSON.stringify(response.data.user));
- localStorage.setItem("authToken", response.data.token);
-  localStorage.setItem("user", JSON.stringify(user));
-  localStorage.setItem("userRole", userRole);
-  localStorage.setItem("signupPassword", formData.password);
-       
+       const userRole = response.data.data.role
         // setTimeout(() => navigate("/dashboardHome"), 2000);
          setTimeout(() => {
     if (userRole === "venue-owner") {
@@ -90,9 +79,7 @@ if (response.data && response.data.token && response.data.data) {
     }
     setLoading(false);
   }, 2000);
-      } else {
-        toast.error("Invalid response from server");
-      }
+    
     } catch (error) {
       console.error("Login error:", error);
 
@@ -154,7 +141,7 @@ const closeVerificationModal = () => setShowVerificationModal(false);
       <div className="left-section3">
         <div
           className="bg-image3"
-          style={{ backgroundImage: "url('https://res.cloudinary.com/depuy7bkr/image/upload/v1761918729/left_side_log_in_evenitq1_rpxkvp.png')" }}
+          style={{ backgroundImage: "url('')" }}
         ></div>
 
         <button className="back-btn3" onClick={() => navigate("/", { replace: true })}>
