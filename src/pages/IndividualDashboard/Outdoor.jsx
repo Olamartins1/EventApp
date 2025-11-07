@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useArea } from "../../assets/AreaContext/AreaContext";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../assets/AuthContext/AuthContext";
 
 const Outdoor = () => {
 
-  const token = localStorage.getItem("authToken");
+  const {token} = useContext(AuthContext)
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

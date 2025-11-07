@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { Search } from "lucide-react";
 import { FiLogOut } from "react-icons/fi";
 import styled from "styled-components";
-const User = localStorage.getItem("user");
-const parsedUser = JSON.parse(User);
+import { AuthContext } from "../../assets/AuthContext/AuthContext";
 const Individual_header = () => {
-  const User = localStorage.getItem("user");
-  const parsedUser = JSON.parse(User);
+ 
+   const {user} = useContext(AuthContext);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
   const toggleDropdown = () => {
@@ -43,15 +42,14 @@ const Individual_header = () => {
 
         <UserSection>
           <div className="avatar" onClick={toggleDropdown}>
-            {parsedUser.firstName.charAt(0).toUpperCase()}
+            {user.firstName.charAt(0).toUpperCase()}
           </div>
-          <UserName>{parsedUser.firstName}</UserName>
+          <UserName>{user.firstName}</UserName>
 
           {showProfileDropdown && (
             <div className="profile-dropdown">
               <div className="user-info">
-                <h4>{parsedUser.firstName}</h4>
-                <p>{parsedUser}</p>
+                <h4>{user.firstName}</h4>
               </div>
 
               <div className="menu">
@@ -350,6 +348,7 @@ const UserSection = styled.div`
     color: white;
     font-weight: 600;
     cursor: pointer;
+    gap: 1rem;
     border: 2px solid #e0aa3d;
   }
 
@@ -358,7 +357,8 @@ const UserSection = styled.div`
     top: 60px;
     right: 0;
     width: 220px;
-    background: #fff;
+    background: #b81c1cff;
+    height: 100px;
     border-radius: 10px;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
     padding: 12px 0;
