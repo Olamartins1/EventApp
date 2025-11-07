@@ -23,15 +23,20 @@ import { LuBuilding2 } from "react-icons/lu";
 import { IoTrendingUpOutline, IoAddCircleOutline } from "react-icons/io5";
 import { HiOutlineUserCircle } from "react-icons/hi";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
+import { Key } from "lucide-react";
 
 const DashboardHome = () => {
   const [statsData, setStatsData] = useState({});
-  console.log("the data", statsData)
+    const [showPopup, setShowPopup] = useState(false); 
   const [booking, setBooking] = useState([])
   console.log("my booking", booking)
   const [loading, setLoading] = useState(true)
+  const [rejectionReason, setRejectionReason] = useState("");
+
    const {token} = useContext(AuthContext)
-  const user = JSON.parse(localStorage.getItem("user"))
+  const {user} = useContext(AuthContext)
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,8 +48,9 @@ const DashboardHome = () => {
             },
           });
         console.log("the res data checking total", res.data?.data)
+
         setStatsData(res.data?.data || {}); 
-        
+        console.log("the start", res.data?.data)
 
       }catch(err){
         console.log(err)
@@ -112,8 +118,8 @@ return (
               <LuBuilding2 style={{color: "purple"}}/>
               </StatIcon>
             </StatHeader>
-            <StatValue>{statsData?.totalVenues?.total }</StatValue>
-         { console.log("my data",statsData)}
+            <StatValue>{statsData?.totalVenues }</StatValue>
+         {/* { console.log("my data",statsData)} */}
           </StatCard>
           <StatCard>
             <StatHeader>
@@ -125,7 +131,7 @@ return (
                 < FiCalendar style={{stroke: "yellow"}}/>
               </StatIcon>
             </StatHeader>
-            <StatValue>{statsData?.activeBooking?.confirmed }</StatValue>
+            <StatValue>{statsData?.activeBooking }</StatValue>
           </StatCard>
            <StatCard>
             <StatHeader>
@@ -137,7 +143,7 @@ return (
                <TbCurrencyNaira style={{stroke: "green"}}/>
               </StatIcon>
             </StatHeader>
-            <StatValue>₦{statsData?.revenue?.total }</StatValue>
+            <StatValue>₦{statsData?.revenue}</StatValue>
           </StatCard>
            <StatCard>
             <StatHeader>
@@ -156,14 +162,115 @@ return (
  <BookingCard>
      
 
+        
         {
+        booking.map((item, index)=>
+        (
+          <>
+          <VenueName>{item.venueId.venuename}</VenueName>
+          <div style={{display: "flex", gap: "7px"}}>
+          <CustomerName>{item.clientId.firstName}</CustomerName>
+           <CustomerName>{item.clientId.surname}</CustomerName>
+           </div>
+           <p>{item.date}</p>
+          <Occasion>{item.eventType}</Occasion>
+          <Price>#{item.venueId.price}</Price>
+          </>
 
-        }
+        )
+          )}
+          
+        
       
 
-      <Actions>
+      <Actions style={{justifyContent: "flex-end"}}>
         <AcceptButton>Accept Booking</AcceptButton>
-        <RejectButton>Reject</RejectButton>
+       <RejectButton onClick={() => setShowPopup(true)}>Reject</RejectButton>
+
+{showPopup && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100vw",
+      height: "100vh",
+      background: "rgba(0,0,0,0.4)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 2000,
+    }}
+  >
+    <div
+      style={{
+        background: "#fff",
+        width: "360px",
+        padding: "2rem",
+        borderRadius: "10px",
+        textAlign: "center",
+        boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.2)",
+      }}
+    >
+      <h3 style={{ marginBottom: "1rem" }}>Reject Booking</h3>
+      <p style={{ color: "#555", marginBottom: "1.5rem" }}>
+        Please provide a reason for rejection:
+      </p>
+
+      <input
+        type="text"
+        placeholder="Enter reason..."
+        value={rejectionReason}
+        onChange={(e) => setRejectionReason(e.target.value)}
+        style={{
+          width: "100%",
+          height: "70px",
+          padding: "10px",
+          border: "1px solid #ccc",
+          borderRadius: "6px",
+          marginBottom: "1.5rem",
+          justifyContent: "flex-start"
+        }}
+      />
+
+      <div style={{ display: "flex", gap: "1rem" }}>
+        <button
+          style={{
+            background: "#e53935",
+            color: "#fff",
+            border: "none",
+            padding: "10px 20px",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            setShowPopup(false);
+          }}
+        >
+          Submit
+        </button>
+
+        <button
+          style={{
+            background: "#f1f1f1",
+            color: "#333",
+            border: "none",
+            padding: "10px 20px",
+            borderRadius: "6px",
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            setRejectionReason(""); 
+            setShowPopup(false); 
+          }}
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
       </Actions>
     </BookingCard>
       <EmptyState>
@@ -214,8 +321,8 @@ const Wrapper = styled.div`
   border-radius: 12px;
   height: 5%;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  flex-direction: column;
   width: 100%;
   padding: 0.4rem;
 `;
