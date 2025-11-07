@@ -28,7 +28,7 @@ const ProfileSettings = () => {
   });
 
   const [profileImage, setProfileImage] = useState(null);
-  const [phonenumbeer, setPhonenumber] = useState(null)
+  // const [phonenumbeer, setPhonenumber] = useState(null)
   const [isEditMode, setIsEditMode] = useState(false);
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
@@ -91,8 +91,9 @@ console.log("the fetchuser", fetchuser)
   const Updateprofile = async ()=>{
     try {
       const res = await axios.put(
-        
-      )
+
+      );
+
     } catch (error) {
       console.log(error)
     }
