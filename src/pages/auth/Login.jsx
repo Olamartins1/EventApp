@@ -58,22 +58,25 @@ const Login = () => {
           password: formData.password,
         }
       );
-      login(response.data);
-      localStorage.setItem("userRole", response.data.data.role);
 
-      const userRole = response.data.data.role;
-      // setTimeout(() => navigate("/dashboardHome"), 2000);
-      setTimeout(() => {
-        if (userRole === "venue-owner") {
-          navigate("/dashboardHome");
-        } else if (userRole === "client") {
-          navigate("/individual-dashboard");
-        } else {
-          // fallback (if role missing or new role added)
-          navigate("/individual-dashboard");
-        }
-        setLoading(false);
-      }, 2000);
+ login(response.data)
+  localStorage.setItem("userRole", response.data.data.role);
+toast.success(response?.data?.message)
+       const userRole = response.data.data.role
+        // setTimeout(() => navigate("/dashboardHome"), 2000);
+         setTimeout(() => {
+    if (userRole === "venue-owner") {
+      navigate("/dashboardHome");
+    } else if (userRole === "client") {
+      navigate("/individual-dashboard");
+    } else {
+      // fallback (if role missing or new role added)
+      navigate("/individual-dashboard");
+    }
+    setLoading(false);
+
+  }, 2000);
+    
     } catch (error) {
       console.error("Login error:", error);
 
