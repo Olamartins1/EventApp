@@ -1,120 +1,110 @@
 import { Heart, Sparkle, Star } from "lucide-react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-
-const halls = [
-  {
-    id: 1,
-    image:
-      "https://res.cloudinary.com/dg9hdp34k/image/upload/v1761301025/Fea1_jegvae.jpg",
-    name: "Versatile Events Center",
-    location: "Ikeja GRA, Lagos",
-    guests: "200-500 guests",
-    price: "₦420,000",
-    rating: 5.0,
-  },
-  {
-    id: 2,
-    image:
-      "https://res.cloudinary.com/dg9hdp34k/image/upload/v1761301025/Fea2_qmo6dv.jpg",
-    name: "Imperial Marquee Hall",
-    location: "Ajah, Lagos",
-    guests: "400-700 guests",
-    price: "₦480,000",
-    rating: 4.8,
-  },
-  {
-    id: 3,
-    image:
-      "https://res.cloudinary.com/dg9hdp34k/image/upload/v1761301025/Fea3_dqarue.jpg",
-    name: "Skyline Rooftop Venue",
-    location: "Ikoyi, Lagos",
-    guests: "200-400 guests",
-    price: "₦600,000",
-    rating: 4.8,
-  },
-  {
-    id: 4,
-    image:
-      "https://res.cloudinary.com/dg9hdp34k/image/upload/v1761301026/Fea4_yfdkeu.jpg",
-    name: "Lush Garden Paradise",
-    location: "Lekki Phase 1, Lagos",
-    guests: "300-600 guests",
-    price: "₦550,000",
-    rating: 4.7,
-  },
-];
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Halls = () => {
+  const [halls, setHalls] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  const fetchHall = async () => {
+    try {
+      const res = await axios.get(
+        "https://eventiq-final-project.onrender.com/api/v1/venues"
+      );
+
+      // check if response has valid data before setting
+      if (res?.data?.data && Array.isArray(res.data.data)) {
+        console.log(res.data.data);
+        setHalls(res.data.data);
+      } else {
+        setHalls([]); // fallback empty array
+        toast.info("No halls available at the moment.");
+      }
+    } catch (error) {
+      console.error(error);
+      setError(true);
+      toast.error(error?.response?.data?.message || "Failed to fetch halls.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ❌ your useEffect had a bug — it called the function immediately
+  // ✅ should pass a function instead:
+  useEffect(() => {
+    fetchHall();
+  }, []);
+
+  if (loading) {
+    return (
+      <Container>
+        <p>Loading halls...</p>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container>
+        <p>Could not load halls. Please try again later.</p>
+      </Container>
+    );
+  }
+
   return (
     <Container>
       <h2>Featured Event Halls</h2>
       <p>Discover our handpicked selection of premium venues</p>
 
       <Halls_container>
-        {halls.map((hall) => (
-          <Hall_card key={hall.id}>
-            <Image_holder>
-              <img src={hall.image} alt={hall.name} />
-              <Wrapper>
-                <Feature_badge>
-                  <Sparkle
-                    style={{
-                      width: "16px",
-                      height: "16px",
-                    }}
-                  />
-                  <span>Featured</span>
-                </Feature_badge>
-              </Wrapper>
-            </Image_holder>
+        {halls.length > 0 ? (
+          halls.map((hall) => (
+            <Hall_card key={hall._id || hall.id}>
+              <Image_holder>
+                <img
+                  src={hall?.documents?.images[0].url || "/placeholder.jpg"}
+                  alt={hall?.name || "Venue"}
+                />
+                <Wrapper>
+                  <Feature_badge>
+                    <Sparkle
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                      }}
+                    />
+                    <span>Featured</span>
+                  </Feature_badge>
+                </Wrapper>
+              </Image_holder>
 
-            <Hall_info>
-              <Hall_header>
-                <h3>{hall.name}</h3>
-                <Hall_rating>
-                  <Star
-                    style={{
-                      width: "16px",
-                      height: "16px",
-                      color: "#fbbf24",
-                      fill: "#fbbf24",
-                    }}
-                  />
-                  <span>{hall.rating}</span>
-                </Hall_rating>
-              </Hall_header>
-              <p
-                style={{
-                  fontSize: "0.875rem",
-                  fontWeight: 600,
-                  color: "#1f2937",
-                  marginTop: "5px",
-                  display: "flex",
-                  justifyContent: "flex-start",
-                }}
-              >
-                {hall.location}
-              </p>
-              <p
-                style={{
-                  fontSize: "0.875rem",
-                  fontWeight: 600,
-                  color: "#1f2937",
-                  display: "flex",
-                  justifyContent: "flex-start",
-                }}
-              >
-                {hall.guests}
-              </p>
+              <Hall_info>
+                <Hall_header>
+                  <h3>{hall?.venuename || "Unnamed Hall"}</h3>
+                 
+                </Hall_header>
+                {/* <p>{hall?.location || "Unknown location"}</p> */}
+                <p>
+                  {hall?.hallsize
+                    ? `${hall.hallsize} guests`
+                    : "Guest info not available"}
+                </p>
 
-              <Hall_price>
-                <h3>
-                  {hall.price} <span>/day</span>
-                </h3>
-              </Hall_price>
-            </Hall_info>
-          </Hall_card>
-        ))}
+                <Hall_price>
+                  <h3>
+                    {hall?.price ? `${hall.price}` : "Price unavailable"}{" "}
+                    <span>/day</span>
+                  </h3>
+                </Hall_price>
+              </Hall_info>
+            </Hall_card>
+          ))
+        ) : (
+          <p>No halls available right now.</p>
+        )}
       </Halls_container>
     </Container>
   );

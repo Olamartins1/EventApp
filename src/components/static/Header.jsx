@@ -1,8 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { FiBell } from "react-icons/fi";
+import { AuthContext } from "../../assets/AuthContext/AuthContext";
+import { useContext } from "react";
 
 const Header = () => {
+  const { user } = useContext(AuthContext);
+
   return (
     <Holder>
       <Wrapper>
@@ -10,12 +14,9 @@ const Header = () => {
           <FiBell />
           <div className="box">0</div>
         </div>
-        <div className="Image">
-          <img
-            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop"
-            alt="Profile"
-          />
-        </div>
+
+        <div className="avatar">{user.firstName.charAt(0).toUpperCase()}</div>
+        <UserName>{user.firstName}</UserName>
       </Wrapper>
     </Holder>
   );
@@ -112,102 +113,21 @@ const Wrapper = styled.div`
     &:active {
       transform: scale(0.95);
     }
-
-    @media (max-width: 1200px) {
-      width: 40px;
-      height: 40px;
-      font-size: 19px;
-    }
-
-    @media (max-width: 1024px) {
-      width: 38px;
-      height: 38px;
-      font-size: 18px;
-      border-radius: 10px;
-    }
-
-    @media (max-width: 768px) {
-      width: 36px;
-      height: 36px;
-      font-size: 17px;
-      border-radius: 8px;
-    }
-
-    @media (max-width: 480px) {
-      width: 34px;
-      height: 34px;
-      font-size: 16px;
-    }
-
-    @media (max-width: 360px) {
-      width: 32px;
-      height: 32px;
-      font-size: 15px;
-    }
   }
 
-  .Image {
-    width: 42px;
-    height: 42px;
+  .avatar {
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
-    overflow: hidden;
+    background: linear-gradient(135deg, #6b46c1, #9333ea);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.25s ease;
-    border: 2px solid transparent;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-
-    /* Allow the image to shrink on very small screens and prevent it
-       from being clipped by parent containers. Disable hover scaling on
-       touch devices to avoid layout shift. */
-    flex: 0 0 auto;
-    min-width: 0;
-
-    &:hover {
-      border-color: #6366f1;
-      transform: scale(1.05);
-    }
-
-    @media (max-width: 1200px) {
-      width: 40px;
-      height: 40px;
-    }
-
-    @media (max-width: 1024px) {
-      width: 38px;
-      height: 38px;
-    }
-
-    @media (max-width: 768px) {
-      width: 36px;
-      height: 36px;
-    }
-
-    @media (max-width: 480px) {
-      width: 38px; /* slightly larger for tap targets */
-      height: 38px;
-      transform: none; /* avoid scaling on touch */
-    }
-
-    @media (max-width: 360px) {
-      width: 32px;
-      height: 32px;
-    }
-
-    img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-      transition: transform 0.25s ease;
-
-      /* only allow hover transform on non-touch (larger) screens */
-      @media (min-width: 481px) {
-        &:hover {
-          transform: scale(1.05);
-        }
-      }
-    }
+    gap: 1rem;
+    border: 2px solid #e0aa3d;
   }
 
   .box {
@@ -263,5 +183,19 @@ const Wrapper = styled.div`
       height: 12px;
       font-size: 8px;
     }
+  }
+`;
+
+const UserName = styled.h3`
+  font-size: 18px;
+  font-weight: 500;
+  color: #0a0a0a;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
   }
 `;
