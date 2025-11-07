@@ -137,7 +137,7 @@ toast.success(response?.data?.message)
         <div className="left-section3">
           <div
             className="bg-image3"
-            style={{ backgroundImage: "url('')" }}
+            style={{ backgroundImage: "url('https://res.cloudinary.com/depuy7bkr/image/upload/v1761918729/left_side_log_in_evenitq1_rpxkvp.png')" }}
           ></div>
 
           <button
