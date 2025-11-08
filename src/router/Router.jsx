@@ -174,6 +174,7 @@ import Overview from "../pages/admin/Overview";
 import AdminVenues from "../pages/admin/AdminVenues";
 import Protect from "./Protect";
 import IndividualPayment from "../pages/IndividualDashboard/IndividualPayment";
+import SuccessfulPayment from "../components/SuccessfulPayment"
 
 export const Element = createHashRouter([
   {
@@ -268,6 +269,10 @@ export const Element = createHashRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/payment-success?reference=wKLN6Cz4sYjf",
+    element: <SuccessfulPayment />,
   },
     {
     path: "/IndividualPayment/:id",
