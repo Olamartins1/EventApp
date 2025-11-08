@@ -29,7 +29,7 @@ const DashboardHome = () => {
   const [statsData, setStatsData] = useState({});
     const [showPopup, setShowPopup] = useState(false); 
   const [booking, setBooking] = useState([])
-
+console.log("book", booking)
   const [loading, setLoading] = useState(true)
   const [rejectionReason, setRejectionReason] = useState("");
   const [bookingstatus, setBookingstatus] = useState(false)
@@ -212,7 +212,7 @@ return (
     <h3 style={{ textAlign: "center", color: "#555" }}>Loading bookings...</h3>
   ) : booking.length > 0 ? (
     booking.map((item, index) => {
-      const isPending = item.bookingstatus === "pending"? true:false ;
+      const isPending = item.bookingstatus === "pending" ? true : false ;
       const buttonText = item.bookingstatus === "confirmed" ? "Accepted" : "Accept";
 console.log("text. ",item.bookingstatus ,item)
       return (
@@ -240,7 +240,6 @@ console.log("text. ",item.bookingstatus ,item)
               {buttonText}
             </AcceptButton>
 
-            {/* ✅ Only show Reject button when status is "pending" */}
             {isPending && (
               <RejectButton
                 onClick={() => {
@@ -364,7 +363,7 @@ console.log("text. ",item.bookingstatus ,item)
 
 export default DashboardHome;
 
-
+// good boy
 const Container = styled.div`
   width: 100%;
   display: flex;
@@ -488,7 +487,7 @@ const Wrapper = styled.div`
     color: white;
     cursor: not-allowed;
     opacity: 0.7;
-  }
+♦  }
 `;
 const WelcomeSection = styled.div`
   display: flex;

@@ -3,28 +3,39 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 const IndividualPayment = () => {
+    const navigate = useNavigate()
     const [bookDetails,setBookDetails]= useState({})
  const {id} = useParams("id")
-
+const [loading, setLoading] = useState(false);
+ 
     const getBookingDetails = async()=>{
   try {
+    setLoading(true);
          const res = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/paiddetail/${id}`)
-       console.log(res)
        setBookDetails(res?.data?.data)
   } catch (error) {
   console.log(error)  
+  } finally {
+    setLoading(false);
   }
     }
  useEffect(()=>{
 
-
 getBookingDetails()
  },[id])
+console.log("the book", bookDetails)
 
+ const handlePay =async  (id)=>{
+ const response = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/booking-payment/${bookDetails.clientId._id}`)
+ console.log(response.data.data.checkout_url)
+ 
+       window.location.href =response.data.data.checkout_url
 
- const handlePay = ()=>{}
+ 
+ }
    const {user} = useContext(AuthContext);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
@@ -86,40 +97,56 @@ getBookingDetails()
         </UserSection>
       </HeaderContent>
     </HeaderContainer>
-   
-    <Holder>
-        <div className="wrapper">
-            <div className="wrapper_holder">
-          <div className="first">
-            <h1>Booking Confirmed!</h1>
-            <p>Your booking has been approved. Completete your payment to finalize.</p>
-          </div>
-            <div className="second">
-        <p> Great news! The venue is available for your selected date.<br />please complete the payment to secure your booking</p>
-            </div>
-              <div className="third">
-<div className="top">
-    <p>venue</p>
-    <h4>{bookDetails?.venueId?.venuename}</h4>
-</div>
-<div className="buttom">
-    <p>Date</p>
-    <h4>{bookDetails?.date}</h4>
-</div>
-              </div>
-      <div className="morn">   
-    <p>Amount to Pay</p>
-    <h4>{bookDetails?.total}</h4>
 
-                  </div>
-                    <button onClick={handlePay
-                        
-                    }>
-Pay Now
-                    </button>
-                    </div>
+ {loading ? (
+  <Middle>
+    <div className="wrapper">
+      <div className="wrapper_holder" style={{ textAlign: "center" }}>
+        <p>Loading booking details...</p>
+      </div>
+    </div>
+  </Middle>
+) : (
+  <Middle>
+    <div className="wrapper">
+      <div className="wrapper_holder">
+        <div className="first">
+          <h1>Booking Confirmed!</h1>
+          <p>Your booking has been approved. Complete your payment to finalize.</p>
         </div>
-    </Holder>
+
+        <div className="second">
+          <p>
+            Great news! The venue is available for your selected date.
+            <br />
+            Please complete the payment to secure your booking.
+          </p>
+        </div>
+
+        <div className="third">
+          <div className="top">
+            <p>Venue</p>
+            <h4>{bookDetails?.venueId?.venuename}</h4>
+          </div>
+          <div className="buttom">
+            <p>Date</p>
+            <h4>{bookDetails?.date}</h4>
+          </div>
+        </div>
+
+        <div className="morn">
+          <p>Amount to Pay</p>
+          <h4>₦{bookDetails?.total}</h4>
+        </div>
+
+        <button onClick={handlePay} disabled={loading}>
+          {loading ? "Processing..." : "Pay Now"}
+        </button>
+      </div>
+    </div>
+  </Middle>
+)}
+
     </Pay>
   );
 };
@@ -519,103 +546,175 @@ const UserName = styled.h3`
     font-size: 14px;
   }
 `;
+const Middle = styled.div`
+  width: 90%;
+  height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e0dce4;
 
-const Holder = styled.div`
-width: 90%;
-height: 90%;
-display: flex;
-align-items: center;
-justify-content: center;
+  .wrapper {
+    width: 43%;
+    height: 67%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.5rem;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
-.wrapper{
-width: 40%;
-height: 60%;
-display: flex;
-justify-content: center;
-align-items: center;
-border-radius: 0.5rem;
-background: white;
- box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    .wrapper_holder {
+      width: 93%;
+      height: 97%;
+
+      button {
+        width: 100%;
+        background: #69447cff;
+        height: 10%;
+        color: white;
+        font-size: 1.3rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+      }
+
+      .morn {
+         display: flex;
+  justify-content: space-between;
+  text-align: center;
+  align-items: center;
+  margin-top: 0.7rem;
+
+        p {
+          font-weight: bold;
+          font-size: 1.2rem;
+        }
+        h4 {
+          font-size: 1.4rem;
+          color: purple;
+        }
+      }
+
+      .third {
+        width: 100%;
+        height: 18%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 1rem;
+
+        .top {
+          height: 18px;
+          display: flex;
+          justify-content: space-between;
+          tex-align: center;
+          align-items: center;
+        }
+        .buttom {
+          height: 18px;
+          display: flex;
+          justify-content: space-between;
+          tex-align: center;
+          align-items: center;
+        }
+      }
+
+      .second {
+        width: 100%;
+        height: 20%;
+        background: #cec0d5;
+        border-radius: 0.5rem;
+        display: flex;
+        justify-content: center;
+        font-size: 1rem;
+      }
+
+      .first {
+        height: 27%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        h1 {
+          font-size: 1.5rem;
+          margin: 0;
+
+          p {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    height: auto;
+    padding: 1rem;
+
+    .wrapper {
+      width: 95%;
+      height: auto;
+      padding: 1.5rem;
+
+      .wrapper_holder {
+        width: 100%;
+        height: auto;
+
+        .morn {
+          gap: 1rem;
+          text-align: center;
+
+          p {
+            font-size: 1rem;
+          }
+
+          h4 {
+            font-size: 1.1rem;
+          }
+        }
+
+        .third {
+          gap: 1rem;
 
 
-.wrapper_holder{
-width: 93%;
-height: 100%;
+           .top {
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 1rem;
+          }
+          .buttom {
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 1rem;
+          }
+        }
 
+        .second {
+          font-size: 0.9rem;
+          display: flex;
+          text-align: center;
+          padding: 0.5rem;
+        }
 
-button{
-width: 100%;
-background: #69447cff;
-height: 10%;
-color: white;
-font-size: 1.3rem;
-border-radius: 0.5rem;
-cursor: pointer;
-}
-.morn{
-display: flex;
-justify-content: space-between;
-tex-align: center;
-align-items: center;
+        .first {
+          text-align: center;
 
-p{
-font-weight: bold;
-font-size: 1.2rem;
-}
-h4{
-font-size: 1.4rem;
-color: purple;
-}
-}
+          h1 {
+            font-size: 1.2rem;
+          }
 
-.third{
-width: 100%;
-height: 18%;
-display: flex;
-flex-direction: column;
-justify-content: center;
-gap: 0.8rem;
+          p {
+            font-size: 0.95rem;
+          }
+        }
 
-.top{
-height: 18px;
-display: flex;
-justify-content: space-between;
-tex-align: center;
-align-items: center;
-}
-.buttom{
-height: 18px;
-display: flex;
-justify-content: space-between;
-tex-align: center;
-align-items: center;
-}
-}
-
-.second{
-width: 100%;
-height: 20%;
-background: #cec0d5;
-border-radius: 0.5rem;
-display: flex;
-justify-content: center;
-font-size: 1rem;
-}
-
-.first{
-height: 27%;
-display: flex;
-justify-content: center;
-flex-direction: column;
-h1{
-font-size: 1.5rem;
-margin: 0;
-
-p{
-margin: 0;
-}
-}
-}
-}
-}
-`
+        button {
+          font-size: 1rem;
+          height: 3rem;
+        }
+      }
+    }
+  }
+`;
