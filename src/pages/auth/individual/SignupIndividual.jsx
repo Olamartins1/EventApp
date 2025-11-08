@@ -87,7 +87,7 @@ const SignupIndividual = () => {
         formData
       );
 
-      console.log("Signup successful:", response.data);
+      toast.success("Signup successful:", response.data);
       localStorage.setItem("signupEmail", response.data.email);
       localStorage.setItem("userRole", response.data.role);
 
@@ -253,7 +253,6 @@ const SignupIndividual = () => {
               {loading ? "Creating Account..." : "Create Account"}
             </button>
 
-         
             <p className="login-text-client">
               Already have an account? <Link to="/login">Log in</Link>
             </p>

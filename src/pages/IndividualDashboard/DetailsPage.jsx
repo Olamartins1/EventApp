@@ -6,10 +6,11 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../assets/AuthContext/AuthContext";
 
 const DetailsPage = () => {
   const { id } = useParams();
-  const token = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const [venue, setVenue] = useState({});
@@ -19,6 +20,7 @@ const DetailsPage = () => {
   const [eventType, setEventType] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [error, setError] = useState("");
+  const [isBooking, setIsBooking] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,12 +48,13 @@ const DetailsPage = () => {
   };
 
   const bookVenue = async () => {
-    if (!eventDate) {
-      alert("Please select an event date");
+    if (!eventDate || !eventType || !days) {
+      toast.error("Please input these fields");
       return;
     }
 
     try {
+      setIsBooking(true);
       console.log({
         servicecharge: venue.price * 0.05,
         total: venue.price * 0.05 + venue.price,
@@ -77,12 +80,14 @@ const DetailsPage = () => {
     } catch (error) {
       console.log(error);
       // toast.error(error.res.data.message || "Somethin went wrong");
+    } finally {
+      setIsBooking(false); // re-enable button after request
     }
   };
   const handleDateChange = (e) => {
-    const inputDate = e.target.value; // e.g. "2025-06-12"
+    const inputDate = e.target.value;
     const [year, month, day] = inputDate.split("-");
-    const formattedDate = `${day}/${month}/${year}`; // "12/06/2025"
+    const formattedDate = `${day}/${month}/${year}`;
     setEventDate(formattedDate);
   };
   if (loading) {
@@ -152,15 +157,12 @@ const DetailsPage = () => {
               </MetaItem>
             </VenueHeader>
             <ImageGallery>
-              {/* Main Image */}
               {venue?.documents?.images?.[0]?.url && (
                 <MainImage
                   src={venue?.documents?.images[0].url}
                   alt={venue?.name || "Venue Image"}
                 />
               )}
-
-              {/* Other Images (if more than one exists) */}
               {venue?.documents?.images?.length > 1 && (
                 <>
                   {venue?.documents?.images.slice(1, 5).map((img, idx) => (
@@ -207,18 +209,6 @@ const DetailsPage = () => {
                     </InfoCard>
                   </InfoGrid>
                 </Section>
-
-                {/* <Section>
-            <AmenitiesList> */}
-                {/* {venue.amenities.map((amenity, idx) => (
-                <AmenityItem key={idx}>
-                  <Check size={18} color="#6b46c1" />
-                  {amenity}
-                </AmenityItem>
-              ))} */}
-                {/* </AmenitiesList>
-          </Section> */}
-
                 <Section>
                   <SectionTitle>Cancellation Policy</SectionTitle>
                   <CancellationPolicy>
@@ -245,20 +235,13 @@ const DetailsPage = () => {
                     <PriceAmount>{venue?.price}</PriceAmount>
                     <PriceLabel>/day</PriceLabel>
                   </PriceDisplay>
-
-                  {/* <DateSelector>
-              <DateLabel>Event Date</DateLabel>
-              <DateInput
-                type="date"
-                value={eventDate}
-                onChange={handleDateChange}
-              />
-              type="date" value={eventDate} onChange={handleDateChange}
-            </DateSelector> */}
-
                   <DateSelector>
                     <DateLabel>Event Date</DateLabel>
-                    <DateInput type="date" onChange={handleDateChange} />
+                    <DateInput
+                      type="date"
+                      min={new Date().toISOString().split("T")[0]} // disables past dates
+                      onChange={handleDateChange}
+                    />
                   </DateSelector>
 
                   <EventContainer>
@@ -275,12 +258,9 @@ const DetailsPage = () => {
                       onChange={handleDaysChange}
                     />
                   </EventContainer>
-
-                  {/* <Bo <DateLabel>Event Date</DateLabel>okButton onClick={bookVenue(venue._id)}>
-              Book This Venue
-            </BookButton> */}
-                  <BookButton onClick={bookVenue}>Book This Venue</BookButton>
-
+                  <BookButton onClick={bookVenue} disabled={isBooking}>
+                    {isBooking ? "Booking..." : "Book This Venue"}
+                  </BookButton>
                   <PricingBreakdown>
                     <BreakdownItem>
                       <span>Venue rental</span>
@@ -315,9 +295,12 @@ const DetailsPage = () => {
                     You’ll receive an email once it’s approved.
                   </p>
 
-                  <CloseButton onClick={() => setShowPopup(false)}>
-                    Close
-                  </CloseButton>
+                  <Link
+                    to="/individual-dashboard"
+                    onClick={() => setShowPopup(false)}
+                  >
+                    <CloseButton>Close</CloseButton>
+                  </Link>
                 </PopupBox>
               </PopupOverlay>
             )}
