@@ -270,8 +270,12 @@ export const Element = createHashRouter([
     path: "/login",
     element: <Login />,
   },
+  // {
+  //   path: "/payment-success",
+  //   element: <SuccessfulPayment />,
+  // },
   {
-    path: "/payment-success?reference=wKLN6Cz4sYjf",
+    path: "/payment-success",
     element: <SuccessfulPayment />,
   },
     {

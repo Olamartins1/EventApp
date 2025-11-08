@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 const IndividualPayment = () => {
+    const navigate = useNavigate()
     const [bookDetails,setBookDetails]= useState({})
  const {id} = useParams("id")
 const [loading, setLoading] = useState(false);
@@ -26,9 +28,13 @@ getBookingDetails()
  },[id])
 console.log("the book", bookDetails)
 
- const handlePay = (id)=>{
- const response = axios.post(`https://eventiq-final-project.onrender.com/api/v1/booking-payment/${bookDetails.clientId._id}`)
- console.log("the res",response)
+ const handlePay =async  (id)=>{
+ const response = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/booking-payment/${bookDetails.clientId._id}`)
+ console.log(response.data.data.checkout_url)
+ 
+       window.location.href =response.data.data.checkout_url
+
+ 
  }
    const {user} = useContext(AuthContext);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);

@@ -4,7 +4,7 @@ import { FaCheckCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const SuccessfulPayment = () => {
-//   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <Container>
@@ -15,7 +15,7 @@ const SuccessfulPayment = () => {
           Your payment has been processed successfully. <br />
           Thank you for choosing Eventiq!
         </p>
-        <button>
+        <button onClick={() => navigate("/individual-dashboard")}>
           Go to Dashboard
         </button>
       </Card>
