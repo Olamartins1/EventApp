@@ -718,7 +718,7 @@ const AllVenues = () => {
 
               <CardContent>
                 <VenueName>{venue.venuename}</VenueName>
-                <Location>{venue?.location?.street || "Location unavailable"}</Location>
+                <Location>{venue?.location?.city || "Location unavailable"}</Location>
                 <Capacity>
                   Capacity: {venue?.capacity?.minimum || 0}–{venue?.capacity?.maximum || 0} guests
                 </Capacity>
