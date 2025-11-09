@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import {Link} from "react-router-dom"
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
@@ -218,9 +219,9 @@ toast.success(response?.data?.message)
 
               {/* Forgot Password */}
               <div className="checkbox-group-Login1">
-                <a href="#" style={{ color: "#603379" }}>
-                  <strong>Forgot Password?</strong>
-                </a>
+                <Link to="/ForgotPassword" style={{ color: "#603379" }}>
+                <strong>Forgot Password?</strong>
+              </Link>
               </div>
 
               {/* Submit */}

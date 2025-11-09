@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
 import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";0
 import axios from "axios";
 const IndividualPayment = () => {
     const navigate = useNavigate()

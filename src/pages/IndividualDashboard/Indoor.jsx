@@ -110,7 +110,7 @@ const Indoor = () => {
                           <h3>{venue.venuename}</h3>
                         </HallHeader>
         
-                        <p>{venue?.location?.street || "Location unavailable"}</p>
+                        <p>{venue?.location?.city || "Location unavailable"}</p>
                         <p>
                           Capacity: {venue?.capacity?.minimum || 0} -{" "}
                           {venue?.capacity?.maximum || 0} 
