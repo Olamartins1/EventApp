@@ -40,11 +40,11 @@ const MyProfile = () => {
 
           <div className="prince">
             <div className="bob">
-              <p>{user.firstName[0]}</p>
+              <p>{user?.firstName[0]}</p>
             </div>
             <div className="bobby">
-              <h3>{user.firstName}</h3>
-              <p>{user.email}</p>
+              <h3>{user?.firstName}</h3>
+              <p>{user?.email}</p>
             </div>
           </div>
         </article>
