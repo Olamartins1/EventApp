@@ -40,7 +40,7 @@ const MyProfile = () => {
 
           <div className="prince">
             <div className="bob">
-              <p>P</p>
+              <p>{user.firstName[0]}</p>
             </div>
             <div className="bobby">
               <h3>{user.firstName}</h3>
