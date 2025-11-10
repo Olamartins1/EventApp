@@ -92,10 +92,10 @@ const {selectedArea}= useArea()
                       src={venue?.documents?.images?.[0]?.url || "/placeholder.jpg"}
                       alt={venue.venuename}
                     />
-                    <FeaturedBadge>
+                    {/* <FeaturedBadge>
                       <Sparkles size={14} />
                       Featured
-                    </FeaturedBadge>
+                    </FeaturedBadge> */}
                   </ImageWrapper>
     
                   <CardContent>

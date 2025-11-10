@@ -58,7 +58,7 @@ const MyBooking = () => {
                     : "pending"
                 }`}
               >
-                {item.status}
+                {item.bookingstatus}
               </span>
             </div>
 
@@ -80,7 +80,8 @@ const MyBooking = () => {
                 </span>
               </div>
               <div className="detail">
-                {/* <span className="value">{item.bookingId}</span> */}
+                 {/* <span className="label">booking Paid</span>
+                <span className="value">{item.bookingId}</span> */}
               </div>
             </div>
 
