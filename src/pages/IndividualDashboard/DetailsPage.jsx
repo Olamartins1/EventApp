@@ -148,7 +148,7 @@ const DetailsPage = () => {
 
               <MetaItem>
                 <MapPin size={16} />
-                {venue?.location?.street},{venue?.location?.city},
+                {venue?.location?.city},
                 {venue?.location?.state}
               </MetaItem>
               <MetaItem>

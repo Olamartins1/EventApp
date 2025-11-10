@@ -53,7 +53,7 @@ const Individual_header = () => {
 
           <UserSection>
             <div className="avatar" onClick={toggleDropdown}>
-              {user.firstName.charAt(0).toUpperCase()}
+              {user?.firstName?.charAt(0).toUpperCase()}
             </div>
             <UserName>{user.firstName}</UserName>
 
