@@ -16,7 +16,6 @@ const SignupHallOwner = () => {
   const navigate = useNavigate();
   const [isVerificationOpen, setIsVerificationOpen] = useState(false);
 
-                                                                  
   const [formData, setFormData] = useState({
     firstName: "",
     surname: "",
@@ -25,7 +24,6 @@ const SignupHallOwner = () => {
     termsAccepted: false,
   });
 
- 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -84,7 +82,7 @@ const SignupHallOwner = () => {
       console.log("Signup successful:", response.data);
       localStorage.setItem("signupEmail", response.data.data.email);
       localStorage.setItem("userRole", response.data.data.role);
-   localStorage.setItem("signupPassword", formData.password);
+      localStorage.setItem("signupPassword", formData.password);
       setIsVerificationOpen(true);
     } catch (error) {
       console.error("Signup failed:", error);

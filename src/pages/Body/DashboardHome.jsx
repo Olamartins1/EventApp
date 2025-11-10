@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import {
@@ -22,12 +22,15 @@ import { TbCurrencyNaira } from "react-icons/tb";
 import { LuBuilding2 } from "react-icons/lu";
 import { IoTrendingUpOutline, IoAddCircleOutline } from "react-icons/io5";
 import { HiOutlineUserCircle } from "react-icons/hi";
+import { AuthContext } from "../../assets/AuthContext/AuthContext";
 
 const DashboardHome = () => {
   const [statsData, setStatsData] = useState({});
   console.log("the data", statsData)
+  const [booking, setBooking] = useState([])
+  console.log("my booking", booking)
   const [loading, setLoading] = useState(true)
-   const token = localStorage.getItem("authToken");
+   const {token} = useContext(AuthContext)
   const user = JSON.parse(localStorage.getItem("user"))
 
   useEffect(() => {
@@ -39,7 +42,7 @@ const DashboardHome = () => {
               Authorization: `Bearer ${token}`,
             },
           });
-        console.log("the res data", res.data?.data)
+        console.log("the res data checking total", res.data?.data)
         setStatsData(res.data?.data || {}); 
         
 
@@ -53,6 +56,31 @@ const DashboardHome = () => {
 
     };
     fetchData();
+  }, [token]);
+
+  useEffect(() => {
+    const fetchBooking = async () => {
+      try {
+        setLoading(true)
+        const res = await axios.get("https://eventiq-final-project.onrender.com/api/v1/allbooking", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        console.log("the am the booking", res)
+        setBooking(res.data?.data || []); 
+        
+
+      }catch(err){
+        console.log(err)
+      }finally{
+        setLoading(false)
+      }
+
+        
+
+    };
+    fetchBooking();
   }, [token]);
 
 return (
@@ -85,6 +113,7 @@ return (
               </StatIcon>
             </StatHeader>
             <StatValue>{statsData?.totalVenues?.total }</StatValue>
+         { console.log("my data",statsData)}
           </StatCard>
           <StatCard>
             <StatHeader>
@@ -125,12 +154,12 @@ return (
         </StatsGrid>
       )}
  <BookingCard>
-      <BookingInfo>
-        <VenueName>Grand Luxe Ballroom</VenueName>
-        <CustomerName>Chioma Adeleke • Oct 25, 2025</CustomerName>
-        <Occasion>Wedding Anniversary</Occasion>
-        <Price>₦250,000</Price>
-      </BookingInfo>
+     
+
+        {
+
+        }
+      
 
       <Actions>
         <AcceptButton>Accept Booking</AcceptButton>

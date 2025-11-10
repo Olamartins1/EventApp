@@ -121,9 +121,8 @@
 //   max-width: 1100px;
 //   margin: 0 auto;
 
-  
 //   @media (max-width: 1024px) {
-    
+
 //   }
 
 //   @media (max-width: 768px) {
@@ -222,7 +221,7 @@ export default How_it_works;
 const Section = styled.div`
   background-color: #f5f5f5;
   padding: 60px 20px;
-
+  margin-top: -100px;
   @media (max-width: 768px) {
     padding: 50px 20px;
   }
@@ -237,6 +236,7 @@ const Container = styled.div`
   width: 100%;
   margin: 0 auto;
   padding-bottom: 2rem;
+  margin-top: 90px;
 
   h2 {
     text-align: center;

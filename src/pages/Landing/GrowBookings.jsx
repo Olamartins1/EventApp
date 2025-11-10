@@ -1,9 +1,15 @@
 import { CheckCircle2 } from "lucide-react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const Grow_booking = () => {
+  const navigate = useNavigate();
   const img =
     "https://res.cloudinary.com/dg9hdp34k/image/upload/v1762335900/err_vyusyq.jpg";
+
+  const handleNavigate = () => {
+    navigate("/signup-hallowner");
+  };
 
   return (
     <Section id="about">
@@ -34,7 +40,7 @@ const Grow_booking = () => {
               <span>Reach premium clientele</span>
             </li>
           </Grow_points>
-          <Button>Sign Up as Venue Owner</Button>
+          <Button onClick={handleNavigate}>Sign Up as Venue Owner</Button>
         </Grow_content>
       </Container>
     </Section>
@@ -196,7 +202,6 @@ const Section = styled.div`
   background-color: #fff;
   padding: 5rem 1.25rem;
 
-
   @media (max-width: 768px) {
     padding: 3.5rem 1.25rem;
   }
@@ -205,7 +210,6 @@ const Section = styled.div`
     padding: 2.5rem 1rem;
   }
 `;
-
 
 // import { CheckCircle2 } from "lucide-react";
 // import styled from "styled-components";
@@ -216,7 +220,7 @@ const Section = styled.div`
 
 //   return (
 //     <Section id="about">
-      
+
 //       <Container>
 //         <Image>
 //           <img src={img} alt="Event hall" />
@@ -248,7 +252,6 @@ const Section = styled.div`
 //           <Button>Sign Up as Venue Owner</Button>
 //         </ButtonWrapper>
 
-    
 //       </Container>
 //     </Section>
 //   );
@@ -261,9 +264,8 @@ const Section = styled.div`
 //   display: flex;
 //   justify-content: center;
 
-
 //   @media (min-width: 769px) {
-   
+
 //   }
 // `;
 
@@ -280,7 +282,6 @@ const Section = styled.div`
 //   text-align: center;
 //   width: 100%;
 //   max-width: 280px;
-  
 
 //   &:hover {
 //     background-color: #3f1953;
@@ -300,11 +301,11 @@ const Section = styled.div`
 //     margin-bottom: 0.875rem;
 //     font-size: 1rem;
 //     color: #4a4a4a;
-    
+
 //     &:last-child {
 //       margin-bottom: 0;
 //     }
-    
+
 //     svg {
 //       flex-shrink: 0;
 //       margin-top: 0.125rem;

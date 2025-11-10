@@ -1,4 +1,3 @@
-
 // import { CheckCircle2 } from "lucide-react";
 // import styled from "styled-components";
 
@@ -6,9 +5,9 @@
 //    const img =
 //     "https://res.cloudinary.com/dg9hdp34k/image/upload/v1762324583/evver_y7eeue.jpg";
 //   return (
-   
+
 //     <Section>
-     
+
 //       <Event_text>
 //         <h2>Find the Perfect Space for Any Event</h2>
 //         <p>
@@ -16,7 +15,6 @@
 //           budget. Browse verified venues, compare options, and book with
 //           confidence.
 //         </p>
-        
 
 //         <Event_features>
 //           <li>
@@ -41,7 +39,7 @@
 //         <img src={event} alt="Event hall" />
 //       </Event_image> */}
 //     </Section>
-    
+
 //   );
 // };
 
@@ -114,7 +112,7 @@
 // const Event_text = styled.div`
 //   flex: 1;
 //   max-width: 540px;
-  
+
 //   h2 {
 //     font-size: 1.875rem;
 //     font-weight: 600;
@@ -172,7 +170,6 @@
 //   background-color: #f3f4f6;
 // margin-top: -50px;
 
-
 //     @media (max-width: 1024px) {
 //     gap: 3rem;
 //   }
@@ -193,7 +190,6 @@
 //   // width: 650px;
 //   // overflow: hidden;
 //   // height: 500px;
-
 
 //   // img {
 //   //   width: 100%;
@@ -220,7 +216,6 @@
 //   //   border-radius: 0.5rem;
 //   //   margin-left: -20px;
 //   // }
-
 
 //  border-radius: 0.75rem;
 //   width: 650px;
@@ -250,49 +245,49 @@
 //   }
 // `;
 
-
-
 import { CheckCircle2 } from "lucide-react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const Event_section = () => {
+  const navigate = useNavigate();
+
   const img =
     "https://res.cloudinary.com/dg9hdp34k/image/upload/v1762324583/evver_y7eeue.jpg";
-
+  const handleNavigate = () => {
+    navigate("/signup-individual");
+  };
   return (
     <Event_Section id="about">
       <Event_Container>
-       
-
         <Event_content>
           <h2>Find the Perfect Space for Any Event</h2>
-       <p>
-          From weddings to conferences, discover halls that fit your style and
-          budget. Browse verified venues, compare options, and book with
-         confidence.
-         </p>
+          <p>
+            From weddings to conferences, discover halls that fit your style and
+            budget. Browse verified venues, compare options, and book with
+            confidence.
+          </p>
 
           <Event_points>
-           <li>
-            <CheckCircle2 size={18} color="#9810FA" />{" "}
-            <span>Browse hundreds of verified venues</span>
-          </li>
-          <li>
-            <CheckCircle2 size={18} color="#9810FA" />{" "}
-            <span> Seamless booking process</span>
-         </li>
-         <li>
-          <CheckCircle2 size={18} color="#9810FA" />{" "}
-            <span>Secure Payment Gateway</span>
-          </li>
+            <li>
+              <CheckCircle2 size={18} color="#9810FA" />{" "}
+              <span>Browse hundreds of verified venues</span>
+            </li>
+            <li>
+              <CheckCircle2 size={18} color="#9810FA" />{" "}
+              <span> Seamless booking process</span>
+            </li>
+            <li>
+              <CheckCircle2 size={18} color="#9810FA" />{" "}
+              <span>Secure Payment Gateway</span>
+            </li>
           </Event_points>
-          <Button>Sign Up as a Client</Button>
+          <Button onClick={handleNavigate}>Sign Up as a Client</Button>
         </Event_content>
-         <Image>
+        <Image>
           <img src={img} alt="Event hall" />
         </Image>
       </Event_Container>
-      
     </Event_Section>
   );
 };
@@ -452,7 +447,6 @@ const Event_Section = styled.div`
   background-color: #f3f4f6;
   padding: 5rem 1.25rem;
 
-
   @media (max-width: 768px) {
     padding: 3.5rem 1.25rem;
   }
@@ -461,8 +455,6 @@ const Event_Section = styled.div`
     padding: 2.5rem 1rem;
   }
 `;
-
-
 
 // import { CheckCircle2 } from "lucide-react";
 // import styled from "styled-components";
@@ -513,7 +505,7 @@ const Event_Section = styled.div`
 //   width: 100%;
 //   display: flex;
 //   justify-content: center;
-  
+
 //   @media (min-width: 769px) {
 //     display: none;
 //   }
@@ -570,7 +562,7 @@ const Event_Section = styled.div`
 //       gap: 0.5rem;
 //       margin-bottom: 0.75rem;
 //       align-items: flex-start;
-      
+
 //       svg {
 //         margin-top: 2px;
 //         flex-shrink: 0;
