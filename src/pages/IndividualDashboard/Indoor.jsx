@@ -4,7 +4,6 @@ import axios from "axios";
 import VenueCard from "../../components/VenueCard";
 import {useArea} from "../../assets/AreaContext/AreaContext"
 import { Sparkles } from "lucide-react"; 
-
 import { Navigate, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
 
@@ -91,7 +90,10 @@ const Indoor = () => {
               <VenuesGrid>
                 {venues.length > 0 ? (
                   venues.map((venue, index) => (
-                    <VenueCardWrapper key={index}>
+                    <VenueCardWrapper key={index}
+                      onClick={() => navigate(`/individual-dashboard/venue/${venue._id}`)}
+                    >
+
                       <ImageHolder>
                         <img
                           src={venue?.documents?.images?.[0]?.url}

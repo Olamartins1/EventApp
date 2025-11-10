@@ -29,7 +29,7 @@ getBookingDetails()
 console.log("the book", bookDetails)
 
  const handlePay =async  (id)=>{
- const response = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/booking-payment/${bookDetails.clientId._id}`)
+ const response = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/booking-payment/${bookDetails._id}`)
  console.log(response.data.data.checkout_url)
  
        window.location.href =response.data.data.checkout_url
