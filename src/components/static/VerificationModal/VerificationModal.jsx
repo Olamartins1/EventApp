@@ -1,6 +1,3 @@
-
-
-
 // import { useState, useRef, useEffect } from "react";
 // import { X } from "lucide-react";
 // import "./VerificationModal.css";
@@ -92,7 +89,6 @@
 //       setTimeout(() => {
 //         onClose?.();
 //         // navigate("/dashboardHome");
-
 
 //   if (userRole === "venue-owner") {
 //     navigate("/dashboardHome");
@@ -314,9 +310,9 @@ const VerificationModal = ({ email, onClose }) => {
         setTimeout(() => {
           onClose?.();
           if (role === "venue-owner") {
-            navigate("/dashboardHome");
+            navigate("/login");
           } else {
-            navigate("/individual-dashboard");
+            navigate("/login");
           }
         }, 1500);
       } else {
@@ -369,7 +365,8 @@ const VerificationModal = ({ email, onClose }) => {
 
         <h2 className="modal-title">Verification</h2>
         <p className="modal-description">
-          A verification code has been sent to <b>{userEmail}</b>. Please enter it below.
+          A verification code has been sent to <b>{userEmail}</b>. Please enter
+          it below.
         </p>
 
         <div className="code-inputs">
