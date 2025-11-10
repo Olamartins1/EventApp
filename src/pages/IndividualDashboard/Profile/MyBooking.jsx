@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useContext } from "react";
+import{Link} from "react-router-dom"
 import { AuthContext } from "../../../assets/AuthContext/AuthContext";
 
 const MyBooking = () => {
@@ -65,27 +66,28 @@ const MyBooking = () => {
               <div className="detail">
                 <span className="label">Event Date</span>
                 <span className="value">
-                  {new Date(item.eventDate).toDateString()}
+                  {item?.date}
                 </span>
               </div>
               <div className="detail">
-                <span className="label">Guests</span>
-                <span className="value">{item.guests} people</span>
+                <span className="label">Event Type</span>
+                <span className="value">{item.eventType}</span>
               </div>
               <div className="detail">
                 <span className="label">Total Paid</span>
                 <span className="value">
-                  ₦{item.totalAmount?.toLocaleString()}
+                  ₦{item.total}
                 </span>
               </div>
               <div className="detail">
-                <span className="label">Booking ID</span>
                 {/* <span className="value">{item.bookingId}</span> */}
               </div>
             </div>
 
             <div className="booking-footer">
+              <Link to="/Invoice">
               <button className="invoice-btn">View Invoice</button>
+              </Link>
             </div>
           </BookingCard>
         ))
