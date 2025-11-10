@@ -61,7 +61,9 @@ const Login = () => {
       );
 
       login(response.data);
-      localStorage.setItem("userRole", response.data.data.role);
+      localStorage.setItem("userRole", JSON.stringify(response?.data?.token));
+      localStorage.setItem("userid", JSON.stringify(response?.data?.data?._id));
+      localStorage.setItem("token", response?.data?.token);
       toast.success(response?.data?.message);
       const userRole = response.data.data.role;
       // setTimeout(() => navigate("/dashboardHome"), 2000);
@@ -134,12 +136,13 @@ const Login = () => {
 
         {/* LEFT SECTION */}
         <div className="left-section3">
-          <div className="bg-image3"></div>
-
-          {/* style={{
+          <div
+            className="bg-image3"
+            style={{
               backgroundImage:
                 "url('https://res.cloudinary.com/depuy7bkr/image/upload/v1761918729/left_side_log_in_evenitq1_rpxkvp.png')",
-            }} */}
+            }}
+          ></div>
 
           <button
             className="back-btn3"

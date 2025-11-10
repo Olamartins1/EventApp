@@ -3,11 +3,13 @@ import styled from "styled-components";
 import { FiCamera, FiCheck, FiX } from "react-icons/fi";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
 import axios from "axios";
+import {toast} from "react-toastify";
+
 
 const ProfileSettings = () => {
     const {user} = useContext(AuthContext)
-
-  const [formData, setFormData] = useState({
+   const {token} = useContext(AuthContext)
+   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
@@ -33,6 +35,9 @@ const ProfileSettings = () => {
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
   const [fetchuser, setFetchuser] = useState({})
+const [loadingBank, setLoadingBank] = useState(false);
+// const [loadingProfile, setLoadingProfile] = useState(false);
+// const [loadingEdit, setLoadingEdit] = useState(false);
 
 
 
@@ -47,23 +52,6 @@ const ProfileSettings = () => {
     }
   };
 
-//   useEffect(()=>{
-//     const fetchData = async()=>{
-
-//       console.log("i am  line 52", user._id)
-//       try {
-//         const res = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/venueowner/${user._id}`)
-//         setFetchuser(res.data)
-     
-// console.log("i am res.data", res.data)
-//       } catch (error) {
-//         console.log(error)
-//       }
-//     }
-// fetchData()
-// }
-
-//   , [])
 useEffect(() => {
   const fetchData = async () => {
     if (!user?._id) return; 
@@ -86,18 +74,125 @@ useEffect(() => {
 }, [user?._id]);
 console.log("the fetchuser", fetchuser)
 
-
-
-  const Updateprofile = async ()=>{
-    try {
-      const res = await axios.put(
-
-      );
-
-    } catch (error) {
-      console.log(error)
+const submitBankDetails = async () => {
+  setLoadingBank(true);
+  try {
+    if (!user?._id) {
+      toast.error("User not found. Please login again.");
+      return;
     }
+
+
+   
+    const bankData = {
+      bankName: formData.bankName,
+      accountNumber: formData.accountNumber,
+      accountType: formData.type, 
+      accountName: formData.accountName,
+    };
+
+    const res = await axios.post(
+      "https://eventiq-final-project.onrender.com/api/v1/register-bank",
+      bankData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+
+    );
+
+    console.log(res)
+
+  
+      toast.success("Bank details saved successfully!");
+     setLoadingBank(false)
+  } catch (error) {
+    console.error("Bank registration error:", error.response?.data || error.message);
+    toast.error(error.response?.data?.message || "Error registering bank details");
+
+    setLoadingBank(false)
   }
+
+};
+
+
+
+ const Updateprofile = async () => {
+  try {
+    //  setLoadingProfile(true);
+    if (!user?._id) {
+      toast.error(res.data.message);
+      return;
+    }
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("phoneNumber", formData.phone);
+    if (profileImage) {
+     
+      const blob = await fetch(profileImage).then((res) => res.blob());
+      formDataToSend.append("profilePicture", blob, "profile.jpg");
+    }
+
+    const res = await axios.patch(
+      `https://eventiq-final-project.onrender.com/api/v1/update-profile`,
+      formDataToSend,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+setFetchuser(res.data.data);
+     toast.success(res.data.message);
+  } catch (error) {
+    console.error("Error updating profile:", error.response?.data || error.message);
+    toast.error(error.response?.data?.message || "Error updating profile");
+  }
+};
+
+const updateBankDetails = async () => {
+
+  try {
+      // setLoadingBank(true);
+    if (!user?._id) {
+      toast.error("User not found. Please login again.");
+      return;
+    }
+
+    const bankData = {
+      bankName: formData.bankName,
+      accountNumber: formData.accountNumber,
+      accountType: formData.type, 
+      accountName: formData.accountName,
+    };
+
+    const res = await axios.put(
+      "https://eventiq-final-project.onrender.com/api/v1/update-bank",
+      bankData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+      setFetchuser(res.data.data); 
+    console.log('my response', res)
+
+    toast.success(res.data.message);
+
+
+  } catch (error) {
+    console.error("Bank update error:", error.response?.data || error.message);
+    toast.error(error.response?.data?.message || "Error updating bank details");
+  }finally {
+    setLoadingBank(false); 
+  }
+};
+
 
 
   const handleImageUpload = (e) => {
@@ -254,16 +349,24 @@ console.log("the fetchuser", fetchuser)
       <Section>
         <SectionHeader>
           <SectionTitle>Personal Information</SectionTitle>
-          <EditButton onClick={handleEditToggle}>
-            {isEditMode ? (
-              <>
-                <FiCheck size={16} style={{ marginRight: "6px" }} />
-                Save
-              </>
-            ) : (
-              "Edit"
-            )}
-          </EditButton>
+         <EditButton
+  onClick={() => {
+    if (isEditMode) {
+      Updateprofile(); 
+    }
+    handleEditToggle();
+  }}
+>
+  {isEditMode ? (
+    <>
+      <FiCheck size={16} style={{ marginRight: "6px" }} />
+      Save
+    </>
+  ) : (
+    "Edit"
+  )}
+</EditButton>
+
         </SectionHeader>
         <FormGrid>
           <FormGroup>
@@ -360,7 +463,17 @@ console.log("the fetchuser", fetchuser)
           </FormGroupFull>
         </FormGrid>
       </Section>
-<Button>Submit</Button>
+      <Btn>
+  <Button onClick={submitBankDetails}>
+    {loadingBank ? "Sending..." : "Submit"}
+  </Button>
+  <Button
+  onClick={updateBankDetails} 
+  // disabled={loadingBank}      
+>
+  edit
+</Button>
+</Btn>
       <Section>
         <SectionTitle>Security</SectionTitle>
         <form onSubmit={handlePasswordChange}>
@@ -417,6 +530,15 @@ console.log("the fetchuser", fetchuser)
     
   );
 };
+
+
+const Btn = styled.div`
+width:100%;
+height:40px;
+margin-bottom:10px;
+display:flex;
+justify-content:space-between;
+`;
 
 const Container = styled.div`
   background: #fff;
@@ -508,7 +630,8 @@ border-radius: 0.5rem;
   background:  #9476a5;
   padding: 0.5rem;
   cursor: pointer;
-  `
+  color:#fff;
+  `;
 
 const SectionHeader = styled.div`
   display: flex;

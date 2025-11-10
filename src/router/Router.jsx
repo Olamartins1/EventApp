@@ -176,7 +176,8 @@ import AdminVenues from "../pages/admin/AdminVenues";
 import Protect from "./Protect";
 import IndividualPayment from "../pages/IndividualDashboard/IndividualPayment";
 import SuccessfulPayment from "../components/SuccessfulPayment"
-// import Invoice from "../pages/IndividualDashboard/Invoice"
+import Invoice from "../pages/IndividualDashboard/Invoice"
+// https://event-app-theta-seven.vercel.app/payment-success?reference=zhPltj6q3FfB
 
 export const Element = createHashRouter([
   {
@@ -272,10 +273,10 @@ export const Element = createHashRouter([
     path: "/login",
     element: <Login />,
   },
-  // {
-  //   path: "/Invoice",
-  //   element: <Invoice />,
-  // },
+  {
+    path: "/Invoice",
+    element: <Invoice />,
+  },
   {
     path: "/payment-success",
     element: <SuccessfulPayment />,

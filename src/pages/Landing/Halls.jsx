@@ -17,12 +17,11 @@ const Halls = () => {
         "https://eventiq-final-project.onrender.com/api/v1/venues"
       );
 
-      // check if response has valid data before setting
       if (res?.data?.data && Array.isArray(res.data.data)) {
         console.log(res.data.data);
         setHalls(res.data.data);
       } else {
-        setHalls([]); // fallback empty array
+        setHalls([]);
         toast.info("No halls available at the moment.");
       }
     } catch (error) {
@@ -34,8 +33,6 @@ const Halls = () => {
     }
   };
 
-  // ❌ your useEffect had a bug — it called the function immediately
-  // ✅ should pass a function instead:
   useEffect(() => {
     fetchHall();
   }, []);
@@ -89,7 +86,7 @@ const Halls = () => {
 
               <Hall_info>
                 <Hall_header>
-                  <h3>{hall?.venuename || "Unnamed Hall"}</h3>
+                  <h3>{hall?.venuename}</h3>
                 </Hall_header>
                 {/* <p>{hall?.location || "Unknown location"}</p> */}
                 <p>

@@ -234,7 +234,8 @@ console.log("text. ",item.bookingstatus ,item)
     onClick={() => {
       acceptBooking(item._id);
 
-      window.location.reload();
+      ;
+      setTimeout(()=>window.location.reload(),5000)
     }}
   >
               {buttonText}
@@ -363,7 +364,7 @@ console.log("text. ",item.bookingstatus ,item)
 
 export default DashboardHome;
 
-// good boy
+
 const Container = styled.div`
   width: 100%;
   display: flex;

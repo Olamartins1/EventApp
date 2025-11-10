@@ -100,10 +100,10 @@ const Indoor = () => {
                           alt={venue.venuename}
                         />
                         <Wrapper>
-                          <FeatureBadge>
+                          {/* <FeatureBadge>
                             <Sparkles size={16} />
                             <span>Featured</span>
-                          </FeatureBadge>
+                          </FeatureBadge> */}
                         </Wrapper>
                       </ImageHolder>
         

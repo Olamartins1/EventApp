@@ -1,343 +1,352 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React from 'react'
 import styled from "styled-components";
-import axios from "axios";
-import { FiMail, FiPhone, FiMapPin, FiClock } from "react-icons/fi";
-import { BsFillPeopleFill } from "react-icons/bs";
-import { AiOutlineFileText } from "react-icons/ai";
+
 
 const Invoice = () => {
-  const [invoice, setInvoice] = useState(null);
-  console.log( "the invoice",invoice)
-
-  const [loading, setLoading] = useState(false);
-  // Prefer using the route param if present. Falls back to placeholder to avoid crashes.
-  const params = useParams();
-  const invoiceId = params.invoiceId || params.id || "YOUR_INVOICE_ID";
-
-  useEffect(() => {
-    const fetchInvoice = async () => {
-      try {
-        setLoading(true);
-        const res = await axios.get(
-          `https://eventiq-final-project.onrender.com/api/v1/invoice/${invoiceId}`
-        );
-        setInvoice(res.data.data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchInvoice();
-  }, [invoiceId]);
-
-  if (loading) return <p>Loading invoice...</p>;
-  if (!invoice && !loading) return <p>No invoice found</p>;
-
   return (
-    <InvoiceContainer>
-      <InvoiceCard>
-        <Header>
-          <div className="logo">
-            <h2>Eventiq</h2>
-            <p>Your Events start here</p>
-          </div>
-          <div className="info">
-            <h3>Invoice</h3>
-            <p>
-              Date Issued: <span>{invoice?.dateIssued}</span>
-            </p>
-            <div className="status">{invoice?.status}</div>
-          </div>
-        </Header>
+    <div>
+     <InvoiceContainer>
+  <div className="invoice-header">
+    <div className="brand">
+      <h2>Eventiq</h2>
+      <p>Your Events start here</p>
+    </div>
+    <div className="invoice-info">
+      <p>
+        <strong>Booking No:</strong> EVT-9283
+      </p>
+      <p>
+        <strong>Date Issued:</strong> November 5th, 2025
+      </p>
+      <span className="status paid">PAID</span>
+    </div>
+  </div>
 
-        <Section>
-          <SectionTitle>
-            <AiOutlineFileText /> Customer Information
-          </SectionTitle>
-          <div className="content">
-            <p>
-              <strong>Name:</strong> {invoice?.customerName}
-            </p>
-            <p>
-              <FiMail /> {invoice?.customerEmail}
-            </p>
-            <p>
-              <FiPhone /> {invoice?.customerPhone}
-            </p>
-          </div>
-        </Section>
+  <section className="section customer-info">
+    <h3>
+      <span className="icon">📄</span> Customer Information
+    </h3>
+    <div className="content-box">
+      <p>
+        <strong>Name:</strong> Princess Umez
+      </p>
+      <p>
+        <strong>Email:</strong> princessumez@gmail.com
+      </p>
+      <p>
+        <strong>Phone:</strong> 08062567835
+      </p>
+      <p>
+        <strong>Booking ID:</strong> EVT-9283
+      </p>
+    </div>
+  </section>
 
-        <Section>
-          <SectionTitle>
-            <FiMapPin /> Venue Details
-          </SectionTitle>
-          <div className="venue-card">
-            <div className="venue_wrapper">
-              <h4>{invoice?.venueName}</h4>
-              <div className="lush">
-                <span>{invoice?.venueType}</span>
-                <p>{invoice?.venueAddress}</p>
-              </div>
-              <div className="venue-info">
-                <span>{invoice?.eventDate}</span>
-                <span>
-                  <FiClock /> {invoice?.hoursBooked} hours
-                </span>
-              </div>
-              <article>
-                <BsFillPeopleFill /> {invoice?.capacity}
-              </article>
-            </div>
-          </div>
-        </Section>
+  <section className="section venue-details">
+    <h3>
+      <span className="icon">🏛️</span> Venue Details
+    </h3>
+    <div className="venue-box">
+      <h4>Lush Garden Paradise</h4>
+      <div className="venue-meta">
+        <div>
+          <p>📍 6, Jimoh oshodi, Lekki Phase 1, Lagos</p>
+          <p>📅 November 5th, 2025</p>
+          <p>👥 300–600 guests</p>
+        </div>
+        <div>
+          <p>🏞️ Outdoor Venue in Lekki</p>
+          <p>⏱️ Minimum 5 hours</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <Section>
-          <SectionTitle>
-            <AiOutlineFileText /> Payment Breakdown
-          </SectionTitle>
-          <div className="table">
-            <div className="row header">
-              <span>Description</span>
-              <span>Qty</span>
-              <span>Price (₦)</span>
-              <span>Total (₦)</span>
-            </div>
+  <section className="section payment-breakdown">
+    <h3>Payment Breakdown</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Qty</th>
+          <th>Price (₦)</th>
+          <th>Total (₦)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Venue Rental</td>
+          <td>1</td>
+          <td>550,000</td>
+          <td>550,000</td>
+        </tr>
+        <tr>
+          <td>Service Fee (10%)</td>
+          <td>1</td>
+          <td>10,500</td>
+          <td>10,500</td>
+        </tr>
+        <tr>
+          <td>Caution Fee</td>
+          <td>1</td>
+          <td>50,000</td>
+          <td>50,000</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colSpan="3" className="grand-total-label">
+            Grand Total
+          </td>
+          <td className="grand-total">₦610,500</td>
+        </tr>
+      </tfoot>
+    </table>
+  </section>
 
-            <div className="row">
-              <span>{invoice?.rentalDescription}</span>
-              <span>1</span>
-              <span>{invoice?.venuePrice?.toLocaleString()}</span>
-              <span>{invoice?.venuePrice?.toLocaleString()}</span>
-            </div>
-
-            <div className="row">
-              <span>Service Fee</span>
-              <span>1</span>
-              <span>{invoice?.serviceFee?.toLocaleString()}</span>
-              <span>{invoice?.serviceFee?.toLocaleString()}</span>
-            </div>
-
-            <div className="row">
-              <span>Caution Fee</span>
-              <span>1</span>
-              <span>{invoice?.cautionFee?.toLocaleString()}</span>
-              <span>{invoice?.cautionFee?.toLocaleString()}</span>
-            </div>
-
-            <div className="grand-total">
-              <span>Grand Total</span>
-              <span>₦{invoice?.totalAmount?.toLocaleString()}</span>
-            </div>
-          </div>
-        </Section>
-
-        <Footer>
-          <p>
-            Thank you for booking with Eventiq. You can download this invoice or
-            view it anytime in your dashboard.
-          </p>
-          <button>Download Invoice (PDF)</button>
-        </Footer>
-      </InvoiceCard>
-    </InvoiceContainer>
-  );
-};
+  <div className="footer">
+    <p>
+      Thank you for booking with Eventiq. You can download this invoice or view
+      it anytime in your dashboard.
+    </p>
+    <button className="download-btn">⬇ Download Invoice (PDF)</button>
+  </div>
+</InvoiceContainer>
+</div>
+  )
+}
 
 export default Invoice;
 
 const InvoiceContainer = styled.div`
-  width: 100%;
-  min-height: 100vh;
-  background: #f4f3fb;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-`;
-
-const InvoiceCard = styled.div`
-  background: white;
-  width: 700px;
+  max-width: 700px;
+  margin: 30px auto;
+  background: #fff;
   border-radius: 12px;
-  padding: 2rem;
+  padding: 30px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-`;
+  font-family: "Poppins", sans-serif;
+  color: #222;
 
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  .invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid #f3f3f3;
+    padding-bottom: 20px;
 
-  .logo {
-    h2 {
-      font-family: "Poppins", sans-serif;
-      color: #7c3aed;
-      margin-bottom: 4px;
-    }
-    p {
-      color: #6b7280;
-      font-size: 0.9rem;
-    }
-  }
-
-  .info {
-    text-align: right;
-    h3 {
-      font-size: 1.3rem;
-      color: #111827;
-      margin-bottom: 5px;
-    }
-    p {
-      color: #6b7280;
-      font-size: 0.9rem;
-      span {
-        color: #111827;
-        font-weight: 500;
-      }
-    }
-    .status {
-      margin-top: 6px;
-      background: #dcfce7;
-      color: #16a34a;
-      font-weight: 600;
-      padding: 4px 12px;
-      border-radius: 20px;
-      display: inline-block;
-      font-size: 0.8rem;
-    }
-  }
-`;
-
-const Section = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-
-  .content {
-    background: #f9fafb;
-    padding: 1rem;
-    border-radius: 10px;
-    p {
-      margin: 4px 0;
-      color: #374151;
-      font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-  }
-
-  .venue-card {
-    background: #f4edff;
-    border-radius: 10px;
-    padding: 1rem;
-
-    .venue_wrapper {
-      width: 70%;
-      height: 100%;
-      gap: 1.5rem;
-
-      article {
-        margin-top: 0.8rem;
-      }
-
-      .lush {
-        font-size: 0.9rem;
-        text-align: center;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      h4 {
+    .brand {
+      h2 {
         color: #6b21a8;
-        font-size: 1.1rem;
-        margin-bottom: 6px;
+        font-size: 1.4rem;
+        margin: 0;
       }
       p {
-        color: #4b5563;
-        margin-bottom: 8px;
-      }
-      .venue-info {
-        display: flex;
-        gap: 4rem;
         font-size: 0.9rem;
-        color: #6b7280;
-        span {
-          display: flex;
-          align-items: center;
-          gap: 5px;
+        color: #777;
+      }
+    }
+
+    .invoice-info {
+      text-align: right;
+      font-size: 0.9rem;
+
+      p {
+        margin: 2px 0;
+      }
+
+      .status {
+        display: inline-block;
+        margin-top: 6px;
+        font-size: 0.8rem;
+        padding: 3px 10px;
+        border-radius: 12px;
+        font-weight: 500;
+
+        &.paid {
+          background: #eafbee;
+          color: #0a8a28;
         }
       }
     }
   }
 
-  .table {
-    border-radius: 10px;
-    overflow: hidden;
-    .row {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      padding: 10px;
-      font-size: 0.9rem;
-      color: #374151;
-      border-bottom: 1px solid #e5e7eb;
+  .section {
+    margin-top: 25px;
 
-      &.header {
-        background: #f3f4f6;
-        font-weight: 600;
+    h3 {
+      display: flex;
+      align-items: center;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 10px;
+
+      .icon {
+        margin-right: 6px;
       }
     }
 
-    .grand-total {
-      display: flex;
-      justify-content: space-between;
-      background: #ede9fe;
-      color: #6b21a8;
-      font-weight: 700;
-      padding: 12px 10px;
-      border-radius: 0 0 10px 10px;
+    .content-box {
+      background: #fafafa;
+      padding: 15px;
+      border-radius: 8px;
+      p {
+        font-size: 0.9rem;
+        margin: 5px 0;
+        color: #444;
+
+        strong {
+          color: #111;
+        }
+      }
+    }
+
+    &.venue-details {
+      .venue-box {
+        background: #f8f4ff;
+        border-radius: 8px;
+        padding: 15px;
+
+        h4 {
+          font-size: 1rem;
+          font-weight: 600;
+          color: #5b21b6;
+          margin-bottom: 8px;
+        }
+
+        .venue-meta {
+          display: flex;
+          justify-content: space-between;
+          flex-wrap: wrap;
+
+          p {
+            font-size: 0.9rem;
+            color: #555;
+            margin: 3px 0;
+          }
+        }
+      }
+    }
+
+    &.payment-breakdown {
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+        margin-top: 10px;
+
+        th {
+          text-align: left;
+          color: #555;
+          padding: 8px 0;
+          border-bottom: 1px solid #eee;
+        }
+
+        td {
+          padding: 8px 0;
+          color: #444;
+        }
+
+        tfoot {
+          .grand-total-label {
+            text-align: right;
+            font-weight: 600;
+            color: #333;
+          }
+
+          .grand-total {
+            font-weight: 700;
+            color: #5b21b6;
+            background: #f3e8ff;
+            border-radius: 6px;
+            padding: 6px 8px;
+          }
+        }
+      }
     }
   }
-`;
 
-const SectionTitle = styled.h4`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 1rem;
-  color: #6b21a8;
-  font-weight: 600;
-`;
+  .footer {
+    text-align: center;
+    margin-top: 30px;
 
-const Footer = styled.div`
-  text-align: center;
-  border-top: 1px solid #f3f4f6;
-  padding-top: 1rem;
+    p {
+      font-size: 0.85rem;
+      color: #555;
+      margin-bottom: 10px;
+    }
 
-  p {
-    color: #6b7280;
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
+    .download-btn {
+      background: #5b21b6;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: #4c1d95;
+      }
+    }
   }
 
-  button {
-    background: #6b21a8;
-    color: white;
-    border: none;
-    padding: 10px 24px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  /* 📱 MOBILE RESPONSIVENESS */
+  @media (max-width: 768px) {
+    padding: 20px;
 
-    &:hover {
-      background: #581c87;
+    .invoice-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+
+      .invoice-info {
+        text-align: left;
+      }
+    }
+
+    .section {
+      h3 {
+        font-size: 0.95rem;
+      }
+
+      .content-box,
+      .venue-box {
+        padding: 12px;
+      }
+
+      &.venue-details {
+        .venue-box {
+          .venue-meta {
+            flex-direction: column;
+            gap: 8px;
+          }
+        }
+      }
+
+      &.payment-breakdown {
+        table {
+          font-size: 0.85rem;
+
+          th,
+          td {
+            padding: 6px 0;
+          }
+        }
+      }
+    }
+
+    .footer {
+      p {
+        font-size: 0.8rem;
+      }
+
+      .download-btn {
+        width: 100%;
+        font-size: 0.85rem;
+      }
     }
   }
 `;
