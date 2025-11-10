@@ -234,7 +234,8 @@ console.log("text. ",item.bookingstatus ,item)
     onClick={() => {
       acceptBooking(item._id);
 
-      window.location.reload();
+      ;
+      setTimeout(()=>window.location.reload(),5000)
     }}
   >
               {buttonText}

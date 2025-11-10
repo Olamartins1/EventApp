@@ -92,7 +92,7 @@ const Outdoor = () => {
               </ImageContainer>
               <VenueInfo>
                 <VenueName>{venue.venuename}</VenueName>
-                <VenueLocation>{venue.location.street}</VenueLocation>
+                <VenueLocation>{venue.location.city}</VenueLocation>
                 <VenueGuests>
                   {venue.capacity.minimum}-{venue.capacity.maximum} guests
                 </VenueGuests>

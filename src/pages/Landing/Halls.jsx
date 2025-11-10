@@ -3,13 +3,14 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom"
 
 const Halls = () => {
-  const navigate = useNavigate(); 
+ 
   const [halls, setHalls] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const navigate = useNavigate();
 
   const fetchHall = async () => {
     try {
@@ -63,10 +64,11 @@ const Halls = () => {
         {halls.length > 0 ? (
           halls.map((hall) => (
             <Hall_card key={hall._id || hall.id}>
-              <Image_holder
-                                onClick={() => navigate(`/individual-dashboard/venue/${hall._id}`)}
->
-                <img 
+              <Image_holder    onClick={() => navigate(`/individual-dashboard/venue/${hall._id}`)}>
+                          
+
+                
+                <img
                   src={hall?.documents?.images[0].url || "/placeholder.jpg"}
                   alt={hall?.name || "Venue"}
 
@@ -274,6 +276,7 @@ const Container = styled.div`
   p {
     font-size: 1.25rem;
     color: #4b5563;
+    color: red;
   }
 
   @media (max-width: 768px) {
