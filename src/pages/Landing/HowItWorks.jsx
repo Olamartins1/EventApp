@@ -5,7 +5,7 @@ const How_it_works = () => {
   return (
     <Section>
       <Container>
-        <h2>How Evently Works</h2>
+        <h2>How Eventiq Works</h2>
 
         <Steps_container>
           <Step>
@@ -69,7 +69,7 @@ export default How_it_works;
 const Section = styled.div`
   background-color: #f5f5f5;
   padding: 60px 20px;
-
+  margin-top: -100px;
   @media (max-width: 768px) {
     padding: 50px 20px;
   }
@@ -84,6 +84,7 @@ const Container = styled.div`
   width: 100%;
   margin: 0 auto;
   padding-bottom: 2rem;
+  margin-top: 90px;
 
   h2 {
     text-align: center;

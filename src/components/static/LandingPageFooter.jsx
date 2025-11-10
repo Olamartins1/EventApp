@@ -24,41 +24,40 @@ const LandingpageFooter = () => {
             <p>Connecting venues and events seamlessly.</p>
           </Footer_brand>
 
-<Footer_flex_Quicklegal>         
-  <Footer_section>
-            <h3>Quick Links</h3>
-            <Footer_list>
-              <li>
-                <Footer_link to="home" smooth={true} duration={600}>
-                  Home
-                </Footer_link>
-              </li>
-              <li>
-                <Footer_link to="about" smooth={true} duration={600}>
-                  About
-                </Footer_link>
-              </li>
-              <li>
-                <Footer_link to="faq" smooth={true} duration={600}>
-                  Faq
-                </Footer_link>
-              </li>
-            </Footer_list>
-          </Footer_section>
+          <Footer_flex_Quicklegal>
+            <Footer_section>
+              <h3>Quick Links</h3>
+              <Footer_list>
+                <li>
+                  <Footer_link to="home" smooth={true} duration={600}>
+                    Home
+                  </Footer_link>
+                </li>
+                <li>
+                  <Footer_link to="about" smooth={true} duration={600}>
+                    About
+                  </Footer_link>
+                </li>
+                <li>
+                  <Footer_link to="faq" smooth={true} duration={600}>
+                    Faq
+                  </Footer_link>
+                </li>
+              </Footer_list>
+            </Footer_section>
 
-          <Footer_section0>
-            <h3>Legal</h3>
-            <Footer_list>
-              <li>
-                <Footer_link href="#">Terms and Conditions</Footer_link>
-              </li>
-              <li>
-                <Footer_link href="#">Privacy Policy</Footer_link>
-              </li>
-            </Footer_list>
-          </Footer_section0>
+            <Footer_section0>
+              <h3>Legal</h3>
+              <Footer_list>
+                <li>
+                  <Footer_link href="#">Terms and Conditions</Footer_link>
+                </li>
+                <li>
+                  <Footer_link href="#">Privacy Policy</Footer_link>
+                </li>
+              </Footer_list>
+            </Footer_section0>
           </Footer_flex_Quicklegal>
- 
 
           <Footer_section1>
             <h3>Contact</h3>
@@ -130,9 +129,11 @@ const LandingpageFooter = () => {
             </Social_icons>
           </Footer_section1>
         </Footer_flex>
-    
+
         <Footer_divider>
-      <Line><hr></hr></Line>
+          <Line>
+            <hr></hr>
+          </Line>
           <p>© Eventiq 2025. All rights reserved.</p>
         </Footer_divider>
       </Container>
@@ -152,43 +153,34 @@ const Footer_divider = styled.div`
     margin: 0 auto;
   }
 
-     @media (max-width: 1024px) {
- 
+  @media (max-width: 1024px) {
   }
 
   @media (max-width: 768px) {
-  
   }
 
   @media (max-width: 480px) {
-width: 300px;
- 
-p {
-    margin: auto;
-    margin-left: -25px;
- 
-    
-  }
-    
+    width: 300px;
+
+    p {
+      margin: auto;
+      margin-left: -25px;
+    }
   }
 `;
 
 const Line = styled.div`
-
-     @media (max-width: 1024px) {
- 
+  @media (max-width: 1024px) {
   }
 
   @media (max-width: 768px) {
-  
   }
 
   @media (max-width: 480px) {
-width: 350px;
-margin: auto;
+    width: 350px;
+    margin: auto;
     margin-left: -40px;
   }
-
 `;
 const Social_icon = styled.a`
   width: 2.5rem;
@@ -240,19 +232,13 @@ const Footer_section = styled.div`
     margin-bottom: 1rem;
   }
 
-  
-    @media (max-width: 1024px) {
- 
+  @media (max-width: 1024px) {
   }
 
   @media (max-width: 768px) {
-  
   }
 
   @media (max-width: 480px) {
-
-  
-   
   }
 `;
 
@@ -264,22 +250,15 @@ const Footer_section0 = styled.div`
     margin-bottom: 1rem;
   }
 
-  
-    @media (max-width: 1024px) {
- 
+  @media (max-width: 1024px) {
   }
 
   @media (max-width: 768px) {
-  
   }
 
   @media (max-width: 480px) {
-
-  
-   
   }
 `;
-
 
 const Footer_section1 = styled.div`
   margin-bottom: 1rem;
@@ -289,20 +268,13 @@ const Footer_section1 = styled.div`
     margin-bottom: 1rem;
   }
 
-  
-    @media (max-width: 1024px) {
- 
+  @media (max-width: 1024px) {
   }
 
   @media (max-width: 768px) {
-  
   }
 
   @media (max-width: 480px) {
-
-
-  
-    
   }
 `;
 const Footer_brand = styled.div`
@@ -325,31 +297,25 @@ const Footer_flex = styled.div`
   margin-bottom: 2rem;
   width: 100%;
   justify-content: space-between;
-   @media (max-width: 1024px) {
- 
+  @media (max-width: 1024px) {
   }
 
   @media (max-width: 768px) {
-  
   }
 
   @media (max-width: 480px) {
-flex-direction: column;
-  
-   
+    flex-direction: column;
   }
 `;
 
 const Footer_flex_Quicklegal = styled.div`
-display:flex;
-gap: 5rem;
-  @media (max-width: 480px) {
-  display:flex;
+  display: flex;
   gap: 5rem;
-flex-direction: row;
-    
+  @media (max-width: 480px) {
+    display: flex;
+    gap: 5rem;
+    flex-direction: row;
   }
-
 `;
 const Container = styled.div`
   max-width: 80rem;
@@ -360,18 +326,14 @@ const Container = styled.div`
   padding-bottom: 30px;
   padding-right: 130px;
 
-    @media (max-width: 1024px) {
- 
+  @media (max-width: 1024px) {
   }
 
   @media (max-width: 768px) {
-  
   }
 
   @media (max-width: 480px) {
-  margin-left: -70px;
-  
-    
+    margin-left: -70px;
   }
 `;
 const Footer = styled.footer`

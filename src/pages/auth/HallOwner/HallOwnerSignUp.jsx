@@ -16,7 +16,6 @@ const SignupHallOwner = () => {
   const navigate = useNavigate();
   const [isVerificationOpen, setIsVerificationOpen] = useState(false);
 
-                                                                  
   const [formData, setFormData] = useState({
     firstName: "",
     surname: "",
@@ -25,7 +24,6 @@ const SignupHallOwner = () => {
     termsAccepted: false,
   });
 
- 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -84,7 +82,7 @@ const SignupHallOwner = () => {
       console.log("Signup successful:", response.data);
       localStorage.setItem("signupEmail", response.data.data.email);
       localStorage.setItem("userRole", response.data.data.role);
-   localStorage.setItem("signupPassword", formData.password);
+      localStorage.setItem("signupPassword", formData.password);
       setIsVerificationOpen(true);
     } catch (error) {
       console.error("Signup failed:", error);
@@ -101,170 +99,171 @@ const SignupHallOwner = () => {
   };
 
   return (
-    <section className="signup-container-client">
-      <ToastContainer position="top-right" autoClose={3000} />
-      {isVerificationOpen && (
-        <VerificationModal
-          onClose={() => setIsVerificationOpen(false)}
-          email={formData.email}
-        />
-      )}
+    <>
+      <section className="signup-container-client">
+        <ToastContainer position="top-right" autoClose={3000} />
+        {isVerificationOpen && (
+          <VerificationModal
+            onClose={() => setIsVerificationOpen(false)}
+            email={formData.email}
+          />
+        )}
 
-      <div className="left-section1">
-        <div
-          className="bg-image1"
-          style={{
-            backgroundImage:
-              "url('https://res.cloudinary.com/depuy7bkr/image/upload/v1761918862/left_side_venue_owner_eventQ3_wb8oaj.png')",
-          }}
-        ></div>
+        <div className="left-section1">
+          <div
+            className="bg-image1"
+            style={{
+              backgroundImage:
+                "url('https://res.cloudinary.com/depuy7bkr/image/upload/v1761918862/left_side_venue_owner_eventQ3_wb8oaj.png')",
+            }}
+          ></div>
 
-        <button
-          className="back-btn1"
-          onClick={() => navigate("/", { replace: true })}
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
+          <button
+            className="back-btn1"
+            onClick={() => navigate("/", { replace: true })}
           >
-            <path d="M19 12H5M12 19l-7-7 7-7" />
-          </svg>
-        </button>
-
-        <div className="left-content1">
-          <div className="badge1">FOR VENUE OWNERS</div>
-          <h1>
-            List Your Hall, <br /> Get Booked.
-          </h1>
-          <p>
-            Manage your event halls with ease and get more bookings, all on
-            Eventiq.
-          </p>
-        </div>
-      </div>
-
-      <section className="right-section1">
-        <div className="form-wrapper1">
-          <div className="form-header1">
-            <LuUser className="user-icon1" size={30} />
-            <div className="form-header-text1">
-              <h2>Venue Owner/Manager </h2>
-              <p className="form-subtitle1">
-                Create your account to get started
-              </p>
-            </div>
-          </div>
-
-          <form className="form-content" onSubmit={handleSubmit}>
-            <div className="two-cols-client">
-              <div className="input-group1-client">
-                <label>
-                  <User size={14} className="label-icon" /> First Name
-                </label>
-                <input
-                  type="text"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  placeholder="John"
-                />
-                {errors.firstName && (
-                  <p className="error-text">{errors.firstName}</p>
-                )}
-              </div>
-
-              <div className="input-group2-client">
-                <label>
-                  <User size={14} className="label-icon" /> Surname
-                </label>
-                <input
-                  type="text"
-                  name="surname"
-                  value={formData.surname}
-                  onChange={handleChange}
-                  placeholder="Doe"
-                />
-                {errors.surname && (
-                  <p className="error-text">{errors.surname}</p>
-                )}
-              </div>
-            </div>
-
-            <div className="input-group-email-client">
-              <label>
-                <Mail size={14} className="label-icon" /> Business Email Address
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="youremail@example.com"
-              />
-              {errors.email && <p className="error-text">{errors.email}</p>}
-            </div>
-
-            <div className="input-group-client password-field-client">
-              <label>
-                <Lock size={14} className="label-icon-client" /> Password
-              </label>
-              <div className="password-box-client">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Create a strong password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
-                </button>
-              </div>
-              {errors.password && (
-                <p className="error-text">{errors.password}</p>
-              )}
-            </div>
-
-            <div className="checkbox-group-client1">
-              <label>
-                I have read the{" "}
-                <a href="#" style={{ color: "#603379" }}>
-                  Terms and Conditions
-                </a>{" "}
-                and i agree to it
-              </label>
-              <input
-                type="checkbox"
-                name="termsAccepted"
-                checked={formData.termsAccepted}
-                onChange={handleChange}
-              />{" "}
-            </div>
-            {errors.termsAccepted && (
-              <p className="error-text">{errors.termsAccepted}</p>
-            )}
-
-            <button
-              className="submit-btn-client"
-              style={{ background: "#603379" }}
-              type="submit"
-              disabled={loading}
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
             >
-              {loading ? "Creating Account..." : "Create Account"}
-            </button>
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+          </button>
 
-            <p className="login-text-client">
-              Already have an account? <Link to="/login">Log in</Link>
+          <div className="left-content1">
+            <div className="badge1">FOR VENUE OWNERS</div>
+            <h1>
+              List Your Hall, <br /> Get Booked.
+            </h1>
+            <p>
+              Manage your event halls with ease and get more bookings, all on
+              Eventiq.
             </p>
-          </form>
+          </div>
+        </div>
 
+        <section>
+          <section className="right-section1">
+            <div className="form-wrapper1">
+              <div className="form-header1">
+                <LuUser className="user-icon1" size={30} />
+                <div className="form-header-text1">
+                  <h2>Venue Owner/Manager </h2>
+                  <p className="form-subtitle1">
+                    Create your account to get started
+                  </p>
+                </div>
+              </div>
+
+              <form className="form-content" onSubmit={handleSubmit}>
+                <div className="two-cols-client">
+                  <div className="input-group1-client">
+                    <label>
+                      <User size={14} className="label-icon" /> First Name
+                    </label>
+                    <input
+                      type="text"
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleChange}
+                      placeholder="John"
+                    />
+                    {errors.firstName && (
+                      <p className="error-text">{errors.firstName}</p>
+                    )}
+                  </div>
+
+                  <div className="input-group2-client">
+                    <label>
+                      <User size={14} className="label-icon" /> Surname
+                    </label>
+                    <input
+                      type="text"
+                      name="surname"
+                      value={formData.surname}
+                      onChange={handleChange}
+                      placeholder="Doe"
+                    />
+                    {errors.surname && (
+                      <p className="error-text">{errors.surname}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="input-group-email-client">
+                  <label>
+                    <Mail size={14} className="label-icon" /> Business Email
+                    Address
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="youremail@example.com"
+                  />
+                  {errors.email && <p className="error-text">{errors.email}</p>}
+                </div>
+
+                <div className="input-group-client password-field-client">
+                  <label>
+                    <Lock size={14} className="label-icon-client" /> Password
+                  </label>
+                  <div className="password-box-client">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      placeholder="Create a strong password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="checkbox-group-client1">
+                  <label>
+                    I have read the{" "}
+                    <a href="#" style={{ color: "#603379" }}>
+                      Terms and Conditions
+                    </a>{" "}
+                    and i agree to it
+                  </label>
+                  <input
+                    type="checkbox"
+                    name="termsAccepted"
+                    checked={formData.termsAccepted}
+                    onChange={handleChange}
+                  />{" "}
+                </div>
+                {errors.termsAccepted && (
+                  <p className="error-text">{errors.termsAccepted}</p>
+                )}
+
+                <button
+                  className="submit-btn-client"
+                  style={{ background: "#603379" }}
+                  type="submit"
+                  disabled={loading}
+                >
+                  {loading ? "Creating Account..." : "Create Account"}
+                </button>
+
+                <p className="login-text-client">
+                  Already have an account? <Link to="/login">Log in</Link>
+                </p>
+              </form>
+            </div>
+          </section>
           <div className="security-note-client">
             <svg
               width="13"
@@ -283,9 +282,9 @@ const SignupHallOwner = () => {
 
             <span>Secure and encrypted platform</span>
           </div>
-        </div>
+        </section>
       </section>
-    </section>
+    </>
   );
 };
 
