@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { AuthContext } from "../../assets/AuthContext/AuthContext";
 
 const NotificationsContainer = styled.div`
   flex: 1;
@@ -85,7 +86,7 @@ const Notifications = () => {
   const [notifications, setNotifications] = useState({});
   console.log("the notification", notifications)
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem("authToken");
+  const token = useContext(AuthContext);
 
   useEffect(() => {
     const fetchNotifications = async () => {

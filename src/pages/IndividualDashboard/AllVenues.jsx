@@ -631,18 +631,19 @@
 //   font-weight: 400;
 // `;
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../assets/AuthContext/AuthContext";
 
 const AllVenues = () => {
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const token = localStorage.getItem("authToken");
+  const {token} = useContext(AuthContext)
 
   useEffect(() => {
     const fetchVenues = async () => {
@@ -717,7 +718,7 @@ const AllVenues = () => {
 
               <CardContent>
                 <VenueName>{venue.venuename}</VenueName>
-                <Location>{venue?.location?.street || "Location unavailable"}</Location>
+                <Location>{venue?.location?.city || "Location unavailable"}</Location>
                 <Capacity>
                   Capacity: {venue?.capacity?.minimum || 0}–{venue?.capacity?.maximum || 0} guests
                 </Capacity>

@@ -404,17 +404,17 @@ text-decoration: underline;
 
  .signup-container-ind {
   display: flex;
-  max-height: 100vh;
+  height: 80%;
   gap: 0;
-  width: 100%;
+  width: 1250px;
   background: #f9fafb;
 }
 
 .left-section2 {
-  width: 50%;
+  width: 60%;
   height: 100vh;
   position: relative;
-  background: linear-gradient(135deg, #4a1d6e 0%, #5a2571 50%, #4a1d6e 100%);
+  /* background: linear-gradient(135deg, #4a1d6e 0%, #5a2571 50%, #4a1d6e 100%); */
   color: white;
 }
 
@@ -426,7 +426,7 @@ text-decoration: underline;
   background-position: center;
   /* opacity: 0.4; */
   width: 100%;
-  height: 100%;
+  height: 800px;
 }
 
 .back-btn2 {
@@ -448,8 +448,9 @@ text-decoration: underline;
 }
 
 .back-btn2:hover {
-  background-color: rgba(255, 255, 255, 0.9);
+  color: white;
   transform: scale(1.05);
+    background-color:#603379;
 }
 
 .left-content2 {
@@ -489,18 +490,61 @@ text-decoration: underline;
 }
 
 .right-section2 {
-  width: 50%;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 3rem;
+  /* padding: 3rem; */
   background: white;
 }
 
 .form-wrapper2 {
-  width: 100%;
-  max-width: 450px;
+   width: 600px;
+ height: 500px;
+
+
+    background: white;
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  margin-top: -5rem;
 }
+
+
+.form-header2 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+ 
+}
+
+.user-icon2 {
+ 
+  border: none;
+ color: #603379;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ 
+}
+
+.form-header-text2 h2 {
+  font-size: 1.5rem;
+  color: #111827;
+  font-weight: 700;
+}
+
+.form-subtitle2 {
+margin-top: -0.3rem;
+  color: #6b7280;
+  font-size: 1rem;
+  font-weight: 400;
+
+  
+}
+
+
 
 .input-group-ind,
 .input-group1-ind,
@@ -601,9 +645,9 @@ text-decoration: underline;
 }
 
 .checkbox-group-ind1 {
-  display: flex;
+   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
+  gap: 2.75rem;
   margin: 1.5rem 0;
   font-size: 0.875rem;
   color: #6b7280;
@@ -674,7 +718,7 @@ text-decoration: underline;
   gap: 0.5rem;
   font-size: 0.75rem;
   color: #9ca3af;
-  margin-top: 2rem;
+  margin-top: -5rem;
 }
 
 .security-note-ind svg {
@@ -923,12 +967,14 @@ text-decoration: underline;
     width: 100%;
     padding: 1.5rem 1.25rem;
     background: white;
+   
   }
   
   .form-wrapper2 {
     max-width: 100%;
     padding: 0;
     box-shadow: none;
+     
   }
   
  
@@ -976,19 +1022,61 @@ text-decoration: underline;
   .signup-container-ind {
     flex-direction: column;
     max-height: none;
-    overflow-y: auto;
-  }
-  
-  .left-section2 {
+    overflow-y: null;
+    max-width: 100%;
     width: 100%;
+  }
+
+  /* Replace */
+.left-section2 {
+  width: 100%;
+}
+
+/* Replace */
+.password-box-ind {
+  width: 100%;
+  max-width: 100%;
+}
+
+
+
+
+
+
+  /* .password-box-ind {
+  position: relative;
+  width: 350px; 
+} */
+
+.password-box-ind input {
+  width: 100%;
+  padding-right: 2.5rem; 
+}
+
+.password-box-ind button {
+  position: absolute;
+  right: 3rem; 
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  font-size: 1.1rem;
+}
+
+  
+  /* .left-section2 {
+    width: 450px;
     height: auto;
     min-height: 300px;
     position: relative;
-  }
+  } */
   
   .bg-image2 {
     width: 100%;
-    height: 100%;
+    height: 50%;
+
   }
   
   .back-btn2 {
@@ -997,7 +1085,9 @@ text-decoration: underline;
     width: 2.25rem;
     height: 2.25rem;
     font-size: 1rem;
+    
   }
+
   
   .left-content2 {
     padding: 2rem 1.5rem 2.5rem;
@@ -1009,8 +1099,9 @@ text-decoration: underline;
   .badge2 {
     font-size: 0.65rem;
     padding: 0.4rem 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 3rem;
     width: auto;
+    margin-top: 4rem;
   }
   
   .left-content2 h1 {
@@ -1021,13 +1112,15 @@ text-decoration: underline;
   
   .left-content2 p {
     font-size: 0.875rem;
-    line-height: 1.5;
+    line-height: 1.8;
+    width: 350px;
   }
   
   .right-section2 {
     width: 100%;
     padding: 1.5rem 1.25rem;
     background: white;
+    margin-top: -400px;
   }
   
   .form-wrapper2 {
@@ -1035,6 +1128,8 @@ text-decoration: underline;
     padding: 0;
     box-shadow: none;
     background: transparent;
+    /* margin-left: -650px; */
+    margin-top: 60px;
   }
   
   
@@ -1052,23 +1147,53 @@ text-decoration: underline;
     margin-bottom: 0.4rem;
   }
   
-  .input-group-ind input,
+  /* .input-group-ind input,
   .input-group-email-ind input {
     padding: 0.7rem 0.85rem;
     font-size: 0.8rem;
+    width: 350px;
   }
+
+   .input-group1-ind input, .input-group2-ind input{
+    width: 160px;
+margin-left: -2px;
+   } */
+
+   
+   .input-group-ind input,
+.input-group-email-ind input,
+.input-group1-ind input,
+.input-group2-ind input,
+.submit-btn-ind {
+  width: 90%;
+  max-width: 100%;
+}
+
+
+   /* .input-group2-ind{
+    margin-left: -30px;
+   } */
+  
   
 
-  .two-cols-ind {
+  /* .two-cols-ind {
     display: flex;
-    gap: 0.75rem;
+    gap:-10rem;
     flex-direction: row;
     margin-bottom: 1rem;
-  }
+  } */
   
-  .two-cols-ind > * {
+  /* .two-cols-ind > * {
     flex: 1;
-  }
+  } */
+
+    .two-cols-ind {
+  display: flex;
+  gap: 0.75rem;
+  flex-direction: row;
+  flex-wrap: wrap; /* ensures it breaks if too narrow */
+  margin-bottom: 1rem;
+}
   
   .input-group1-ind,
   .input-group2-ind {
@@ -1079,6 +1204,12 @@ text-decoration: underline;
   .input-group2-ind input {
     font-size: 0.8rem;
     padding: 0.7rem 0.85rem;
+    width: 150px;
+  }
+
+    .input-group-email-ind {
+    margin-bottom: 1rem;
+    width: 390px;
   }
   
   .input-group-email-ind {
@@ -1104,6 +1235,7 @@ text-decoration: underline;
     padding: 0.8rem;
     font-size: 0.95rem;
     margin-top: 0.5rem;
+    width: 350px;
   }
   
   .login-text-ind {
@@ -1111,14 +1243,18 @@ text-decoration: underline;
     margin-top: 1.25rem;
     padding: 0;
     border-top: none;
+    margin-left: -20px;
   }
   
   .security-note-ind {
-    margin-top: 1.5rem;
+      margin-top: -4rem;
     font-size: 0.7rem;
   }
 }
 
+html, body {
+  overflow-x: hidden;
+}
 
 @media (max-width: 319px) {
   .left-section2 {

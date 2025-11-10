@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
@@ -58,9 +59,10 @@ const Login = () => {
           password: formData.password,
         }
       );
+
       login(response.data);
       localStorage.setItem("userRole", response.data.data.role);
-
+      toast.success(response?.data?.message);
       const userRole = response.data.data.role;
       // setTimeout(() => navigate("/dashboardHome"), 2000);
       setTimeout(() => {
@@ -70,7 +72,7 @@ const Login = () => {
           navigate("/individual-dashboard");
         } else {
           // fallback (if role missing or new role added)
-          navigate("/admin-dashboard");
+          navigate("/individual-dashboard");
         }
         setLoading(false);
       }, 2000);
@@ -132,10 +134,12 @@ const Login = () => {
 
         {/* LEFT SECTION */}
         <div className="left-section3">
-          <div
-            className="bg-image3"
-            style={{ backgroundImage: "url('')" }}
-          ></div>
+          <div className="bg-image3"></div>
+
+          {/* style={{
+              backgroundImage:
+                "url('https://res.cloudinary.com/depuy7bkr/image/upload/v1761918729/left_side_log_in_evenitq1_rpxkvp.png')",
+            }} */}
 
           <button
             className="back-btn3"
@@ -215,9 +219,9 @@ const Login = () => {
 
               {/* Forgot Password */}
               <div className="checkbox-group-Login1">
-                <a href="#" style={{ color: "#603379" }}>
+                <Link to="/ForgotPassword" style={{ color: "#603379" }}>
                   <strong>Forgot Password?</strong>
-                </a>
+                </Link>
               </div>
 
               {/* Submit */}
