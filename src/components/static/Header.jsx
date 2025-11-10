@@ -15,8 +15,8 @@ const Header = () => {
           <div className="box">0</div>
         </div>
 
-        <div className="avatar">{user.firstName.charAt(0).toUpperCase()}</div>
-        <UserName>{user.firstName}</UserName>
+        <div className="avatar">{user?.firstName?.charAt(0).toUpperCase()}</div>
+        <UserName>{user?.firstName}</UserName>
       </Wrapper>
     </Holder>
   );
