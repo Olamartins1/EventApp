@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import {useNavigate} from "react-router-dom"
 
 const Halls = () => {
+ 
   const [halls, setHalls] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -17,12 +18,11 @@ const Halls = () => {
         "https://eventiq-final-project.onrender.com/api/v1/venues"
       );
 
-      // check if response has valid data before setting
       if (res?.data?.data && Array.isArray(res.data.data)) {
         console.log(res.data.data);
         setHalls(res.data.data);
       } else {
-        setHalls([]); // fallback empty array
+        setHalls([]); 
         toast.info("No halls available at the moment.");
       }
     } catch (error) {
@@ -34,8 +34,7 @@ const Halls = () => {
     }
   };
 
-  // ❌ your useEffect had a bug — it called the function immediately
-  // ✅ should pass a function instead:
+
   useEffect(() => {
     fetchHall();
   }, []);
@@ -61,7 +60,7 @@ const Halls = () => {
       <h2>Featured Event Halls</h2>
       <p>Discover our handpicked selection of premium venues</p>
 
-      <Halls_container>
+      <Halls_container >
         {halls.length > 0 ? (
           halls.map((hall) => (
             <Hall_card key={hall._id || hall.id}>
@@ -72,6 +71,7 @@ const Halls = () => {
                 <img
                   src={hall?.documents?.images[0].url || "/placeholder.jpg"}
                   alt={hall?.name || "Venue"}
+
                 />
                 <Wrapper>
                   <Feature_badge>
@@ -88,7 +88,7 @@ const Halls = () => {
 
               <Hall_info>
                 <Hall_header>
-                  <h3>{hall?.venuename || "Unnamed Hall"}</h3>
+                  <h3>{hall?.venuename }</h3>
                  
                 </Hall_header>
                 {/* <p>{hall?.location || "Unknown location"}</p> */}
