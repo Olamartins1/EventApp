@@ -16,7 +16,7 @@ const DetailsPage = () => {
   const [venue, setVenue] = useState({});
   const [loading, setLoading] = useState(true);
   const [eventDate, setEventDate] = useState("");
-  const [days, setDays] = useState(1);
+  const [days, setDays] = useState("");
   const [eventType, setEventType] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [error, setError] = useState("");
@@ -49,11 +49,14 @@ const DetailsPage = () => {
     setEventType(e.target.value);
   };
 
-  const bookVenue = async () => {
-    if (!eventDate || !eventType || !days) {
-      toast.error("Please input these fields");
-      return;
-    }
+ const bookVenue = async () => {
+  if (!eventDate || !eventType || !days) {
+    toast.error("Please fill in all fields before booking");
+    console.log("event:", eventDate == false)
+    console.log("type:", eventType == false)
+    console.log("days:", days == false)
+    return;
+  }
 
     try {
       setIsBooking(true);
@@ -64,7 +67,7 @@ const DetailsPage = () => {
       const res = await axios.post(
         `https://eventiq-final-project.onrender.com/api/v1/booking/${id}`,
         {
-          date,
+         date: eventDate,
           days,
           eventType
         },
