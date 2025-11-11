@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useContext } from "react";
-import{Link} from "react-router-dom"
+import { Link } from "react-router-dom";
 import { AuthContext } from "../../../assets/AuthContext/AuthContext";
 
 const MyBooking = () => {
   const [bookings, setBookings] = useState([]);
-  console.log("the booking", bookings)
+  console.log("the booking", bookings);
   const [loading, setLoading] = useState(true);
   const { token } = useContext(AuthContext);
 
@@ -18,7 +18,7 @@ const MyBooking = () => {
         const response = await axios.get(
           "https://eventiq-final-project.onrender.com/api/v1/client-bookings",
           {
-           headers: {
+            headers: {
               Authorization: `Bearer ${token}`,
             },
           }
@@ -53,9 +53,7 @@ const MyBooking = () => {
               </div>
               <span
                 className={`status ${
-                  item.bookingstatus === "confirmed"
-                    ? "confirmed"
-                    : "pending"
+                  item.bookingstatus === "confirmed" ? "confirmed" : "pending"
                 }`}
               >
                 {item.bookingstatus}
@@ -65,9 +63,7 @@ const MyBooking = () => {
             <div className="booking-details">
               <div className="detail">
                 <span className="label">Event Date</span>
-                <span className="value">
-                  {item?.date}
-                </span>
+                <span className="value">{item?.date}</span>
               </div>
               <div className="detail">
                 <span className="label">Event Type</span>
@@ -75,19 +71,17 @@ const MyBooking = () => {
               </div>
               <div className="detail">
                 <span className="label">Total Paid</span>
-                <span className="value">
-                  ₦{item.total}
-                </span>
+                <span className="value">₦{item.total}</span>
               </div>
               <div className="detail">
-                 {/* <span className="label">booking Paid</span>
+                {/* <span className="label">booking Paid</span>
                 <span className="value">{item.bookingId}</span> */}
               </div>
             </div>
 
             <div className="booking-footer">
-              <Link to="/Invoice">
-              <button className="invoice-btn">View Invoice</button>
+              <Link to="/Invoice/:id">
+                <button className="invoice-btn">View Invoice</button>
               </Link>
             </div>
           </BookingCard>
@@ -98,7 +92,6 @@ const MyBooking = () => {
 };
 
 export default MyBooking;
-
 
 const Bookhall = styled.div`
   width: 90%;

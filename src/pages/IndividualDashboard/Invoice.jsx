@@ -1,120 +1,175 @@
-import React from 'react'
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
-
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { AuthContext } from "../../assets/AuthContext/AuthContext";
 
 const Invoice = () => {
+  const { invoiceId } = useParams();
+  const [invoicing, setInvoicing] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const { token } = useContext(AuthContext);
+  console.log("the id", invoiceId);
+
+  useEffect(() => {
+    const fetchAllInvoices = async () => {
+      try {
+        const res = await axios.get(
+          "https://eventiq-final-project.onrender.com/api/v1/invoices",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("thee invoice", res.data);
+      } catch (error) {
+        console.log("error fetching invoices:", error);
+      }
+    };
+
+    fetchAllInvoices();
+  }, [token]);
+  const getInvoice = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const res = await axios.get(
+        `https://eventiq-final-project.onrender.com/api/v1/invoice/${invoiceId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("responsiveness", res?.data);
+      setInvoicing(res?.data?.data || res?.data);
+    } catch (err) {
+      console.log(err);
+      setError(err.response?.data?.message || err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getInvoice();
+  }, [invoiceId]);
   return (
     <div>
-     <InvoiceContainer>
-  <div className="invoice-header">
-    <div className="brand">
-      <h2>Eventiq</h2>
-      <p>Your Events start here</p>
-    </div>
-    <div className="invoice-info">
-      <p>
-        <strong>Booking No:</strong> EVT-9283
-      </p>
-      <p>
-        <strong>Date Issued:</strong> November 5th, 2025
-      </p>
-      <span className="status paid">PAID</span>
-    </div>
-  </div>
-
-  <section className="section customer-info">
-    <h3>
-      <span className="icon">📄</span> Customer Information
-    </h3>
-    <div className="content-box">
-      <p>
-        <strong>Name:</strong> Princess Umez
-      </p>
-      <p>
-        <strong>Email:</strong> princessumez@gmail.com
-      </p>
-      <p>
-        <strong>Phone:</strong> 08062567835
-      </p>
-      <p>
-        <strong>Booking ID:</strong> EVT-9283
-      </p>
-    </div>
-  </section>
-
-  <section className="section venue-details">
-    <h3>
-      <span className="icon">🏛️</span> Venue Details
-    </h3>
-    <div className="venue-box">
-      <h4>Lush Garden Paradise</h4>
-      <div className="venue-meta">
-        <div>
-          <p>📍 6, Jimoh oshodi, Lekki Phase 1, Lagos</p>
-          <p>📅 November 5th, 2025</p>
-          <p>👥 300–600 guests</p>
+      <InvoiceContainer>
+        <div className="invoice-header">
+          <div className="brand">
+            <h2>Eventiq</h2>
+            <p>Your Events start here</p>
+          </div>
+          <div className="invoice-info">
+            <p>
+              <strong>Booking No:</strong> EVT-9283
+            </p>
+            <p>
+              <strong>Date Issued:</strong> November 5th, 2025
+            </p>
+            <span className="status paid">PAID</span>
+          </div>
         </div>
-        <div>
-          <p>🏞️ Outdoor Venue in Lekki</p>
-          <p>⏱️ Minimum 5 hours</p>
+
+        <section className="section customer-info">
+          <h3>
+            <span className="icon">📄</span> Customer Information
+          </h3>
+          <div className="content-box">
+            <p>
+              <strong>Name:</strong> Princess Umez
+            </p>
+            <p>
+              <strong>Email:</strong> princessumez@gmail.com
+            </p>
+            <p>
+              <strong>Phone:</strong> 08062567835
+            </p>
+            <p>
+              <strong>Booking ID:</strong> EVT-9283
+            </p>
+          </div>
+        </section>
+
+        <section className="section venue-details">
+          <h3>
+            <span className="icon">🏛️</span> Venue Details
+          </h3>
+          <div className="venue-box">
+            <h4>Lush Garden Paradise</h4>
+            <div className="venue-meta">
+              <div>
+                <p>📍 6, Jimoh oshodi, Lekki Phase 1, Lagos</p>
+                <p>📅 November 5th, 2025</p>
+                <p>👥 300–600 guests</p>
+              </div>
+              <div>
+                <p>🏞️ Outdoor Venue in Lekki</p>
+                <p>⏱️ Minimum 5 hours</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="section payment-breakdown">
+          <h3>Payment Breakdown</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th>Qty</th>
+                <th>Price (₦)</th>
+                <th>Total (₦)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Venue Rental</td>
+                <td>1</td>
+                <td>550,000</td>
+                <td>550,000</td>
+              </tr>
+              <tr>
+                <td>Service Fee (10%)</td>
+                <td>1</td>
+                <td>10,500</td>
+                <td>10,500</td>
+              </tr>
+              <tr>
+                <td>Caution Fee</td>
+                <td>1</td>
+                <td>50,000</td>
+                <td>50,000</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colSpan="3" className="grand-total-label">
+                  Grand Total
+                </td>
+                <td className="grand-total">₦610,500</td>
+              </tr>
+            </tfoot>
+          </table>
+        </section>
+
+        <div className="footer">
+          <p>
+            Thank you for booking with Eventiq. You can download this invoice or
+            view it anytime in your dashboard.
+          </p>
+          <button className="download-btn">⬇ Download Invoice (PDF)</button>
         </div>
-      </div>
+      </InvoiceContainer>
     </div>
-  </section>
-
-  <section className="section payment-breakdown">
-    <h3>Payment Breakdown</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Description</th>
-          <th>Qty</th>
-          <th>Price (₦)</th>
-          <th>Total (₦)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Venue Rental</td>
-          <td>1</td>
-          <td>550,000</td>
-          <td>550,000</td>
-        </tr>
-        <tr>
-          <td>Service Fee (10%)</td>
-          <td>1</td>
-          <td>10,500</td>
-          <td>10,500</td>
-        </tr>
-        <tr>
-          <td>Caution Fee</td>
-          <td>1</td>
-          <td>50,000</td>
-          <td>50,000</td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colSpan="3" className="grand-total-label">
-            Grand Total
-          </td>
-          <td className="grand-total">₦610,500</td>
-        </tr>
-      </tfoot>
-    </table>
-  </section>
-
-  <div className="footer">
-    <p>
-      Thank you for booking with Eventiq. You can download this invoice or view
-      it anytime in your dashboard.
-    </p>
-    <button className="download-btn">⬇ Download Invoice (PDF)</button>
-  </div>
-</InvoiceContainer>
-</div>
-  )
-}
+  );
+};
 
 export default Invoice;
 
