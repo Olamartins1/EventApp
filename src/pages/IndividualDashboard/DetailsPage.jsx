@@ -25,7 +25,7 @@ const DetailsPage = () => {
 
       let theAmount = venue.price
       let  servicecharge = (theAmount * days) * 5/100;
-
+// : (
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -58,7 +58,7 @@ const DetailsPage = () => {
   }
 
   setEventType(value);
-  setErrorField(""); // clear error when valid
+  setErrorField(""); 
 };
 
 
@@ -239,7 +239,7 @@ const DetailsPage = () => {
 
                     <InfoCard>
                       <InfoLabel>Caution Fee</InfoLabel>
-                      <InfoValue>#{venue?.cautionfee}</InfoValue>
+                      <InfoValue>₦{venue?.cautionfee}</InfoValue>
                     </InfoCard>
                     <InfoCard>
                       <InfoLabel>About this Venue</InfoLabel>
@@ -330,6 +330,12 @@ const DetailsPage = () => {
                       </span>
                     </BreakdownItem>
                     <BreakdownItem>
+                      <span>Caution Fee</span>
+                      <span>
+                        ₦{venue?.cautionfee}
+                      </span>
+                    </BreakdownItem>
+                    <BreakdownItem>
                       <span>Total</span>
                       <span>
                         ₦
@@ -371,8 +377,9 @@ export default DetailsPage;
 
 const EventContainer = styled.div`
   width: 100%;
-  height: auto; /* ✅ allow content like <small> to expand naturally */
-  margin-bottom: 1rem; /* optional: gives spacing below */
+  height: auto; 
+  margin-bottom: 1rem; 
+
   
   input {
     width: 100%;

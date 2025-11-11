@@ -273,7 +273,7 @@ export const Element = createHashRouter([
     element: <Login />,
   },
   {
-    path: "/Invoice/:id",
+    path: "/Invoice/:invoiceId",
     element: <Invoice />,
   },
   {

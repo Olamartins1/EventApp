@@ -72,15 +72,6 @@ const Halls = () => {
                   alt={hall?.name || "Venue"}
                 />
                 <Wrapper>
-                  <Feature_badge>
-                    <Sparkle
-                      style={{
-                        width: "16px",
-                        height: "16px",
-                      }}
-                    />
-                    <span>Featured</span>
-                  </Feature_badge>
                 </Wrapper>
               </Image_holder>
 
@@ -90,9 +81,7 @@ const Halls = () => {
                 </Hall_header>
                 {/* <p>{hall?.location || "Unknown location"}</p> */}
                 <p>
-                  {hall?.hallsize
-                    ? `${hall.hallsize} guests`
-                    : "Guest info not available"}
+                  {hall?.location?.city}
                 </p>
 
                 <Hall_price>
@@ -152,13 +141,14 @@ const Hall_header = styled.div`
 const Hall_info = styled.div`
   display: flex;
   flex-direction: column;
+  width: 92%;
+
   justify-content: flex-start;
   p {
-    font-size: 15px !important;
+    font-size: 18px !important;
     color: #545454 !important;
     // margin: 0 0 0.5rem 0;
-    margin-left: -10px;
-    width: 100px;
+    width: 100%;
   }
 `;
 
@@ -175,10 +165,10 @@ const Wrapper = styled.div`
 
 const Image_holder = styled.div`
   position: relative;
-  width: 290px;
+  width: 300px;
   height: 290px;
   overflow: hidden;
-  border-radius: 14px;
+  border-radius: 12px;
 
   img {
     width: 100%;
@@ -197,27 +187,15 @@ const Image_holder = styled.div`
   }
 `;
 
-const Feature_badge = styled.div`
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  background-color: #fbbe24;
-  color: #1f2937;
-  padding: 0.5rem 0.75rem;
-  border-radius: 2rem;
+const Hall_card = styled.div`
+  width: 325px;
+  flex-direction: column;
   display: flex;
   align-items: center;
-  height: 0.5rem;
-  gap: 0.25rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  z-index: 1;
-`;
 
-const Hall_card = styled.div`
-  width: 320px;
-  flex-direction: column;
-  flex-shrink: 0;
+  p{
+  color: red;
+  }
 
   @media (max-width: 768px) {
     width: 280px;
@@ -228,11 +206,9 @@ const Halls_container = styled.div`
   display: flex;
   flex-wrap: nowrap;
   gap: 15px;
-  width: 50%;
+  width: 100%;
   height: 100%;
   justify-content: center;
-  // align-items: center;
-  align-items: flex-start;
 
   @media (max-width: 768px) {
     width: 90%;
@@ -259,14 +235,15 @@ const Halls_container = styled.div`
 const Container = styled.div`
   width: 100%;
   margin: auto;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding-top: 2rem;
   background-color: #ffffff;
   height: 100%;
   margin-bottom: 50px;
 
   h2 {
-    text-align: center;
     font-size: 1.875rem;
     font-weight: bold;
     color: #1a1a1a;
