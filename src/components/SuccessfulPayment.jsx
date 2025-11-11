@@ -1,41 +1,77 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { FaCheckCircle } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
-import {useParams} from "react-router-dom"
-import {useState,useEffect} from "react"
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 const SuccessfulPayment = () => {
-  const {reference} = useParams()
-  const [query, setQuery] = useState("")
+  const { reference } = useParams();
+  const [query, setQuery] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
- useEffect(() => {
-  const fetchQuery = async () => {
-    try {
-      const response = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/verify/${reference}`);
-      setQuery(response?.data);
-      console.log("the response to me", response?.data)
-    } catch (err) {
-      console.log("Error fetching venues:", err);
-    }
-  };
- fetchQuery();
-}, [reference]); 
+  useEffect(() => {
+    const fetchQuery = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `https://eventiq-final-project.onrender.com/api/v1/verify/?reference=${reference}`
+        );
+        console.log("Verification response:", response?.data);
 
+        setQuery(response?.data);
+        // Assuming API returns something like { success: true, ... }
+        setSuccess(response?.data?.status === "success" || response?.data?.success === true);
+      } catch (err) {
+        console.error("Error verifying payment:", err);
+        setSuccess(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchQuery();
+  }, [reference]);
+
+  if (loading) {
+    return (
+      <Container>
+        <Card>
+          <p>Verifying your payment, please wait...</p>
+        </Card>
+      </Container>
+    );
+  }
 
   return (
     <Container>
       <Card>
-        <FaCheckCircle className="icon" />
-        <h2>Payment Successful!</h2>
-        <p>
-          Your payment has been processed successfully. <br />
-          Thank you for choosing Eventiq!
-        </p>
-        <button onClick={() => navigate("/individual-dashboard")}>
-          Go to Dashboard
-        </button>
+        {success ? (
+          <>
+            <FaCheckCircle className="icon success" />
+            <h2>Payment Successful!</h2>
+            <p>
+              Your payment has been processed successfully. <br />
+              Thank you for choosing <strong>Eventiq!</strong>
+            </p>
+            <button onClick={() => navigate("/individual-dashboard")}>
+              Go to Dashboard
+            </button>
+          </>
+        ) : (
+          <>
+            <FaTimesCircle className="icon failure" />
+            <h2>Payment Failed!</h2>
+            <p>
+              Oops! We couldn't verify your payment. <br />
+              Please try again or contact support.
+            </p>
+            <button onClick={() => navigate("/book-venue")}>
+              Try Again
+            </button>
+          </>
+        )}
       </Card>
     </Container>
   );
@@ -43,6 +79,7 @@ const SuccessfulPayment = () => {
 
 export default SuccessfulPayment;
 
+// ---------- STYLES ----------
 const Container = styled.div`
   width: 100%;
   height: 100vh;
@@ -61,9 +98,16 @@ const Card = styled.div`
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 
   .icon {
-    color: #22c55e;
     font-size: 3rem;
     margin-bottom: 1rem;
+  }
+
+  .success {
+    color: #22c55e;
+  }
+
+  .failure {
+    color: #ef4444;
   }
 
   h2 {
@@ -111,4 +155,3 @@ const Card = styled.div`
     }
   }
 `;
-
