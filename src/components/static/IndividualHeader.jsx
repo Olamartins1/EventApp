@@ -183,8 +183,10 @@ export default Individual_header
 
 const HeaderContainer = styled.header`
   background-color: #ffffff;
-  padding: 0.1rem 4rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -212,7 +214,7 @@ const HeaderContainer = styled.header`
 `
 
 const HeaderContent = styled.div`
-  max-width: 1400px;
+  width: 91%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -463,7 +465,7 @@ const UserSection = styled.div`
     right: 0;
     width: 220px;
     background: #fff;
-    height: 100px;
+    height: 160px;
     border-radius: 10px;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
     padding: 12px 0;
