@@ -4,9 +4,9 @@
   display: flex;
   height: 80%;
   gap: 0;
-  width: 1250px;
+  width: 100%;
   background: #f9fafb;
-  background-color: red;
+
 
 }
 
@@ -25,7 +25,7 @@
   background-size: cover;
   background-position: center;
   /* opacity: 0.4; */
-  width: 100%;
+  width: 80%;
   height: 800px;
  
 }
@@ -97,6 +97,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  
   /* padding: 3rem; */
 
   background: white;
