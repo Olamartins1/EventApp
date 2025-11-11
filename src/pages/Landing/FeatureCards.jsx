@@ -117,28 +117,24 @@ const Card = styled.div`
     margin: 0;
   }
 
-     @media (max-width: 1024px) {
- 
+  @media (max-width: 1024px) {
   }
 
   @media (max-width: 768px) {
-  
   }
 
   @media (max-width: 480px) {
-  h3 {
-    font-weight: 600;
-    font-size: 0.8rem;
-    margin-bottom: 0.25rem;
-    margin-top: 0;
-  }
-  p {
-    font-size: 0.7rem;
-    color: #e9d5ff;
-    margin: 0;
-  }
-
-
+    h3 {
+      font-weight: 600;
+      font-size: 0.8rem;
+      margin-bottom: 0.25rem;
+      margin-top: 0;
+    }
+    p {
+      font-size: 0.7rem;
+      color: #e9d5ff;
+      margin: 0;
+    }
   }
 `;
 const Cards_holder = styled.div`
@@ -156,16 +152,13 @@ const Cards_holder = styled.div`
   width: 80%;
   z-index: 10;
   margin-top: -40px;
-  
-  
+
   @media (max-width: 1024px) {
     gap: 2.5rem;
     width: 90%;
   }
 
-
   @media (max-width: 768px) {
-   
     flex-direction: row;
     justify-content: space-evenly;
     gap: 1.5rem;
@@ -173,13 +166,11 @@ const Cards_holder = styled.div`
     padding: 1.5rem 1rem;
   }
 
-
   @media (max-width: 480px) {
     flex-direction: row;
     gap: 0.12rem;
     padding: 1rem;
     width: 100%;
-    
   }
 `;
 const Container = styled.div`
@@ -188,16 +179,14 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: -40px;
-       @media (max-width: 1024px) {
- 
+  @media (max-width: 1024px) {
   }
 
   @media (max-width: 768px) {
-  
   }
 
   @media (max-width: 480px) {
-width: 80%;
-margin-left: 40px;
+    width: 80%;
+    margin-left: 40px;
   }
 `;

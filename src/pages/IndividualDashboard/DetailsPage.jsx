@@ -21,6 +21,8 @@ const DetailsPage = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [error, setError] = useState("");
   const [isBooking, setIsBooking] = useState(false);
+      let theAmount = venue.price
+      let  servicecharge = (theAmount * days) * 5/100;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,11 +49,14 @@ const DetailsPage = () => {
     setEventType(e.target.value);
   };
 
-  const bookVenue = async () => {
-    if (!eventDate || !eventType || !days) {
-      toast.error("Please input these fields");
-      return;
-    }
+ const bookVenue = async () => {
+  if (!eventDate || !eventType || !days) {
+    toast.error("Please fill in all fields before booking");
+    console.log("event:", eventDate == false)
+    console.log("type:", eventType == false)
+    console.log("days:", days == false)
+    return;
+  }
 
     try {
       setIsBooking(true);
@@ -62,11 +67,9 @@ const DetailsPage = () => {
       const res = await axios.post(
         `https://eventiq-final-project.onrender.com/api/v1/booking/${id}`,
         {
-          date: eventDate,
+         date: eventDate,
           days,
-          eventType,
-          servicecharge: venue.price * 0.05,
-          total: venue.price * 0.05 + venue.price,
+          eventType
         },
         {
           headers: {
@@ -148,7 +151,7 @@ const DetailsPage = () => {
 
               <MetaItem>
                 <MapPin size={16} />
-                {venue?.location?.street},{venue?.location?.city},
+                {venue?.location?.city},
                 {venue?.location?.state}
               </MetaItem>
               <MetaItem>
@@ -256,6 +259,7 @@ const DetailsPage = () => {
                       type="text"
                       placeholder="e.g: 1,2,3,4,5,"
                       onChange={handleDaysChange}
+
                     />
                   </EventContainer>
                   <BookButton onClick={bookVenue} disabled={isBooking}>
@@ -264,21 +268,19 @@ const DetailsPage = () => {
                   <PricingBreakdown>
                     <BreakdownItem>
                       <span>Venue rental</span>
-                      <span>{venue?.price}</span>
+                      <span>{venue?.price * days}</span>
                     </BreakdownItem>
                     <BreakdownItem>
                       <span>Service fee (5%)</span>
                       <span>
-                        ₦{Math.round(venue?.price * 0.05).toLocaleString()}
+                        ₦{(theAmount * days) * 5/100}
                       </span>
                     </BreakdownItem>
                     <BreakdownItem>
                       <span>Total</span>
                       <span>
                         ₦
-                        {Math.round(
-                          venue?.price * 0.05 + venue?.price
-                        ).toLocaleString()}
+                        {(theAmount * days) + servicecharge + venue.cautionfee}
                       </span>
                     </BreakdownItem>
                   </PricingBreakdown>

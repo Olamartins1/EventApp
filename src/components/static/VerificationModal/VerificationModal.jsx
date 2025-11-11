@@ -300,7 +300,6 @@ const VerificationModal = ({ email, onClose }) => {
         }
       );
 
-      // Step 3: Save token & user info, then redirect
       if (loginRes.data && loginRes.data.token && loginRes.data.data) {
         const user = loginRes.data.data;
         const role = user.role;
@@ -311,14 +310,12 @@ const VerificationModal = ({ email, onClose }) => {
 
         toast.success("Verification complete! Logging you in...");
 
-        setTimeout(() => {
           onClose?.();
           if (role === "venue-owner") {
             navigate("/dashboardHome");
           } else {
             navigate("/individual-dashboard");
           }
-        }, 1500);
       } else {
         toast.error("Login failed after verification. Please try again.");
       }
@@ -331,7 +328,6 @@ const VerificationModal = ({ email, onClose }) => {
     }
   };
 
-  // ✅ Resend OTP
   const handleResend = async () => {
     if (!userEmail) {
       toast.error("Email not found — please sign up again");

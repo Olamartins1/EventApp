@@ -645,6 +645,7 @@ const AllVenues = () => {
   const navigate = useNavigate();
   const {token} = useContext(AuthContext)
 
+
   useEffect(() => {
     const fetchVenues = async () => {
       try {
@@ -703,17 +704,16 @@ const AllVenues = () => {
           venues.map((venue) => (
             <VenueCard
               key={venue._id}
-              onClick={() => navigate(`/individual-dashboard/venue/${venue._id}`)}
             >
               <ImageWrapper>
                 <VenueImage
                   src={venue?.documents?.images?.[0]?.url || "/placeholder.jpg"}
                   alt={venue.venuename}
                 />
-                <FeaturedBadge>
+                {/* <FeaturedBadge>
                   <Sparkles size={14} />
                   Featured
-                </FeaturedBadge>
+                </FeaturedBadge> */}
               </ImageWrapper>
 
               <CardContent>
