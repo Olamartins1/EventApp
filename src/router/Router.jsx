@@ -149,7 +149,7 @@ import Dashboardlayout from "../components/layout/Dashboardlayout";
 import DashboardHome from "../pages/Body/DashboardHome";
 import Login from "../pages/auth/Login";
 import SignUp from "../pages/auth/SignUp";
-import ForgotPassword from "../pages/auth/ForgotPassword"
+import ForgotPassword from "../pages/auth/ForgotPassword";
 import Venues from "../pages/Body/Venues";
 import Payments from "../pages/Body/Payments";
 import Notification from "../pages/Body/Notification";
@@ -175,8 +175,8 @@ import Overview from "../pages/admin/Overview";
 import AdminVenues from "../pages/admin/AdminVenues";
 import Protect from "./Protect";
 import IndividualPayment from "../pages/IndividualDashboard/IndividualPayment";
-import SuccessfulPayment from "../components/SuccessfulPayment"
-import Invoice from "../pages/IndividualDashboard/Invoice"
+import SuccessfulPayment from "../components/SuccessfulPayment";
+import Invoice from "../pages/IndividualDashboard/Invoice";
 // https://event-app-theta-seven.vercel.app/payment-success?reference=zhPltj6q3FfB
 
 export const Element = createHashRouter([
@@ -216,7 +216,6 @@ export const Element = createHashRouter([
     ],
   },
   {
-    
     path: "/individual-dashboard",
 
     element: (
@@ -274,14 +273,14 @@ export const Element = createHashRouter([
     element: <Login />,
   },
   {
-    path: "/Invoice",
+    path: "/Invoice/:id",
     element: <Invoice />,
   },
   {
     path: "/payment-success",
     element: <SuccessfulPayment />,
   },
-    {
+  {
     path: "/IndividualPayment/:id",
     element: <IndividualPayment />,
   },
@@ -307,14 +306,12 @@ export const Element = createHashRouter([
     element: <SignupIndividual />,
   },
   {
-  path: "/test-loading",
-  element: <Loading />,
-},
-{ 
+    path: "/test-loading",
+    element: <Loading />,
+  },
+  {
     path: "/admin-dashboard",
-    element: (
-        <AdminDashboard />
-    ),
+    element: <AdminDashboard />,
     children: [
       {
         index: true,
