@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Halls = () => {
   const [halls, setHalls] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const navigate = useNavigate();
 
   const fetchHall = async () => {
     try {
@@ -15,12 +17,11 @@ const Halls = () => {
         "https://eventiq-final-project.onrender.com/api/v1/venues"
       );
 
-      // check if response has valid data before setting
       if (res?.data?.data && Array.isArray(res.data.data)) {
         console.log(res.data.data);
         setHalls(res.data.data);
       } else {
-        setHalls([]); // fallback empty array
+        setHalls([]);
         toast.info("No halls available at the moment.");
       }
     } catch (error) {
@@ -32,8 +33,6 @@ const Halls = () => {
     }
   };
 
-  // ❌ your useEffect had a bug — it called the function immediately
-  // ✅ should pass a function instead:
   useEffect(() => {
     fetchHall();
   }, []);
@@ -63,7 +62,11 @@ const Halls = () => {
         {halls.length > 0 ? (
           halls.map((hall) => (
             <Hall_card key={hall._id || hall.id}>
-              <Image_holder>
+              <Image_holder
+                onClick={() =>
+                  navigate(`/individual-dashboard/venue/${hall._id}`)
+                }
+              >
                 <img
                   src={hall?.documents?.images[0].url || "/placeholder.jpg"}
                   alt={hall?.name || "Venue"}
@@ -83,8 +86,7 @@ const Halls = () => {
 
               <Hall_info>
                 <Hall_header>
-                  <h3>{hall?.venuename || "Unnamed Hall"}</h3>
-                 
+                  <h3>{hall?.venuename}</h3>
                 </Hall_header>
                 {/* <p>{hall?.location || "Unknown location"}</p> */}
                 <p>
@@ -95,7 +97,7 @@ const Halls = () => {
 
                 <Hall_price>
                   <h3>
-                    {hall?.price ? `${hall.price}` : "Price unavailable"}{" "}
+                    {hall?.price ? `₦ ${hall.price}` : "Price unavailable"}{" "}
                     <span>/day</span>
                   </h3>
                 </Hall_price>
@@ -152,9 +154,11 @@ const Hall_info = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   p {
-    font-size: 15px;
-    color: #545454;
-    margin: 0 0 0.5rem 0;
+    font-size: 15px !important;
+    color: #545454 !important;
+    // margin: 0 0 0.5rem 0;
+    margin-left: -10px;
+    width: 100px;
   }
 `;
 
@@ -222,12 +226,13 @@ const Hall_card = styled.div`
 
 const Halls_container = styled.div`
   display: flex;
+  flex-wrap: nowrap;
   gap: 15px;
-  width: 100%;
+  width: 50%;
   height: 100%;
-
   justify-content: center;
-  align-items: center;
+  // align-items: center;
+  align-items: flex-start;
 
   @media (max-width: 768px) {
     width: 90%;
@@ -270,7 +275,8 @@ const Container = styled.div`
 
   p {
     font-size: 1.25rem;
-    color: #4b5563;
+    color: #4b5563 !important;
+    color: red;
   }
 
   @media (max-width: 768px) {

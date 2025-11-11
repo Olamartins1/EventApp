@@ -9,8 +9,10 @@ const Individual_subHeader = () => {
   const location = useLocation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { selectedArea, setSelectedArea } = useArea();
+const storedArea = JSON.parse(localStorage.getItem("All area"));
 
   const isActive = (path) => location.pathname === path;
+
 
   const areas = [
     "All Areas",
@@ -38,7 +40,9 @@ const Individual_subHeader = () => {
     const IconComponent = iconMap[type];
     return IconComponent ? <IconComponent size={25} /> : null;
   };
-
+  const myArea = () => {
+    localStorage.setItem("myArea", JSON.stringify(selectedArea));
+  };
   return (
     <SubHeaderContainer>
       <SubHeaderContent>
@@ -91,6 +95,7 @@ const Individual_subHeader = () => {
                   <DropdownItem
                     key={index}
                     onClick={() => {
+                      myArea;
                       setSelectedArea(area);
                       setIsDropdownOpen(false);
                     }}
@@ -103,7 +108,6 @@ const Individual_subHeader = () => {
           </FilterSection>
         </NavButtonsWrapper>
 
-        {/* Filter dropdown - mobile position (separate row) */}
         <FilterSection className="mobile-filter">
           <FilterButton
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -122,6 +126,7 @@ const Individual_subHeader = () => {
                 <DropdownItem
                   key={index}
                   onClick={() => {
+                     localStorage.setItem("All area", JSON.stringify(area));
                     setSelectedArea(area);
                     setIsDropdownOpen(false);
                   }}
@@ -143,7 +148,7 @@ const SubHeaderContainer = styled.div`
   background-color: #ffffff;
   border-bottom: 1px solid #e5e7eb;
   padding: 0 4rem;
-  
+
   position: sticky;
   top: 95px;
   z-index: 99;

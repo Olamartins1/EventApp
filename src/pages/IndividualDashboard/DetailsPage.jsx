@@ -16,11 +16,15 @@ const DetailsPage = () => {
   const [venue, setVenue] = useState({});
   const [loading, setLoading] = useState(true);
   const [eventDate, setEventDate] = useState("");
-  const [days, setDays] = useState("");
+  const [days, setDays] = useState(1);
   const [eventType, setEventType] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [error, setError] = useState("");
   const [isBooking, setIsBooking] = useState(false);
+  const [errorField, setErrorField] = useState("");
+
+      let theAmount = venue.price
+      let  servicecharge = (theAmount * days) * 5/100;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,20 +42,60 @@ const DetailsPage = () => {
     };
     if (id) fetchData();
   }, [id]);
-
-  const handleDaysChange = (e) => {
-    setDays(e.target.value);
-  };
-
   const handleEventTypeChange = (e) => {
-    setEventType(e.target.value);
-  };
+  const value = e.target.value.trim();
+  
+  if (value === "") {
+    setEventType("");
+    setErrorField("eventType");
+    return;
+  }
 
-  const bookVenue = async () => {
-    if (!eventDate || !eventType || !days) {
-      toast.error("Please input these fields");
-      return;
-    }
+  if (!/^[a-zA-Z\s]+$/.test(value)) {
+    toast.error("Event type should only contain letters");
+    setErrorField("eventType");
+    return;
+  }
+
+  setEventType(value);
+  setErrorField(""); // clear error when valid
+};
+
+
+ const handleDaysChange = (e) => {
+  const value = e.target.value.trim();
+
+  if (value === "") {
+    setDays("");
+    setErrorField("days");
+    return;
+  }
+
+  const numberValue = Number(value);
+
+  if (!Number.isInteger(numberValue) || numberValue <= 0) {
+    setErrorField("days");
+    return;
+  }
+
+  setDays(numberValue);
+  setErrorField("");
+};
+
+
+ const bookVenue = async () => {
+  if (isNaN(days) || days <= 0) {
+    <small>please input a valid number of days</small>
+  return;
+}
+
+  if (!eventDate || !eventType || !days) {
+    toast.error("Please fill in all fields before booking");
+    console.log("event:", eventDate == false)
+    console.log("type:", eventType == false)
+    console.log("days:", days == false)
+    return;
+  }
 
     try {
       setIsBooking(true);
@@ -62,11 +106,9 @@ const DetailsPage = () => {
       const res = await axios.post(
         `https://eventiq-final-project.onrender.com/api/v1/booking/${id}`,
         {
-          date: eventDate,
+         date: eventDate,
           days,
-          eventType,
-          servicecharge: venue.price * 0.05,
-          total: venue.price * 0.05 + venue.price,
+          eventType
         },
         {
           headers: {
@@ -148,7 +190,7 @@ const DetailsPage = () => {
 
               <MetaItem>
                 <MapPin size={16} />
-                {venue?.location?.street},{venue?.location?.city},
+                {venue?.location?.city},
                 {venue?.location?.state}
               </MetaItem>
               <MetaItem>
@@ -246,17 +288,32 @@ const DetailsPage = () => {
 
                   <EventContainer>
                     <EventType>Event Type</EventType>
-                    <input
-                      type="text"
-                      placeholder="e.g: birthday, graduation, wedding"
-                      onChange={handleEventTypeChange}
-                    />
+                <input
+  type="text"
+  placeholder="e.g: birthday, graduation, wedding"
+  onChange={handleEventTypeChange}
+  style={{
+    borderColor: errorField === "eventType" ? "red" : "#e5e7eb",
+    boxShadow: errorField === "eventType" ? "0 0 0 3px rgba(255, 0, 0, 0.1)" : "none"
+  }}
+/>
+
                     <NumberType>Number of Days</NumberType>
-                    <input
-                      type="text"
-                      placeholder="e.g: 1,2,3,4,5,"
-                      onChange={handleDaysChange}
-                    />
+<input
+  type="text"
+  placeholder="e.g: 1,2,3,4,5"
+  onChange={handleDaysChange}
+  style={{
+    borderColor: errorField === "days" ? "red" : "#e5e7eb",
+    boxShadow: errorField === "days" ? "0 0 0 3px rgba(255, 0, 0, 0.1)" : "none"
+  }}
+/>
+{errorField === "days" && (
+  <small style={{ color: "red", fontSize: "0.8rem" }}>
+    Please input a valid number of days
+  </small>
+)}
+
                   </EventContainer>
                   <BookButton onClick={bookVenue} disabled={isBooking}>
                     {isBooking ? "Booking..." : "Book This Venue"}
@@ -264,21 +321,19 @@ const DetailsPage = () => {
                   <PricingBreakdown>
                     <BreakdownItem>
                       <span>Venue rental</span>
-                      <span>{venue?.price}</span>
+                      <span>{venue?.price * days}</span>
                     </BreakdownItem>
                     <BreakdownItem>
                       <span>Service fee (5%)</span>
                       <span>
-                        ₦{Math.round(venue?.price * 0.05).toLocaleString()}
+                        ₦{(theAmount * days) * 5/100}
                       </span>
                     </BreakdownItem>
                     <BreakdownItem>
                       <span>Total</span>
                       <span>
                         ₦
-                        {Math.round(
-                          venue?.price * 0.05 + venue?.price
-                        ).toLocaleString()}
+                        {(theAmount * days) + servicecharge + venue.cautionfee}
                       </span>
                     </BreakdownItem>
                   </PricingBreakdown>
@@ -316,8 +371,9 @@ export default DetailsPage;
 
 const EventContainer = styled.div`
   width: 100%;
-  height: 180px;
-
+  height: auto; /* ✅ allow content like <small> to expand naturally */
+  margin-bottom: 1rem; /* optional: gives spacing below */
+  
   input {
     width: 100%;
     padding: 0.75rem;
@@ -337,6 +393,7 @@ const EventContainer = styled.div`
     }
   }
 `;
+
 
 const EventType = styled.div`
   display: block;

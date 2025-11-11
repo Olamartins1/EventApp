@@ -29,7 +29,7 @@ const DashboardHome = () => {
   const [statsData, setStatsData] = useState({});
     const [showPopup, setShowPopup] = useState(false); 
   const [booking, setBooking] = useState([])
-
+console.log("book", booking)
   const [loading, setLoading] = useState(true)
   const [rejectionReason, setRejectionReason] = useState("");
   const [bookingstatus, setBookingstatus] = useState(false)
@@ -206,14 +206,15 @@ return (
           </StatCard>
         </StatsGrid>
       )}
+      {console.log("booooooo",booking)}
 <BookingCard>
   {loading ? (
     <h3 style={{ textAlign: "center", color: "#555" }}>Loading bookings...</h3>
   ) : booking.length > 0 ? (
     booking.map((item, index) => {
-      const isPending = item.bookingstatus === "pending";
+      const isPending = item.bookingstatus === "pending" ? true : false ;
       const buttonText = item.bookingstatus === "confirmed" ? "Accepted" : "Accept";
-
+console.log("text. ",item.bookingstatus ,item)
       return (
         <div key={index} style={{ marginBottom: "1.5rem" }}>
           <VenueName>{item.venueId.venuename}</VenueName>
@@ -232,13 +233,14 @@ return (
     disabled={!isPending}
     onClick={() => {
       acceptBooking(item._id);
-      window.location.reload();
+
+      ;
+      setTimeout(()=>window.location.reload(),5000)
     }}
   >
               {buttonText}
             </AcceptButton>
 
-            {/* ✅ Only show Reject button when status is "pending" */}
             {isPending && (
               <RejectButton
                 onClick={() => {
@@ -486,7 +488,7 @@ const Wrapper = styled.div`
     color: white;
     cursor: not-allowed;
     opacity: 0.7;
-  }
+♦  }
 `;
 const WelcomeSection = styled.div`
   display: flex;

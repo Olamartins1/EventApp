@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { Sparkles } from "lucide-react";
 import {useArea} from "../../assets/AreaContext/AreaContext"
 import {useEffect, useState} from "react"
 import {Navigate, useNavigate} from "react-router-dom";
@@ -29,7 +30,7 @@ const {selectedArea}= useArea()
             },
           }
         );
-        console.log(`https://eventiq-final-project.onrender.com/api/v1/allvenues-multipurpose?city=${selectedArea}`,
+        console.log( "the ven",`https://eventiq-final-project.onrender.com/api/v1/allvenues-multipurpose?city=${selectedArea}`,
 )
 
         // // Depending on API structure
@@ -45,7 +46,7 @@ const {selectedArea}= useArea()
        setVenues(response.data.data);
       } catch (err) {
         console.error("Error fetching indoor venues:", err);
-        setError("Failed to load indoor venues. Please try again later.");
+        setError("Failed to load Multipurpose venues. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -58,7 +59,7 @@ const {selectedArea}= useArea()
  if (loading) {
     return (
       <PageHolder>
-        <PageTitle>Loading Indoor Venues...</PageTitle>
+        <PageTitle>Loading Multipurpose Venues...</PageTitle>
       </PageHolder>
     );
   }
@@ -79,20 +80,41 @@ const {selectedArea}= useArea()
         <PageSubtitle>{venues.length} venues available</PageSubtitle>
       </PageHeader>
 
-      <IndoorGrid>
-        {venues.length > 0 ? (
-          venues.map((venue) => <div onClick={() => navigate(`/individual-dashboard/venue/${venue._id}`)}> 
-<img src={venue.documents.images[0].url}/>
-<h3>{venue.venuename}</h3>
-<span>{venue.location.street}</span>
-<p>{venue.capacity.minimum}-</p>
-<p>{venue.capacity.maximum}</p>
-<p>#{venue.price}/day</p>
-          </div>)
-        )  : (
-          <PageSubtitle>No indoor venues found</PageSubtitle>
-        )}
-      </IndoorGrid>
+    <VenuesGrid>
+            {venues.length > 0 ? (
+              venues.map((venue) => (
+                <VenueCard
+                  key={venue._id}
+                  onClick={() => navigate(`/individual-dashboard/venue/${venue._id}`)}
+                >
+                  <ImageWrapper>
+                    <VenueImage
+                      src={venue?.documents?.images?.[0]?.url || "/placeholder.jpg"}
+                      alt={venue.venuename}
+                    />
+                    {/* <FeaturedBadge>
+                      <Sparkles size={14} />
+                      Featured
+                    </FeaturedBadge> */}
+                  </ImageWrapper>
+    
+                  <CardContent>
+                    <VenueName>{venue.venuename}</VenueName>
+                    <Location>{venue?.location?.city || "Location unavailable"}</Location>
+                    <Capacity>
+                      Capacity: {venue?.capacity?.minimum || 0}–{venue?.capacity?.maximum || 0} guests
+                    </Capacity>
+                    <Price>
+                      ₦{venue.price.toLocaleString()}
+                      <PriceUnit>/day</PriceUnit>
+                    </Price>
+                  </CardContent>
+                </VenueCard>
+              ))
+            ) : (
+              <PageSubtitle>No venues found</PageSubtitle>
+            )}
+          </VenuesGrid>
     </PageHolder>
   );
 
@@ -132,18 +154,97 @@ const PageSubtitle = styled.p`
   font-size: 1.2rem;
 `;
 
-const IndoorGrid = styled.div`
+const VenuesGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+`;
+
+const VenueCard = styled.div`
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+`;
+
+const ImageWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.9s;
+  }
+
+  &:hover img {
+    transform: scale(1.05);
+  }
+`;
+
+const VenueImage = styled.img``;
+
+const FeaturedBadge = styled.div`
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #fbbe24;
+  color: #1f2937;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-family: Poppins, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
   display: flex;
-  flex-wrap: wrap;
-  gap: 25px;
-  height: 90%;
+  align-items: center;
+  gap: 4px;
+`;
 
-  @media (max-width: 768px) {
-    gap: 20px;
-  }
+const CardContent = styled.div`
+  padding: 16px 18px 20px 18px;
+`;
 
-  @media (max-width: 480px) {
-    gap: 15px;
-    flex-direction: column;
-  }
+const VenueName = styled.h3`
+  color: #0a0a0a;
+  font-family: Poppins, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+`;
+
+const Location = styled.p`
+  color: #717182;
+  font-family: Poppins, sans-serif;
+  font-size: 13px;
+  margin-bottom: 4px;
+`;
+
+const Capacity = styled.p`
+  color: #717182;
+  font-family: Poppins, sans-serif;
+  font-size: 13px;
+  margin-bottom: 12px;
+`;
+
+const Price = styled.p`
+  color: #5d3a8f;
+  font-family: Poppins, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+`;
+
+const PriceUnit = styled.span`
+  color: #0a0a0a;
+  font-size: 13px;
+  font-weight: 400;
 `;

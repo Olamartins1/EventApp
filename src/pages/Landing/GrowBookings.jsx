@@ -1,10 +1,16 @@
 import { CheckCircle2 } from "lucide-react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 const Grow_booking = () => {
+  const navigate = useNavigate();
   const img =
     "https://res.cloudinary.com/dg9hdp34k/image/upload/v1762335900/err_vyusyq.jpg";
+
+  const handleNavigate = () => {
+    navigate("/signup-hallowner");
+  };
 
   return (
     <Section id="about">

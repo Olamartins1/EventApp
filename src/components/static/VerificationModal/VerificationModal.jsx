@@ -1,6 +1,3 @@
-
-
-
 // import { useState, useRef, useEffect } from "react";
 // import { X } from "lucide-react";
 // import "./VerificationModal.css";
@@ -92,7 +89,6 @@
 //       setTimeout(() => {
 //         onClose?.();
 //         // navigate("/dashboardHome");
-
 
 //   if (userRole === "venue-owner") {
 //     navigate("/dashboardHome");
@@ -300,7 +296,6 @@ const VerificationModal = ({ email, onClose }) => {
         }
       );
 
-      // Step 3: Save token & user info, then redirect
       if (loginRes.data && loginRes.data.token && loginRes.data.data) {
         const user = loginRes.data.data;
         const role = user.role;
@@ -311,14 +306,12 @@ const VerificationModal = ({ email, onClose }) => {
 
         toast.success("Verification complete! Logging you in...");
 
-        setTimeout(() => {
           onClose?.();
           if (role === "venue-owner") {
-            navigate("/dashboardHome");
+            navigate("/login");
           } else {
-            navigate("/individual-dashboard");
+            navigate("/login");
           }
-        }, 1500);
       } else {
         toast.error("Login failed after verification. Please try again.");
       }
@@ -331,7 +324,6 @@ const VerificationModal = ({ email, onClose }) => {
     }
   };
 
-  // ✅ Resend OTP
   const handleResend = async () => {
     if (!userEmail) {
       toast.error("Email not found — please sign up again");
@@ -369,7 +361,8 @@ const VerificationModal = ({ email, onClose }) => {
 
         <h2 className="modal-title">Verification</h2>
         <p className="modal-description">
-          A verification code has been sent to <b>{userEmail}</b>. Please enter it below.
+          A verification code has been sent to <b>{userEmail}</b>. Please enter
+          it below.
         </p>
 
         <div className="code-inputs">

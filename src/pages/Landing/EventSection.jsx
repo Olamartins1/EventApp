@@ -1,11 +1,17 @@
 import { CheckCircle2 } from "lucide-react";
 import styled from "styled-components";
+// import { useNavigate } from "react-router-dom";
+
 import { Link } from "react-router-dom";
 
 const Event_section = () => {
+  // const navigate = useNavigate();
+
   const img =
     "https://res.cloudinary.com/dg9hdp34k/image/upload/v1762324583/evver_y7eeue.jpg";
-
+  // const handleNavigate = () => {
+  //   navigate("/signup-individual");
+  // };
   return (
     <Event_Section id="about">
       <Event_Container>

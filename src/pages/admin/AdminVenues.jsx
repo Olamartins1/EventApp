@@ -185,6 +185,7 @@ const AdminVenue = () => {
   const [activeTab, setActiveTab] = useState("all");
   const [category, setCategory] = useState("");
   const [venues, setVenues] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const filteredVenues = venues.filter((v) => {
     if (activeTab === "verified") return v.verified;
@@ -193,25 +194,112 @@ const AdminVenue = () => {
     return true;
   });
 
-  const fetchHalls = async () => {
+  // const fetchHalls = async () => {
+  //   try {
+  //   const response = await axios.get(
+  //       `https://eventiq-final-project.onrender.com/api/v1/halls?status=${category}`
+  //     );
+  //     setVenues(response.data.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // const fetchHalls = async (filter = "all") => {
+  //   setLoading(true);
+  //   try {
+  //     let url = "https://eventiq-final-project.onrender.com/api/v1/halls";
+
+  //     if (filter === "verified") url += "?verified=true";
+  //     else if (filter === "unverified") url += "?verified=false";
+  //     else if (filter === "featured") url += "?featured=true";
+
+  //     const response = await axios.get(url);
+  //     setVenues(response.data.data);
+  //     console.log();
+  //   } catch (error) {
+  //     console.error("Error fetching halls:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // const fetchHalls = async (filter = "all") => {
+  //   setLoading(true);
+  //   try {
+  //     let url =
+  //       "https://eventiq-final-project.onrender.com/api/v1/halls?status=verified";
+
+  //     if (filter === "verified") url += "?status=verified";
+  //     else if (filter === "unverified") url += "?status=unverified";
+  //     else if (filter === "featured") url += "?featured=true";
+
+  //     const token = localStorage.getItem("token");
+
+  //     const response = await axios.get(url, {
+  //       headers: {
+  //         Accept: "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+
+  //     setVenues(response.data.data);
+  //   } catch (error) {
+  //     console.error(
+  //       "Error fetching halls:",
+  //       error.response?.data || error.message
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchHalls();
+  // }, [category]);
+
+  // console.log(venues);
+
+  const fetchHalls = async (filter = "all") => {
+    setLoading(true);
     try {
-      const response = await axios.get(
-        `https://eventiq-final-project.onrender.com/api/v1/halls?status=${category}`
-      );
-      setVenues(response.data.data);
+      // ✅ Base URL first — no query yet
+      let url = "https://eventiq-final-project.onrender.com/api/v1/halls";
+
+      // ✅ Append filters correctly — use `?` only once!
+      if (filter === "verified") url += "?status=verified";
+      else if (filter === "unverified") url += "?status=unverified";
+      else if (filter === "featured") url += "?featured=true";
+      // “all” means no extra query
+
+      // ✅ Retrieve auth token (make sure the key matches what you saved)
+      const token = localStorage.getItem("token"); // use the correct key!
+
+      // ✅ Make request with headers
+      const response = await axios.get(url, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // ✅ Update state
+      setVenues(response.data.data || []);
     } catch (error) {
-      console.log(error);
+      console.error(
+        "Error fetching halls:",
+        error.response?.data || error.message
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
-  // ✅ useEffect must receive a function, not its return value
+  // ✅ useEffect should call fetchHalls when category changes
   useEffect(() => {
-    fetchHalls();
+    fetchHalls(category);
   }, [category]);
 
-  console.log(venues);
-
-  // ✅ return moved INSIDE the component
   return (
     <>
       <Container>

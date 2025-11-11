@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { AuthContext } from "../../assets/AuthContext/AuthContext";
 
 const NotificationsContainer = styled.div`
   flex: 1;
@@ -47,7 +48,7 @@ const NotificationItem = styled.div`
   background: #fff;
   border-radius: 10px;
   padding: 1rem 1.5rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 `;
 
 const EventTitle = styled.h3`
@@ -83,9 +84,9 @@ const EmptyState = styled.div`
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState({});
-  console.log("the notification", notifications)
+  console.log("the notification", notifications);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem("authToken");
+  const token = useContext(AuthContext);
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -100,8 +101,8 @@ const Notifications = () => {
           }
         );
 
-        console.log("the res data:", res.data?.data); 
-        setNotifications(res.data?.data || {}); 
+        console.log("the res data:", res.data?.data);
+        setNotifications(res.data?.data || {});
       } catch (error) {
         console.log("Error fetching notifications:", error);
       } finally {
@@ -111,8 +112,6 @@ const Notifications = () => {
 
     fetchNotifications();
   }, [token]);
-
-
 
   return (
     <NotificationsContainer>
@@ -145,51 +144,51 @@ const Notifications = () => {
 
 export default Notifications;
 
-  // useEffect(() => {
-  //   const fetchVenues = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const token = localStorage.getItem("authToken");
-  //       const userData = localStorage.getItem("user");
-  //       const user = userData ? JSON.parse(userData) : null;
-  //       const userId = user?._id || user?.id;
+// useEffect(() => {
+//   const fetchVenues = async () => {
+//     try {
+//       setLoading(true);
+//       const token = localStorage.getItem("authToken");
+//       const userData = localStorage.getItem("user");
+//       const user = userData ? JSON.parse(userData) : null;
+//       const userId = user?._id || user?.id;
 
-  //       const response = await axios.get(
-  //         "https://eventiq-final-project.onrender.com/api/v1/venues",
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
+//       const response = await axios.get(
+//         "https://eventiq-final-project.onrender.com/api/v1/venues",
+//         {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//           },
+//         }
+//       );
 
-  //       if (response.data && response.data.data) {
-  //         const userVenues = userId
-  //           ? response.data.data.filter(
-  //               (venue) => venue.venueOwnerId === userId
-  //             )
-  //           : response.data.data;
+//       if (response.data && response.data.data) {
+//         const userVenues = userId
+//           ? response.data.data.filter(
+//               (venue) => venue.venueOwnerId === userId
+//             )
+//           : response.data.data;
 
-  //         setVenues(userVenues);
-  //         setError(null);
-  //       } else {
-  //         setError("Invalid response format");
-  //         toast.error("Failed to load venues");
-  //       }
-  //     } catch (err) {
-  //       console.error("Venues fetch error:", err);
-  //       setError(err.message);
-  //       if (err.response?.status === 401) {
-  //         toast.error("Unauthorized. Please login again.");
-  //       } else if (err.response?.data?.message) {
-  //         toast.error(err.response.data.message);
-  //       } else {
-  //         toast.error("Failed to load venues");
-  //       }
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+//         setVenues(userVenues);
+//         setError(null);
+//       } else {
+//         setError("Invalid response format");
+//         toast.error("Failed to load venues");
+//       }
+//     } catch (err) {
+//       console.error("Venues fetch error:", err);
+//       setError(err.message);
+//       if (err.response?.status === 401) {
+//         toast.error("Unauthorized. Please login again.");
+//       } else if (err.response?.data?.message) {
+//         toast.error(err.response.data.message);
+//       } else {
+//         toast.error("Failed to load venues");
+//       }
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
-  //   fetchVenues();
-  // }, []);
+//   fetchVenues();
+// }, []);
