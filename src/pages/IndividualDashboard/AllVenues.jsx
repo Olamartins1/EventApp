@@ -10,7 +10,6 @@
 // //     const token = localStorage.getItem("authToken")
 // //   console.log(token)
 // // // const AuthToken =()=>{
-  
 
 // // //     {
 // // //       Headers: {
@@ -19,11 +18,11 @@
 // // //         }
 // // //   }
 // //   useEffect(() => {
-    
+
 // //     const fetchVenues = async () => {
 // //       try {
-// //         setLoading(true); 
-// //         setError(null); 
+// //         setLoading(true);
+// //         setError(null);
 
 // //         const response = await axios.get(
 // //           "https://eventiq-final-project.onrender.com/api/v1/allvenues",       {
@@ -31,10 +30,10 @@
 // //               Authorization: `Bearer ${token}`,
 // //             },
 // //           }
-        
+
 // //         );
 // // console.log(response.data.data)
-        
+
 // //         setVenues(response.data.data);
 // //       } catch (err) {
 // //         console.error(" Error fetching venues:", err);
@@ -42,14 +41,13 @@
 // //           "Failed to load venues. Please check your network or try again later."
 // //         );
 // //       } finally {
-// //         setLoading(false); 
+// //         setLoading(false);
 // //       }
 // //     };
 
 // //     fetchVenues();
 // //   }, []);
 
-  
 // //   if (loading) {
 // //     return (
 // //       <PageContainer>
@@ -58,7 +56,6 @@
 // //     );
 // //   }
 
- 
 // //   if (error) {
 // //     return (
 // //       <PageContainer>
@@ -68,7 +65,6 @@
 // //     );
 // //   }
 
-  
 // //   return (
 // //     <PageContainer>
 // //       <PageHeader>
@@ -78,8 +74,8 @@
 
 // //       <VenuesGrid>
 // //         {venues.length > 0 ? (
-// //           venues.map((venue) => 
-          
+// //           venues.map((venue) =>
+
 // //             <image_holder>
 // // <img src={venue.documents.images[0].url}/>
 // // <Wrapper>
@@ -126,7 +122,7 @@
 // //                   justifyContent: "flex-start",
 // //                 }}
 // //               >
-                
+
 // // {venue.capacity.maximum}</p>
 // //   <Hall_price>
 // //                 <h3>
@@ -142,7 +138,6 @@
 // // };
 
 // // export default All_venues;
-
 
 // // const PageContainer = styled.div`
 // //   max-width: 1400px;
@@ -271,7 +266,7 @@
 // import styled from "styled-components";
 // import axios from "axios";
 // <<<<<<< HEAD
-// import { Sparkles } from "lucide-react"; 
+// import { Sparkles } from "lucide-react";
 // =======
 // import { useNavigate } from "react-router-dom";
 // >>>>>>> 33e302d8f70f19530e5c8ff20de86538182a33ac
@@ -410,8 +405,6 @@
 // };
 
 // export default AllVenues;
-
-
 
 // const PageContainer = styled.div`
 //   max-width: 1400px;
@@ -643,7 +636,11 @@ const AllVenues = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const {token} = useContext(AuthContext)
+  const { token } = useContext(AuthContext);
+
+  const getArr = JSON.parse(localStorage.getItem("myArea"));
+
+  console.log("this is it", getArr);
 
 
   useEffect(() => {
@@ -662,6 +659,8 @@ const AllVenues = () => {
         );
 
         setVenues(response.data.data);
+
+        // localStorage.setItem("areas", JSON.stringify(areas));
       } catch (err) {
         console.error("Error fetching venues:", err);
         setError(
@@ -704,6 +703,9 @@ const AllVenues = () => {
           venues.map((venue) => (
             <VenueCard
               key={venue._id}
+              onClick={() =>
+                navigate(`/individual-dashboard/venue/${venue._id}`)
+              }
             >
               <ImageWrapper>
                 <VenueImage
@@ -718,9 +720,12 @@ const AllVenues = () => {
 
               <CardContent>
                 <VenueName>{venue.venuename}</VenueName>
-                <Location>{venue?.location?.city || "Location unavailable"}</Location>
+                <Location>
+                  {venue?.location?.city || "Location unavailable"}
+                </Location>
                 <Capacity>
-                  Capacity: {venue?.capacity?.minimum || 0}–{venue?.capacity?.maximum || 0} guests
+                  Capacity: {venue?.capacity?.minimum || 0}–
+                  {venue?.capacity?.maximum || 0} guests
                 </Capacity>
                 <Price>
                   ₦{venue.price.toLocaleString()}
@@ -738,7 +743,6 @@ const AllVenues = () => {
 };
 
 export default AllVenues;
-
 
 const PageContainer = styled.div`
   max-width: 1400px;

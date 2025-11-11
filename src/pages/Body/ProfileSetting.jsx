@@ -3,13 +3,12 @@ import styled from "styled-components";
 import { FiCamera, FiCheck, FiX } from "react-icons/fi";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
 import axios from "axios";
-import {toast} from "react-toastify";
-
+import { toast } from "react-toastify";
 
 const ProfileSettings = () => {
-    const {user} = useContext(AuthContext)
-   const {token} = useContext(AuthContext)
-   const [formData, setFormData] = useState({
+  const { user } = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
+  const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
@@ -34,15 +33,12 @@ const ProfileSettings = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
-  const [fetchuser, setFetchuser] = useState({})
-const [loadingBank, setLoadingBank] = useState(false);
-// const [loadingProfile, setLoadingProfile] = useState(false);
-// const [loadingEdit, setLoadingEdit] = useState(false);
+  const [fetchuser, setFetchuser] = useState({});
+  const [loadingBank, setLoadingBank] = useState(false);
+  // const [loadingProfile, setLoadingProfile] = useState(false);
+  // const [loadingEdit, setLoadingEdit] = useState(false);
 
-
-
-
-  console.log("line 39", user._id)
+  console.log("line 39", user._id);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -52,148 +48,147 @@ const [loadingBank, setLoadingBank] = useState(false);
     }
   };
 
-useEffect(() => {
-  const fetchData = async () => {
-    if (!user?._id) return; 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!user?._id) return;
 
-    console.log("Fetching user data for:", user._id);
+      console.log("Fetching user data for:", user._id);
 
+      try {
+        const res = await axios.get(
+          `https://eventiq-final-project.onrender.com/api/v1/venueowner/${user._id}`
+        );
+
+        setFetchuser(res.data.data);
+      } catch (error) {
+        console.error("Error fetching venue owner:", error);
+      }
+    };
+
+    fetchData();
+  }, [user?._id]);
+  console.log("the fetchuser", fetchuser);
+
+  const submitBankDetails = async () => {
+    setLoadingBank(true);
     try {
-      const res = await axios.get(
-        `https://eventiq-final-project.onrender.com/api/v1/venueowner/${user._id}` 
+      if (!user?._id) {
+        toast.error("User not found. Please login again.");
+        return;
+      }
+
+      const bankData = {
+        bankName: formData.bankName,
+        accountNumber: formData.accountNumber,
+        accountType: formData.type,
+        accountName: formData.accountName,
+      };
+
+      const res = await axios.post(
+        "https://eventiq-final-project.onrender.com/api/v1/register-bank",
+        bankData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
-      setFetchuser(res.data.data);
-     
+      console.log(res);
+
+      toast.success("Bank details saved successfully!");
+      setLoadingBank(false);
     } catch (error) {
-      console.error("Error fetching venue owner:", error);
+      console.error(
+        "Bank registration error:",
+        error.response?.data || error.message
+      );
+      toast.error(
+        error.response?.data?.message || "Error registering bank details"
+      );
+
+      setLoadingBank(false);
     }
   };
 
-  fetchData();
-}, [user?._id]);
-console.log("the fetchuser", fetchuser)
-
-const submitBankDetails = async () => {
-  setLoadingBank(true);
-  try {
-    if (!user?._id) {
-      toast.error("User not found. Please login again.");
-      return;
-    }
-
-
-   
-    const bankData = {
-      bankName: formData.bankName,
-      accountNumber: formData.accountNumber,
-      accountType: formData.type, 
-      accountName: formData.accountName,
-    };
-
-    const res = await axios.post(
-      "https://eventiq-final-project.onrender.com/api/v1/register-bank",
-      bankData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+  const Updateprofile = async () => {
+    try {
+      //  setLoadingProfile(true);
+      if (!user?._id) {
+        toast.error(res.data.message);
+        return;
       }
 
-    );
-
-    console.log(res)
-
-  
-      toast.success("Bank details saved successfully!");
-     setLoadingBank(false)
-  } catch (error) {
-    console.error("Bank registration error:", error.response?.data || error.message);
-    toast.error(error.response?.data?.message || "Error registering bank details");
-
-    setLoadingBank(false)
-  }
-
-};
-
-
-
- const Updateprofile = async () => {
-  try {
-    //  setLoadingProfile(true);
-    if (!user?._id) {
-      toast.error(res.data.message);
-      return;
-    }
-
-    const formDataToSend = new FormData();
-    formDataToSend.append("phoneNumber", formData.phone);
-    if (profileImage) {
-     
-      const blob = await fetch(profileImage).then((res) => res.blob());
-      formDataToSend.append("profilePicture", blob, "profile.jpg");
-    }
-
-    const res = await axios.patch(
-      `https://eventiq-final-project.onrender.com/api/v1/update-profile`,
-      formDataToSend,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
+      const formDataToSend = new FormData();
+      formDataToSend.append("phoneNumber", formData.phone);
+      if (profileImage) {
+        const blob = await fetch(profileImage).then((res) => res.blob());
+        formDataToSend.append("profilePicture", blob, "profile.jpg");
       }
-    );
-setFetchuser(res.data.data);
-     toast.success(res.data.message);
-  } catch (error) {
-    console.error("Error updating profile:", error.response?.data || error.message);
-    toast.error(error.response?.data?.message || "Error updating profile");
-  }
-};
 
-const updateBankDetails = async () => {
+      const res = await axios.patch(
+        `https://eventiq-final-project.onrender.com/api/v1/update-profile`,
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setFetchuser(res.data.data);
+      toast.success(res.data.message);
+    } catch (error) {
+      console.error(
+        "Error updating profile:",
+        error.response?.data || error.message
+      );
+      toast.error(error.response?.data?.message || "Error updating profile");
+    }
+  };
 
-  try {
+  const updateBankDetails = async () => {
+    try {
       // setLoadingBank(true);
-    if (!user?._id) {
-      toast.error("User not found. Please login again.");
-      return;
-    }
-
-    const bankData = {
-      bankName: formData.bankName,
-      accountNumber: formData.accountNumber,
-      accountType: formData.type, 
-      accountName: formData.accountName,
-    };
-
-    const res = await axios.put(
-      "https://eventiq-final-project.onrender.com/api/v1/update-bank",
-      bankData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+      if (!user?._id) {
+        toast.error("User not found. Please login again.");
+        return;
       }
-    );
-      setFetchuser(res.data.data); 
-    console.log('my response', res)
 
-    toast.success(res.data.message);
+      const bankData = {
+        bankName: formData.bankName,
+        accountNumber: formData.accountNumber,
+        accountType: formData.type,
+        accountName: formData.accountName,
+      };
 
+      const res = await axios.put(
+        "https://eventiq-final-project.onrender.com/api/v1/update-bank",
+        bankData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setFetchuser(res.data.data);
+      console.log("my response", res);
 
-  } catch (error) {
-    console.error("Bank update error:", error.response?.data || error.message);
-    toast.error(error.response?.data?.message || "Error updating bank details");
-  }finally {
-    setLoadingBank(false); 
-  }
-};
-
-
+      toast.success(res.data.message);
+    } catch (error) {
+      console.error(
+        "Bank update error:",
+        error.response?.data || error.message
+      );
+      toast.error(
+        error.response?.data?.message || "Error updating bank details"
+      );
+    } finally {
+      setLoadingBank(false);
+    }
+  };
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -211,7 +206,6 @@ const updateBankDetails = async () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setProfileImage(reader.result);
-        
       };
       reader.readAsDataURL(file);
     }
@@ -219,7 +213,6 @@ const updateBankDetails = async () => {
 
   const validatePersonalInfo = () => {
     const newErrors = {};
-
 
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
@@ -349,30 +342,28 @@ const updateBankDetails = async () => {
       <Section>
         <SectionHeader>
           <SectionTitle>Personal Information</SectionTitle>
-         <EditButton
-  onClick={() => {
-    if (isEditMode) {
-      Updateprofile(); 
-    }
-    handleEditToggle();
-  }}
->
-  {isEditMode ? (
-    <>
-      <FiCheck size={16} style={{ marginRight: "6px" }} />
-      Save
-    </>
-  ) : (
-    "Edit"
-  )}
-</EditButton>
-
+          <EditButton
+            onClick={() => {
+              if (isEditMode) {
+                Updateprofile();
+              }
+              handleEditToggle();
+            }}
+          >
+            {isEditMode ? (
+              <>
+                <FiCheck size={16} style={{ marginRight: "6px" }} />
+                Save
+              </>
+            ) : (
+              "Edit"
+            )}
+          </EditButton>
         </SectionHeader>
         <FormGrid>
           <FormGroup>
             <Label>First name</Label>
             <Input
-
               disabled
               placeholder={fetchuser.firstName}
               hasError={errors.firstName}
@@ -381,20 +372,12 @@ const updateBankDetails = async () => {
           </FormGroup>
           <FormGroup>
             <Label>Surname</Label>
-            <Input
-        
-              disabled
-              placeholder={fetchuser.surname}
-             
-            />
+            <Input disabled placeholder={fetchuser.surname} />
             {errors.lastName && <ErrorText>{errors.lastName}</ErrorText>}
           </FormGroup>
-           <FormGroup>
+          <FormGroup>
             <Label>Email</Label>
-            <Input
-              disabled
-              placeholder={fetchuser.email}
-            />
+            <Input disabled placeholder={fetchuser.email} />
             {errors.lastName && <ErrorText>{errors.email}</ErrorText>}
           </FormGroup>
           <FormGroup>
@@ -411,10 +394,7 @@ const updateBankDetails = async () => {
             {errors.phone && <ErrorText>{errors.phone}</ErrorText>}
           </FormGroup>
         </FormGrid>
-
       </Section>
-
-
 
       <Section>
         <SectionTitle>Bank Details</SectionTitle>
@@ -440,17 +420,13 @@ const updateBankDetails = async () => {
           </FormGroup>
           <FormGroup>
             <Label>Account type </Label>
-            <Select
-                      name="type"
-                      value={formData.type}
-                      onChange={handleChange}
-                    >
-                      <option value="Select type">Select type</option>
-                      <option value="Savings">Savings</option>
-                      <option value="Fixed">Fixed</option>
-                       <option value="Current">Current</option>
-                        <option value="Corporate">Corporate</option>
-                    </Select>
+            <Select name="type" value={formData.type} onChange={handleChange}>
+              <option value="Select type">Select type</option>
+              <option value="Savings">Savings</option>
+              <option value="Fixed">Fixed</option>
+              <option value="Current">Current</option>
+              <option value="Corporate">Corporate</option>
+            </Select>
           </FormGroup>
           <FormGroupFull>
             <Label>Account Name</Label>
@@ -464,16 +440,16 @@ const updateBankDetails = async () => {
         </FormGrid>
       </Section>
       <Btn>
-  <Button onClick={submitBankDetails}>
-    {loadingBank ? "Sending..." : "Submit"}
-  </Button>
-  <Button
-  onClick={updateBankDetails} 
-  // disabled={loadingBank}      
->
-  edit
-</Button>
-</Btn>
+        <Button onClick={submitBankDetails}>
+          {loadingBank ? "Sending..." : "Submit"}
+        </Button>
+        <Button
+          onClick={updateBankDetails}
+          // disabled={loadingBank}
+        >
+          edit
+        </Button>
+      </Btn>
       <Section>
         <SectionTitle>Security</SectionTitle>
         <form onSubmit={handlePasswordChange}>
@@ -527,17 +503,15 @@ const updateBankDetails = async () => {
         </form>
       </Section>
     </Container>
-    
   );
 };
 
-
 const Btn = styled.div`
-width:100%;
-height:40px;
-margin-bottom:10px;
-display:flex;
-justify-content:space-between;
+  width: 100%;
+  height: 40px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Container = styled.div`
@@ -621,17 +595,16 @@ const Subtitle = styled.p`
 
 const Section = styled.div`
   margin-bottom: 40px;
-
 `;
 const Button = styled.div`
-text-align: center;
-width: 10%;
-border-radius: 0.5rem;
-  background:  #9476a5;
+  text-align: center;
+  width: 10%;
+  border-radius: 0.5rem;
+  background: #9476a5;
   padding: 0.5rem;
   cursor: pointer;
-  color:#fff;
-  `;
+  color: #fff;
+`;
 
 const SectionHeader = styled.div`
   display: flex;

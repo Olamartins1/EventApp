@@ -2,9 +2,27 @@ import React from "react";
 import styled from "styled-components";
 import { FaCheckCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import {useParams} from "react-router-dom"
+import {useState,useEffect} from "react"
 
 const SuccessfulPayment = () => {
+  const {reference} = useParams()
+  const [query, setQuery] = useState("")
   const navigate = useNavigate();
+
+ useEffect(() => {
+  const fetchQuery = async () => {
+    try {
+      const response = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/verify/${reference}`);
+      setQuery(response?.data);
+      console.log("the response to me", response?.data)
+    } catch (err) {
+      console.log("Error fetching venues:", err);
+    }
+  };
+ fetchQuery();
+}, [reference]); 
+
 
   return (
     <Container>

@@ -40,7 +40,9 @@ const storedArea = JSON.parse(localStorage.getItem("All area"));
     const IconComponent = iconMap[type];
     return IconComponent ? <IconComponent size={25} /> : null;
   };
-
+  const myArea = () => {
+    localStorage.setItem("myArea", JSON.stringify(selectedArea));
+  };
   return (
     <SubHeaderContainer>
       <SubHeaderContent>
@@ -93,7 +95,7 @@ const storedArea = JSON.parse(localStorage.getItem("All area"));
                   <DropdownItem
                     key={index}
                     onClick={() => {
-                      
+                      myArea;
                       setSelectedArea(area);
                       setIsDropdownOpen(false);
                     }}
@@ -146,7 +148,7 @@ const SubHeaderContainer = styled.div`
   background-color: #ffffff;
   border-bottom: 1px solid #e5e7eb;
   padding: 0 4rem;
-  
+
   position: sticky;
   top: 95px;
   z-index: 99;
