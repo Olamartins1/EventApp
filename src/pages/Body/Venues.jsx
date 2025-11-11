@@ -14,6 +14,7 @@ import {
 import { FaClock } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
 import { toast } from "react-toastify";
+// import Premium from "../Body/Premium";
 
 const VenuesContainer = styled.div`
   flex: 1;
@@ -51,8 +52,8 @@ const AddButton = styled.button`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #2563eb;
-  color: white;
+  background-color: #fff;
+  color: #000;
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
@@ -62,7 +63,8 @@ const AddButton = styled.button`
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: #1d4ed8;
+    background-color: #800080;
+    color: #fff;
   }
 `;
 
@@ -182,7 +184,6 @@ const VerifiedBadge = styled.div`
   position: absolute;
   top: 12px;
   right: 12px;
-  // background: yellow;
   color: black;
   padding: 6px 12px;
   border-radius: 20px;
@@ -314,145 +315,145 @@ const DeleteButton = styled(ActionButton)`
   }
 `;
 
-const PlansContainer = styled.div`
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  margin-bottom: 3rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-`;
+// const PlansContainer = styled.div`
+//   background: white;
+//   padding: 2rem;
+//   border-radius: 12px;
+//   margin-bottom: 3rem;
+//   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+// `;
 
-const PlansHeader = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.5rem;
-`;
+// const PlansHeader = styled.div`
+//   display: flex;
+//   align-items: center;
+//   gap: 0.75rem;
+//   margin-bottom: 0.5rem;
+// `;
 
-const PlansTitle = styled.h2`
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+// const PlansTitle = styled.h2`
+//   font-size: 1.5rem;
+//   font-weight: 700;
+//   color: #1a1a1a;
+//   margin: 0;
+//   display: flex;
+//   align-items: center;
+//   gap: 0.5rem;
 
-  &:before {
-    content: "⭐";
-    font-size: 1.75rem;
-  }
-`;
+//   &:before {
+//     content: "⭐";
+//     font-size: 1.75rem;
+//   }
+// `;
 
-const PlansSubtitle = styled.p`
-  font-size: 0.95rem;
-  color: #666;
-  margin: 0 0 2rem 0;
-`;
+// const PlansSubtitle = styled.p`
+//   font-size: 0.95rem;
+//   color: #666;
+//   margin: 0 0 2rem 0;
+// `;
 
-const PlansGrid = styled.div`
-  display: flex;
-  /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
-  gap: 2rem;
-`;
+// const PlansGrid = styled.div`
+//   display: flex;
+//   /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
+//   gap: 2rem;
+// `;
 
-const PlanCard = styled.div`
-  background: #f3f0ff;
-  border: ${(props) =>
-    props.popular ? "2px solid #7c3aed" : "2px solid #e0e0e0"};
-  border-radius: 12px;
-  padding: 2rem 1.5rem;
-  text-align: center;
-  position: relative;
-  transition: all 0.3s;
-  width: 230px;
+// const PlanCard = styled.div`
+//   background: #f3f0ff;
+//   border: ${(props) =>
+//     props.popular ? "2px solid #7c3aed" : "2px solid #e0e0e0"};
+//   border-radius: 12px;
+//   padding: 2rem 1.5rem;
+//   text-align: center;
+//   position: relative;
+//   transition: all 0.3s;
+//   width: 230px;
 
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-  }
-`;
+//   &:hover {
+//     transform: translateY(-4px);
+//     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+//   }
+// `;
 
-const PopularBadge = styled.div`
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #7c3aed;
-  color: white;
-  padding: 4px 16px;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
-`;
+// const PopularBadge = styled.div`
+//   position: absolute;
+//   top: -12px;
+//   left: 50%;
+//   transform: translateX(-50%);
+//   background: #7c3aed;
+//   color: white;
+//   padding: 4px 16px;
+//   border-radius: 12px;
+//   font-size: 0.75rem;
+//   font-weight: 600;
+// `;
 
-const PlanDuration = styled.h3`
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #333;
-  margin: ${(props) =>
-    props.popular ? "1.5rem 0 0.75rem 0" : "0 0 0.75rem 0"};
-`;
+// const PlanDuration = styled.h3`
+//   font-size: 1.125rem;
+//   font-weight: 600;
+//   color: #333;
+//   margin: ${(props) =>
+//     props.popular ? "1.5rem 0 0.75rem 0" : "0 0 0.75rem 0"};
+// `;
 
-const PlanPrice = styled.div`
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #7c3aed;
-  margin: 0.5rem 0;
-`;
+// const PlanPrice = styled.div`
+//   font-size: 2.5rem;
+//   font-weight: 700;
+//   color: #7c3aed;
+//   margin: 0.5rem 0;
+// `;
 
-const PlanDays = styled.p`
-  font-size: 0.875rem;
-  color: #999;
-  margin: 0.5rem 0 1.5rem 0;
-`;
+// const PlanDays = styled.p`
+//   font-size: 0.875rem;
+//   color: #999;
+//   margin: 0.5rem 0 1.5rem 0;
+// `;
 
-const PlanFeatures = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 1.5rem 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  text-align: left;
-`;
+// const PlanFeatures = styled.ul`
+//   list-style: none;
+//   padding: 0;
+//   margin: 1.5rem 0;
+//   display: flex;
+//   flex-direction: column;
+//   gap: 0.75rem;
+//   text-align: left;
+// `;
 
-const PlanFeature = styled.li`
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 0.9rem;
-  color: #666;
+// const PlanFeature = styled.li`
+//   display: flex;
+//   align-items: center;
+//   gap: 0.75rem;
+//   font-size: 0.9rem;
+//   color: #666;
 
-  svg {
-    color: #7c3aed;
-    flex-shrink: 0;
-  }
-`;
+//   svg {
+//     color: #7c3aed;
+//     flex-shrink: 0;
+//   }
+// `;
 
-const SubscribeButton = styled.button`
-  width: 100%;
-  padding: 0.875rem;
-  margin-top: 1.5rem;
-  border: ${(props) => (props.popular ? "none" : "1px solid #7c3aed")};
-  background: ${(props) => (props.popular ? "#7c3aed" : "white")};
-  color: ${(props) => (props.popular ? "white" : "#7c3aed")};
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+// const SubscribeButton = styled.button`
+//   width: 100%;
+//   padding: 0.875rem;
+//   margin-top: 1.5rem;
+//   border: ${(props) => (props.popular ? "none" : "1px solid #7c3aed")};
+//   background: ${(props) => (props.popular ? "#7c3aed" : "white")};
+//   color: ${(props) => (props.popular ? "white" : "#7c3aed")};
+//   border-radius: 8px;
+//   font-size: 0.95rem;
+//   font-weight: 600;
+//   cursor: pointer;
+//   transition: all 0.2s;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   gap: 0.5rem;
 
-  &:hover {
-    background: #7c3aed;
-    color: white;
-    ${(props) => !props.popular && "border-color: #7c3aed;"}
-  }
-`;
+//   &:hover {
+//     background: #7c3aed;
+//     color: white;
+//     ${(props) => !props.popular && "border-color: #7c3aed;"}
+//   }
+// `;
 
 const Modal = styled.div`
   position: fixed;
@@ -851,10 +852,10 @@ const VenueCardSkeletonLoader = () => (
 );
 
 const Venues = () => {
-const {user}= useContext(AuthContext)
-  const {token}= useContext(AuthContext)
+  const { user } = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
   const [venues, setVenues] = useState([]);
-  console.log(venues)
+  console.log(venues);
   const [loading, setLoading] = useState(true);
   const [features, setFeatures] = useState([]);
   const [error, setError] = useState(null);
@@ -880,44 +881,10 @@ const {user}= useContext(AuthContext)
     state: "",
   });
 
-  
-
   const [documentFiles, setDocumentFiles] = useState({
     cacCertificate: null,
     certificateOfOccupancy: null,
   });
-
-  //  useEffect(() => {
-  //   const fetchVenues = async () => {
-  //     try {
-  //       if (!user || !user._id) {
-  //         console.warn("User not available yet");
-  //         return;
-  //       }
-
-  //       setLoading(true);
-  //       const userId = user._id;
-  //       console.log("User ID:", userId);
-
-  //       const response = await axios.get(
-  //         `https://eventiq-final-project.onrender.com/api/v1/venues/${userId}`,
-  //         {
-  //           headers: { Authorization: `Bearer ${token}` },
-  //         }
-  //       );
-
-  //       // setVenues(response.data.data);
-  //       setError(null);
-  //     } catch (err) {
-  //       console.error("Error fetching venues:", err);
-  //       setError("Failed to load venues");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchVenues();
-  // }, [user, token]); 
 
   const handleOpenModal = (venue = null) => {
     setActiveTab("basic");
@@ -1134,7 +1101,6 @@ const {user}= useContext(AuthContext)
     setIsSubmitting(true);
 
     try {
-      
       const venueFormData = new FormData();
       venueFormData.append("venuename", formData.venuename);
       venueFormData.append("description", formData.description);
@@ -1207,8 +1173,6 @@ const {user}= useContext(AuthContext)
   const handleDelete = async (venueId) => {
     if (window.confirm("Are you sure you want to delete this venue?")) {
       try {
-        
-
         await axios.delete(
           `https://eventiq-final-project.onrender.com/api/v1/venues/${venueId}`,
           {
@@ -1233,17 +1197,15 @@ const {user}= useContext(AuthContext)
 
   const handleSubscribe = async (featureId) => {
     try {
-
-
       if (!token) {
         toast.error("Please login to subscribe");
         return;
       }
 
-      console.log("[v0] Subscribing to feature:", featureId);
+      // console.log("[v0] Subscribing to feature:", featureId);
 
       const response = await axios.get(
-        `https://eventiq-final-project.onrender.com/api/v1/subscribe/${featureId}`,
+        `https://eventiq-final-project.onrender.com/api/v1/features`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -1252,7 +1214,7 @@ const {user}= useContext(AuthContext)
         }
       );
 
-      console.log("[v0] Subscribe response:", response.data);
+      // console.log("[v0] Subscribe response:", response.data);
 
       if (
         response.data &&
@@ -1262,10 +1224,10 @@ const {user}= useContext(AuthContext)
         const { reference, checkout_url } = response.data.data;
 
         toast.success("Payment initialized! Redirecting to checkout...");
-        console.log("[v0] Payment details:", {
-          reference,
-          checkout_url,
-        });
+        // console.log("[v0] Payment details:", {
+        //   reference,
+        //   checkout_url,
+        // });
 
         window.location.href = checkout_url;
       } else {
@@ -1287,11 +1249,8 @@ const {user}= useContext(AuthContext)
 
   useEffect(() => {
     const fetchFeatures = async () => {
-    
       try {
         setLoading(true);
-      
-      
 
         const response = await axios.get(
           `https://eventiq-final-project.onrender.com/api/v1/ownervenue`,
@@ -1301,13 +1260,11 @@ const {user}= useContext(AuthContext)
             },
           }
         );
-setVenues(response.data.data)
-       
-        
+        setVenues(response.data.data);
       } catch (err) {
-        console.error("❌ Features fetch error:", err);
-       
-        toast.error(err.response.data.message)
+        // console.error("❌ Features fetch error:", err);
+
+        toast.error(err.response.data.message);
       } finally {
         setLoading(false);
       }
@@ -1351,10 +1308,9 @@ setVenues(response.data.data)
             {venues.map((venue) => (
               <VenueCard key={venue._id}>
                 <VenueImageWrapper>
-                  {venue.documents.images  ? (
+                  {venue.documents.images ? (
                     <VenueImage
                       src={venue.documents.images[0]?.url || "/placeholder.svg"}
-                     
                       alt={venue.venuename}
                       onError={(e) => {
                         e.target.style.display = "none";
@@ -1365,36 +1321,34 @@ setVenues(response.data.data)
                       <FiPackage />
                     </VenueImagePlaceholder>
                   )}
-          <VerifiedBadge
-  style={{
-    color:
-      venue?.status?.toLowerCase() === "pending"
-        ? "gold"
-        : "green", 
-  }}
->
-  {venue?.status?.toLowerCase() === "pending" ? (
-    <>
-      <FaClock /> Pending
-    </>
-  ) : (
-    <>
-      <MdVerified /> Verified
-    </>
-  )}
-</VerifiedBadge>
-
-
+                  <VerifiedBadge
+                    style={{
+                      color:
+                        venue?.status?.toLowerCase() === "pending"
+                          ? "gold"
+                          : "green",
+                    }}
+                  >
+                    {venue?.status?.toLowerCase() === "pending" ? (
+                      <>
+                        <FaClock /> Pending
+                      </>
+                    ) : (
+                      <>
+                        <MdVerified /> Verified
+                      </>
+                    )}
+                  </VerifiedBadge>
                 </VenueImageWrapper>
                 <VenueContent>
                   <VenueName>{venue.venuename}</VenueName>
                   <VenueDetail>
                     <FiMapPin size={16} />
-                    {venue.location?.street}, {venue.location?.city}
+                  {venue.location?.city}
                   </VenueDetail>
                   <VenueDetail>
                     <FiUsers size={16} />
-                    up to {venue.capacity.maximum } guests
+                    up to {venue.capacity.maximum} guests
                   </VenueDetail>
 
                   <VenueStats>
@@ -1403,10 +1357,6 @@ setVenues(response.data.data)
                       <StatValue>
                         ₦{(venue.price || 0).toLocaleString()}
                       </StatValue>
-                    </StatItem>
-                    <StatItem>
-                      <StatLabel>Bookings</StatLabel>
-                      <StatValue>2</StatValue>
                     </StatItem>
                   </VenueStats>
                   {/* <ViewDetailsButton onClick={() => handleOpenModal(venue)}>
@@ -1425,14 +1375,12 @@ setVenues(response.data.data)
             ))}
           </VenuesGrid>
 
-          <PlansContainer>
-            <PlansHeader>
-              <PlansTitle>Featured Venue Plans</PlansTitle>
-            </PlansHeader>
-            <PlansSubtitle>
-              Boost your venue's visibility and get more bookings
-            </PlansSubtitle>
-            <PlansGrid>
+        
+            
+
+            
+             
+{/*             
               {features.map((feature) => (
                 <PlanCard key={feature._id}>
                   <PlanDuration>
@@ -1463,9 +1411,10 @@ setVenues(response.data.data)
                     Subscribe Now
                   </SubscribeButton>
                 </PlanCard>
-              ))}
-            </PlansGrid>
-          </PlansContainer>
+              ))} */}
+            
+          
+          {/* <Premium /> */}
         </>
       )}
 
@@ -1994,6 +1943,7 @@ setVenues(response.data.data)
           </ModalContent>
         </Modal>
       )}
+      {/* </FeatureSection> */}
     </VenuesContainer>
   );
 };
