@@ -67,7 +67,7 @@ const SuccessfulPayment = () => {
               Oops! We couldn't verify your payment. <br />
               Please try again or contact support.
             </p>
-            <button onClick={() => navigate("/book-venue")}>
+            <button onClick={() => navigate("/ndividual-dashboard")}>
               Try Again
             </button>
           </>
