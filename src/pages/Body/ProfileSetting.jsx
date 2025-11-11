@@ -3,9 +3,10 @@ import styled from "styled-components";
 import { FiCamera, FiCheck, FiX } from "react-icons/fi";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const ProfileSettings = () => {
-    const {user} = useContext(AuthContext)
+  const { user } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -32,12 +33,9 @@ const ProfileSettings = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
-  const [fetchuser, setFetchuser] = useState({})
+  const [fetchuser, setFetchuser] = useState({});
+  const [loading, setLoading] = useState(false);
 
-
-
-
-  console.log("line 39", user._id)
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -46,59 +44,6 @@ const ProfileSettings = () => {
       setErrors({ ...errors, [name]: "" });
     }
   };
-
-//   useEffect(()=>{
-//     const fetchData = async()=>{
-
-//       console.log("i am  line 52", user._id)
-//       try {
-//         const res = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/venueowner/${user._id}`)
-//         setFetchuser(res.data)
-     
-// console.log("i am res.data", res.data)
-//       } catch (error) {
-//         console.log(error)
-//       }
-//     }
-// fetchData()
-// }
-
-//   , [])
-useEffect(() => {
-  const fetchData = async () => {
-    if (!user?._id) return; 
-
-    console.log("Fetching user data for:", user._id);
-
-    try {
-      const res = await axios.get(
-        `https://eventiq-final-project.onrender.com/api/v1/venueowner/${user._id}` 
-      );
-
-      setFetchuser(res.data.data);
-     
-    } catch (error) {
-      console.error("Error fetching venue owner:", error);
-    }
-  };
-
-  fetchData();
-}, [user?._id]);
-console.log("the fetchuser", fetchuser)
-
-
-
-  const Updateprofile = async ()=>{
-    try {
-      const res = await axios.put(
-
-      );
-
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -116,7 +61,6 @@ console.log("the fetchuser", fetchuser)
       const reader = new FileReader();
       reader.onloadend = () => {
         setProfileImage(reader.result);
-        
       };
       reader.readAsDataURL(file);
     }
@@ -124,7 +68,6 @@ console.log("the fetchuser", fetchuser)
 
   const validatePersonalInfo = () => {
     const newErrors = {};
-
 
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
@@ -207,6 +150,56 @@ console.log("the fetchuser", fetchuser)
     )}`.toUpperCase();
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setLoading(true); // start loading
+
+    try {
+      const token = user?.accessToken || localStorage.getItem("token");
+      if (!token) {
+        alert("No token found. Please log in again.");
+        setLoading(false);
+        return;
+      }
+
+      // Use FormData for multipart/form-data
+      const formDataToSend = new FormData();
+
+      // Append all fields from your formData state
+      for (const key in formData) {
+        if (formData[key]) {
+          formDataToSend.append(key, formData[key]);
+        }
+      }
+
+      // Append profile image if exists
+      if (profileImage) {
+        const blob = await (await fetch(profileImage)).blob();
+        formDataToSend.append("profilePicture", blob, "profile.png");
+      }
+
+      const res = await axios.patch(
+        "https://eventiq-final-project.onrender.com/api/v1/update-profile",
+        formDataToSend,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("Profile updated:", res.data);
+      toast.success(res.data.message);
+    } catch (err) {
+      console.error("Error updating profile:", err.response?.data || err);
+      toast.error(res.data.message);
+    } finally {
+      setLoading(false); // stop loading
+    }
+  };
+
   return (
     <Container>
       {successMessage && (
@@ -268,30 +261,17 @@ console.log("the fetchuser", fetchuser)
         <FormGrid>
           <FormGroup>
             <Label>First name</Label>
-            <Input
-
-              disabled
-              placeholder={fetchuser.firstName}
-              hasError={errors.firstName}
-            />
+            <Input placeholder="First name" hasError={errors.firstName} />
             {errors.firstName && <ErrorText>{errors.firstName}</ErrorText>}
           </FormGroup>
           <FormGroup>
             <Label>Surname</Label>
-            <Input
-        
-              disabled
-              placeholder={fetchuser.surname}
-             
-            />
+            <Input placeholder="Surname" />
             {errors.lastName && <ErrorText>{errors.lastName}</ErrorText>}
           </FormGroup>
-           <FormGroup>
+          <FormGroup>
             <Label>Email</Label>
-            <Input
-              disabled
-              placeholder={fetchuser.email}
-            />
+            <Input placeholder="email" />
             {errors.lastName && <ErrorText>{errors.email}</ErrorText>}
           </FormGroup>
           <FormGroup>
@@ -301,35 +281,23 @@ console.log("the fetchuser", fetchuser)
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              disabled={!isEditMode}
-              placeholder={fetchuser.phoneNumber}
+              placeholder="phone number"
               hasError={errors.phone}
             />
             {errors.phone && <ErrorText>{errors.phone}</ErrorText>}
           </FormGroup>
         </FormGrid>
-
       </Section>
-
-
 
       <Section>
         <SectionTitle>Bank Details</SectionTitle>
         <FormGrid>
-          <FormGroupFull>
-            <Label>Bank Name</Label>
-            <Input
-              type="text"
-              name="bankName"
-              value={formData.bankName}
-              onChange={handleChange}
-            />
-          </FormGroupFull>
           <FormGroup>
             <Label>Account Number</Label>
             <Input
               type="text"
               name="accountNumber"
+              placeholder="please input your account number"
               value={formData.accountNumber}
               onChange={handleChange}
               maxLength={10}
@@ -337,30 +305,29 @@ console.log("the fetchuser", fetchuser)
           </FormGroup>
           <FormGroup>
             <Label>Account type </Label>
-            <Select
-                      name="type"
-                      value={formData.type}
-                      onChange={handleChange}
-                    >
-                      <option value="Select type">Select type</option>
-                      <option value="Savings">Savings</option>
-                      <option value="Fixed">Fixed</option>
-                       <option value="Current">Current</option>
-                        <option value="Corporate">Corporate</option>
-                    </Select>
+            <Select name="type" value={formData.type} onChange={handleChange}>
+              <option value="Select type">Select type</option>
+              <option value="Savings">Savings</option>
+              <option value="Fixed">Fixed</option>
+              <option value="Current">Current</option>
+              <option value="Corporate">Corporate</option>
+            </Select>
           </FormGroup>
           <FormGroupFull>
             <Label>Account Name</Label>
             <Input
               type="text"
               name="accountName"
+              placeholder="please input your account name"
               value={formData.accountName}
               onChange={handleChange}
             />
           </FormGroupFull>
         </FormGrid>
       </Section>
-<Button>Submit</Button>
+      <Button onClick={handleSubmit} disabled={loading}>
+        {loading ? "Updating..." : "Submit"}
+      </Button>
       <Section>
         <SectionTitle>Security</SectionTitle>
         <form onSubmit={handlePasswordChange}>
@@ -409,12 +376,11 @@ console.log("the fetchuser", fetchuser)
             </FormGroupFull>
           </FormGrid>
           <ChangePasswordButton type="submit">
-            Change Password
+            Confirm Password
           </ChangePasswordButton>
         </form>
       </Section>
     </Container>
-    
   );
 };
 
@@ -468,15 +434,18 @@ const Header = styled.div`
 `;
 const Select = styled.select`
   padding: 0.75rem;
-  border: 1px solid #e0e0e0;
+  border: 1px solid gray;
   border-radius: 8px;
   font-size: 0.95rem;
   transition: border-color 0.2s;
 
   &:focus {
     outline: none;
-    border-color: #7c3aed;
+    border-color: #800080;
     box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  }
+
+  option {
   }
 `;
 
@@ -499,16 +468,24 @@ const Subtitle = styled.p`
 
 const Section = styled.div`
   margin-bottom: 40px;
-
 `;
 const Button = styled.div`
-text-align: center;
-width: 10%;
-border-radius: 0.5rem;
-  background:  #9476a5;
+  text-align: center;
+  width: 10%;
+  border: 1px solid gray;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: #000;
   padding: 0.5rem;
-  cursor: pointer;
-  `
+  margin-bottom: 7px;
+
+  &:hover {
+    transform: translateY(-2px);
+    background: #800080;
+    color: #fff;
+    cursor: pointer;
+  }
+`;
 
 const SectionHeader = styled.div`
   display: flex;
@@ -526,21 +503,20 @@ const SectionTitle = styled.h2`
 
 const EditButton = styled.button`
   background: transparent;
-  border: 1px solid #ddd;
+  border: 1px solid gray;
   padding: 8px 20px;
   border-radius: 6px;
   font-size: 14px;
-  color: #666;
-  cursor: pointer;
-  transition: all 0.2s;
+  color: #000;
+
   display: flex;
   align-items: center;
   font-weight: 500;
 
   &:hover {
-    border-color: #7c3aed;
-    color: #7c3aed;
-    background: #f5f3ff;
+    color: #fff;
+    background: #800080;
+    cursor: pointer;
   }
 `;
 
@@ -598,7 +574,7 @@ const CameraIconLabel = styled.label`
   transition: all 0.2s;
 
   &:hover {
-    color: #7c3aed;
+    color: #800080;
     transform: scale(1.1);
   }
 `;
@@ -655,22 +631,14 @@ const Label = styled.label`
 
 const Input = styled.input`
   padding: 12px 16px;
-  border: 1px solid ${(props) => (props.hasError ? "#ef4444" : "#e5e5e5")};
+  border: 1px solid gray;
   border-radius: 6px;
   font-size: 14px;
-  background: ${(props) => (props.disabled ? "#f9f9f9" : "#f9f9f9")};
   transition: all 0.2s;
-  color: ${(props) => (props.disabled ? "#999" : "#1a1a1a")};
-  cursor: ${(props) => (props.disabled ? "not-allowed" : "text")};
+  cursor: pointer;
 
   &:focus {
     outline: none;
-    border-color: ${(props) => (props.hasError ? "#ef4444" : "#7c3aed")};
-    background: ${(props) => (props.disabled ? "#f9f9f9" : "white")};
-  }
-
-  &::placeholder {
-    color: #aaa;
   }
 `;
 
@@ -686,7 +654,7 @@ const TextArea = styled.textarea`
 
   &:focus {
     outline: none;
-    border-color: #7c3aed;
+    border-color: #800080;
     background: white;
   }
 
@@ -704,17 +672,20 @@ const ErrorText = styled.span`
 const ChangePasswordButton = styled.button`
   margin-top: 20px;
   padding: 12px 32px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: transparent;
+  color: #000;
   border: none;
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
+  border: 1px solid gray;
   cursor: pointer;
   transition: transform 0.2s;
 
   &:hover {
     transform: translateY(-2px);
+    background: #800080;
+    color: white;
   }
 
   &:active {
