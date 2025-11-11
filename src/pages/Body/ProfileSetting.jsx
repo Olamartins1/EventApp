@@ -295,6 +295,56 @@ const ProfileSettings = () => {
     )}`.toUpperCase();
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setLoading(true); // start loading
+
+    try {
+      const token = user?.accessToken || localStorage.getItem("token");
+      if (!token) {
+        alert("No token found. Please log in again.");
+        setLoading(false);
+        return;
+      }
+
+      // Use FormData for multipart/form-data
+      const formDataToSend = new FormData();
+
+      // Append all fields from your formData state
+      for (const key in formData) {
+        if (formData[key]) {
+          formDataToSend.append(key, formData[key]);
+        }
+      }
+
+      // Append profile image if exists
+      if (profileImage) {
+        const blob = await (await fetch(profileImage)).blob();
+        formDataToSend.append("profilePicture", blob, "profile.png");
+      }
+
+      const res = await axios.patch(
+        "https://eventiq-final-project.onrender.com/api/v1/update-profile",
+        formDataToSend,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("Profile updated:", res.data);
+      toast.success(res.data.message);
+    } catch (err) {
+      console.error("Error updating profile:", err.response?.data || err);
+      toast.error(res.data.message);
+    } finally {
+      setLoading(false); // stop loading
+    }
+  };
+
   return (
     <Container>
       {successMessage && (
@@ -387,8 +437,7 @@ const ProfileSettings = () => {
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              disabled={!isEditMode}
-              placeholder={fetchuser.phoneNumber}
+              placeholder="phone number"
               hasError={errors.phone}
             />
             {errors.phone && <ErrorText>{errors.phone}</ErrorText>}
@@ -399,20 +448,12 @@ const ProfileSettings = () => {
       <Section>
         <SectionTitle>Bank Details</SectionTitle>
         <FormGrid>
-          <FormGroupFull>
-            <Label>Bank Name</Label>
-            <Input
-              type="text"
-              name="bankName"
-              value={formData.bankName}
-              onChange={handleChange}
-            />
-          </FormGroupFull>
           <FormGroup>
             <Label>Account Number</Label>
             <Input
               type="text"
               name="accountNumber"
+              placeholder="please input your account number"
               value={formData.accountNumber}
               onChange={handleChange}
               maxLength={10}
@@ -433,6 +474,7 @@ const ProfileSettings = () => {
             <Input
               type="text"
               name="accountName"
+              placeholder="please input your account name"
               value={formData.accountName}
               onChange={handleChange}
             />
@@ -498,7 +540,7 @@ const ProfileSettings = () => {
             </FormGroupFull>
           </FormGrid>
           <ChangePasswordButton type="submit">
-            Change Password
+            Confirm Password
           </ChangePasswordButton>
         </form>
       </Section>
@@ -564,15 +606,18 @@ const Header = styled.div`
 `;
 const Select = styled.select`
   padding: 0.75rem;
-  border: 1px solid #e0e0e0;
+  border: 1px solid gray;
   border-radius: 8px;
   font-size: 0.95rem;
   transition: border-color 0.2s;
 
   &:focus {
     outline: none;
-    border-color: #7c3aed;
+    border-color: #800080;
     box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  }
+
+  option {
   }
 `;
 
@@ -622,21 +667,20 @@ const SectionTitle = styled.h2`
 
 const EditButton = styled.button`
   background: transparent;
-  border: 1px solid #ddd;
+  border: 1px solid gray;
   padding: 8px 20px;
   border-radius: 6px;
   font-size: 14px;
-  color: #666;
-  cursor: pointer;
-  transition: all 0.2s;
+  color: #000;
+
   display: flex;
   align-items: center;
   font-weight: 500;
 
   &:hover {
-    border-color: #7c3aed;
-    color: #7c3aed;
-    background: #f5f3ff;
+    color: #fff;
+    background: #800080;
+    cursor: pointer;
   }
 `;
 
@@ -694,7 +738,7 @@ const CameraIconLabel = styled.label`
   transition: all 0.2s;
 
   &:hover {
-    color: #7c3aed;
+    color: #800080;
     transform: scale(1.1);
   }
 `;
@@ -751,22 +795,14 @@ const Label = styled.label`
 
 const Input = styled.input`
   padding: 12px 16px;
-  border: 1px solid ${(props) => (props.hasError ? "#ef4444" : "#e5e5e5")};
+  border: 1px solid gray;
   border-radius: 6px;
   font-size: 14px;
-  background: ${(props) => (props.disabled ? "#f9f9f9" : "#f9f9f9")};
   transition: all 0.2s;
-  color: ${(props) => (props.disabled ? "#999" : "#1a1a1a")};
-  cursor: ${(props) => (props.disabled ? "not-allowed" : "text")};
+  cursor: pointer;
 
   &:focus {
     outline: none;
-    border-color: ${(props) => (props.hasError ? "#ef4444" : "#7c3aed")};
-    background: ${(props) => (props.disabled ? "#f9f9f9" : "white")};
-  }
-
-  &::placeholder {
-    color: #aaa;
   }
 `;
 
@@ -782,7 +818,7 @@ const TextArea = styled.textarea`
 
   &:focus {
     outline: none;
-    border-color: #7c3aed;
+    border-color: #800080;
     background: white;
   }
 
@@ -800,17 +836,20 @@ const ErrorText = styled.span`
 const ChangePasswordButton = styled.button`
   margin-top: 20px;
   padding: 12px 32px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: transparent;
+  color: #000;
   border: none;
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
+  border: 1px solid gray;
   cursor: pointer;
   transition: transform 0.2s;
 
   &:hover {
     transform: translateY(-2px);
+    background: #800080;
+    color: white;
   }
 
   &:active {

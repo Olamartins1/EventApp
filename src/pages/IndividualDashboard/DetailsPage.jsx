@@ -23,9 +23,15 @@ const DetailsPage = () => {
   const [isBooking, setIsBooking] = useState(false);
   const [errorField, setErrorField] = useState("");
 
+<<<<<<< HEAD
+  let theAmount = venue.price;
+  let servicecharge = (theAmount * days * 5) / 100;
+
+=======
       let theAmount = venue.price
       let  servicecharge = (theAmount * days) * 5/100;
 // : (
+>>>>>>> cfbe98c9f07d814c8c3f24940792aca11040128b
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -43,59 +49,63 @@ const DetailsPage = () => {
     if (id) fetchData();
   }, [id]);
   const handleEventTypeChange = (e) => {
-  const value = e.target.value.trim();
-  
-  if (value === "") {
-    setEventType("");
-    setErrorField("eventType");
-    return;
-  }
+    const value = e.target.value.trim();
 
-  if (!/^[a-zA-Z\s]+$/.test(value)) {
-    toast.error("Event type should only contain letters");
-    setErrorField("eventType");
-    return;
-  }
+    if (value === "") {
+      setEventType("");
+      setErrorField("eventType");
+      return;
+    }
 
+<<<<<<< HEAD
+    if (!/^[a-zA-Z\s]+$/.test(value)) {
+      toast.error("Event type should only contain letters");
+      setErrorField("eventType");
+      return;
+    }
+=======
   setEventType(value);
   setErrorField(""); 
 };
+>>>>>>> cfbe98c9f07d814c8c3f24940792aca11040128b
 
+    setEventType(value);
+    setErrorField(""); // clear error when valid
+  };
 
- const handleDaysChange = (e) => {
-  const value = e.target.value.trim();
+  const handleDaysChange = (e) => {
+    const value = e.target.value.trim();
 
-  if (value === "") {
-    setDays("");
-    setErrorField("days");
-    return;
-  }
+    if (value === "") {
+      setDays("");
+      setErrorField("days");
+      return;
+    }
 
-  const numberValue = Number(value);
+    const numberValue = Number(value);
 
-  if (!Number.isInteger(numberValue) || numberValue <= 0) {
-    setErrorField("days");
-    return;
-  }
+    if (!Number.isInteger(numberValue) || numberValue <= 0) {
+      setErrorField("days");
+      return;
+    }
 
-  setDays(numberValue);
-  setErrorField("");
-};
+    setDays(numberValue);
+    setErrorField("");
+  };
 
+  const bookVenue = async () => {
+    if (isNaN(days) || days <= 0) {
+      <small>please input a valid number of days</small>;
+      return;
+    }
 
- const bookVenue = async () => {
-  if (isNaN(days) || days <= 0) {
-    <small>please input a valid number of days</small>
-  return;
-}
-
-  if (!eventDate || !eventType || !days) {
-    toast.error("Please fill in all fields before booking");
-    console.log("event:", eventDate == false)
-    console.log("type:", eventType == false)
-    console.log("days:", days == false)
-    return;
-  }
+    if (!eventDate || !eventType || !days) {
+      toast.error("Please fill in all fields before booking");
+      console.log("event:", eventDate == false);
+      console.log("type:", eventType == false);
+      console.log("days:", days == false);
+      return;
+    }
 
     try {
       setIsBooking(true);
@@ -106,9 +116,9 @@ const DetailsPage = () => {
       const res = await axios.post(
         `https://eventiq-final-project.onrender.com/api/v1/booking/${id}`,
         {
-         date: eventDate,
+          date: eventDate,
           days,
-          eventType
+          eventType,
         },
         {
           headers: {
@@ -190,8 +200,7 @@ const DetailsPage = () => {
 
               <MetaItem>
                 <MapPin size={16} />
-                {venue?.location?.city},
-                {venue?.location?.state}
+                {venue?.location?.city},{venue?.location?.state}
               </MetaItem>
               <MetaItem>
                 <AlertCircle size={16} />
@@ -288,32 +297,38 @@ const DetailsPage = () => {
 
                   <EventContainer>
                     <EventType>Event Type</EventType>
-                <input
-  type="text"
-  placeholder="e.g: birthday, graduation, wedding"
-  onChange={handleEventTypeChange}
-  style={{
-    borderColor: errorField === "eventType" ? "red" : "#e5e7eb",
-    boxShadow: errorField === "eventType" ? "0 0 0 3px rgba(255, 0, 0, 0.1)" : "none"
-  }}
-/>
+                    <input
+                      type="text"
+                      placeholder="e.g: birthday, graduation, wedding"
+                      onChange={handleEventTypeChange}
+                      style={{
+                        borderColor:
+                          errorField === "eventType" ? "red" : "#e5e7eb",
+                        boxShadow:
+                          errorField === "eventType"
+                            ? "0 0 0 3px rgba(255, 0, 0, 0.1)"
+                            : "none",
+                      }}
+                    />
 
                     <NumberType>Number of Days</NumberType>
-<input
-  type="text"
-  placeholder="e.g: 1,2,3,4,5"
-  onChange={handleDaysChange}
-  style={{
-    borderColor: errorField === "days" ? "red" : "#e5e7eb",
-    boxShadow: errorField === "days" ? "0 0 0 3px rgba(255, 0, 0, 0.1)" : "none"
-  }}
-/>
-{errorField === "days" && (
-  <small style={{ color: "red", fontSize: "0.8rem" }}>
-    Please input a valid number of days
-  </small>
-)}
-
+                    <input
+                      type="text"
+                      placeholder="e.g: 1,2,3,4,5"
+                      onChange={handleDaysChange}
+                      style={{
+                        borderColor: errorField === "days" ? "red" : "#e5e7eb",
+                        boxShadow:
+                          errorField === "days"
+                            ? "0 0 0 3px rgba(255, 0, 0, 0.1)"
+                            : "none",
+                      }}
+                    />
+                    {errorField === "days" && (
+                      <small style={{ color: "red", fontSize: "0.8rem" }}>
+                        Please input a valid number of days
+                      </small>
+                    )}
                   </EventContainer>
                   <BookButton onClick={bookVenue} disabled={isBooking}>
                     {isBooking ? "Booking..." : "Book This Venue"}
@@ -325,9 +340,7 @@ const DetailsPage = () => {
                     </BreakdownItem>
                     <BreakdownItem>
                       <span>Service fee (5%)</span>
-                      <span>
-                        ₦{(theAmount * days) * 5/100}
-                      </span>
+                      <span>₦{(theAmount * days * 5) / 100}</span>
                     </BreakdownItem>
                     <BreakdownItem>
                       <span>Caution Fee</span>
@@ -338,8 +351,7 @@ const DetailsPage = () => {
                     <BreakdownItem>
                       <span>Total</span>
                       <span>
-                        ₦
-                        {(theAmount * days) + servicecharge + venue.cautionfee}
+                        ₦{theAmount * days + servicecharge + venue.cautionfee}
                       </span>
                     </BreakdownItem>
                   </PricingBreakdown>
@@ -377,10 +389,16 @@ export default DetailsPage;
 
 const EventContainer = styled.div`
   width: 100%;
+<<<<<<< HEAD
+  height: auto; /* ✅ allow content like <small> to expand naturally */
+  margin-bottom: 1rem; /* optional: gives spacing below */
+
+=======
   height: auto; 
   margin-bottom: 1rem; 
 
   
+>>>>>>> cfbe98c9f07d814c8c3f24940792aca11040128b
   input {
     width: 100%;
     padding: 0.75rem;
@@ -400,7 +418,6 @@ const EventContainer = styled.div`
     }
   }
 `;
-
 
 const EventType = styled.div`
   display: block;

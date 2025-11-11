@@ -35,7 +35,7 @@ export const AddButton = styled.button`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #2563eb;
+  background-color: #800080;
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;

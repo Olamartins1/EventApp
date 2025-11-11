@@ -347,7 +347,7 @@ console.log("text. ",item.bookingstatus ,item)
   )}
 </BookingCard>
 
-      <EmptyState>
+      {/* <EmptyState>
         <EmptyIcon>
           <BsBox />
         </EmptyIcon>
@@ -355,7 +355,7 @@ console.log("text. ",item.bookingstatus ,item)
         <EmptyText>
           Create your first venue to start managing bookings and events
         </EmptyText>
-      </EmptyState>
+      </EmptyState> */}
     </Wrapper>
   </Container>
 );
@@ -477,9 +477,10 @@ const Wrapper = styled.div`
 
   &:hover {
     background: red;
-    color: white
+    color: white;
   }
-      &:hover:not(:disabled) {
+
+  &:hover:not(:disabled) {
     background-color: #e53935;
   }
 
@@ -488,8 +489,9 @@ const Wrapper = styled.div`
     color: white;
     cursor: not-allowed;
     opacity: 0.7;
-♦  }
+  }
 `;
+
 const WelcomeSection = styled.div`
   display: flex;
   flex-direction: column;
@@ -635,70 +637,70 @@ const StatValue = styled.div`
   }
 `;
 
-const EmptyState = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 80px 32px;
-  background: white;
-  border-radius: 16px;
+// const EmptyState = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   padding: 80px 32px;
+//   background: white;
+//   border-radius: 16px;
 
-  @media (max-width: 768px) {
-    padding: 60px 24px;
-    border-radius: 12px;
-  }
+//   @media (max-width: 768px) {
+//     padding: 60px 24px;
+//     border-radius: 12px;
+//   }
 
-  @media (max-width: 480px) {
-    padding: 40px 20px;
-  }
-`;
+//   @media (max-width: 480px) {
+//     padding: 40px 20px;
+//   }
+// `;
 
-const EmptyIcon = styled.div`
-  font-size: 72px;
-  color: #d1d5db;
-  margin-bottom: 20px;
+// const EmptyIcon = styled.div`
+//   font-size: 72px;
+//   color: #d1d5db;
+//   margin-bottom: 20px;
 
-  @media (max-width: 768px) {
-    font-size: 60px;
-    margin-bottom: 16px;
-  }
+//   @media (max-width: 768px) {
+//     font-size: 60px;
+//     margin-bottom: 16px;
+//   }
 
-  @media (max-width: 480px) {
-    font-size: 48px;
-    margin-bottom: 12px;
-  }
-`;
+//   @media (max-width: 480px) {
+//     font-size: 48px;
+//     margin-bottom: 12px;
+//   }
+// `;
 
-const EmptyTitle = styled.h3`
-  font-size: 22px;
-  font-weight: 600;
-  color: #374151;
-  margin: 0 0 8px 0;
+// const EmptyTitle = styled.h3`
+//   font-size: 22px;
+//   font-weight: 600;
+//   color: #374151;
+//   margin: 0 0 8px 0;
 
-  @media (max-width: 768px) {
-    font-size: 20px;
-  }
+//   @media (max-width: 768px) {
+//     font-size: 20px;
+//   }
 
-  @media (max-width: 480px) {
-    font-size: 18px;
-  }
-`;
+//   @media (max-width: 480px) {
+//     font-size: 18px;
+//   }
+// `;
 
-const EmptyText = styled.p`
-  font-size: 15px;
-  color: #9ca3af;
-  margin: 0 0 24px 0;
-  text-align: center;
-  max-width: 400px;
+// const EmptyText = styled.p`
+//   font-size: 15px;
+//   color: #9ca3af;
+//   margin: 0 0 24px 0;
+//   text-align: center;
+//   max-width: 400px;
 
-  @media (max-width: 768px) {
-    font-size: 14px;
-    max-width: 350px;
-  }
+//   @media (max-width: 768px) {
+//     font-size: 14px;
+//     max-width: 350px;
+//   }
 
-  @media (max-width: 480px) {
-    font-size: 13px;
-    max-width: 280px;
-  }
-`;
+//   @media (max-width: 480px) {
+//     font-size: 13px;
+//     max-width: 280px;
+//   }
+// `;
