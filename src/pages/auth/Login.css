@@ -333,9 +333,8 @@ text-decoration: none;
 
 .signup-container-Login {
   display: flex;
-  height: 80%;
-  gap: 0rem;
-  width: 1250px;
+  height: 100%;
+  width: 100%;
 }
 
 .left-section3 {
@@ -346,29 +345,16 @@ text-decoration: none;
   /* background: linear-gradient(135deg, #4a1d6e 0%, #5a2571 50%, #4a1d6e 100%); */
 }
 
- /* .bg-image3 {
-  position: absolute;
-  inset: 0;
-    background-image: url('https://res.cloudinary.com/depuy7bkr/image/upload/v1761918729/left_side_log_in_evenitq1_rpxkvp.png'); 
 
-  background-size: cover;
-  background-position: center;
-   
-  width: 100%;
-  height: 100%;
-  
-}  */
 
 .bg-image3 {
   position: absolute;
-  width: 100%;
+  width: 90%;
   height: 800px;
-
   background-image: url('https://res.cloudinary.com/depuy7bkr/image/upload/v1761918729/left_side_log_in_evenitq1_rpxkvp.png');
   background-size: cover;        
   background-position: center;    
   
-  /* opacity: 0.4;               */
 }
 
 
@@ -415,17 +401,14 @@ text-decoration: none;
 .left-content3 p {
   font-size: 1rem;
   color: #ede9fe;
-  line-height: 1.6;
 }
 
 .right-section3 {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* padding: 2rem 3rem; */
   width: 50%;
   height: 100%;
-  /* overflow-y: auto; */
   background-color: white;
   
 }
@@ -435,8 +418,8 @@ text-decoration: none;
   border-radius: 1rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   padding: 2rem;
-  width: 600px;
-  height: 400px;
+  width: 70%;
+  height: 60%;
 margin-top: 50px;
 margin-left: 40px;
   
@@ -835,7 +818,7 @@ margin-left: 40px;
   /* ====== Right section & form adjustments ====== */
   .right-section3 {
     width: 100%;
-    padding: 1.5rem 1.25rem;
+
     background: white;
     margin-top: 0;
   }
