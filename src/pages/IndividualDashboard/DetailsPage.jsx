@@ -23,9 +23,15 @@ const DetailsPage = () => {
   const [isBooking, setIsBooking] = useState(false);
   const [errorField, setErrorField] = useState("");
 
+<<<<<<< HEAD
   let theAmount = venue.price;
   let servicecharge = (theAmount * days * 5) / 100;
 
+=======
+      let theAmount = venue.price
+      let  servicecharge = (theAmount * days) * 5/100;
+// : (
+>>>>>>> cfbe98c9f07d814c8c3f24940792aca11040128b
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -51,11 +57,17 @@ const DetailsPage = () => {
       return;
     }
 
+<<<<<<< HEAD
     if (!/^[a-zA-Z\s]+$/.test(value)) {
       toast.error("Event type should only contain letters");
       setErrorField("eventType");
       return;
     }
+=======
+  setEventType(value);
+  setErrorField(""); 
+};
+>>>>>>> cfbe98c9f07d814c8c3f24940792aca11040128b
 
     setEventType(value);
     setErrorField(""); // clear error when valid
@@ -236,7 +248,7 @@ const DetailsPage = () => {
 
                     <InfoCard>
                       <InfoLabel>Caution Fee</InfoLabel>
-                      <InfoValue>#{venue?.cautionfee}</InfoValue>
+                      <InfoValue>₦{venue?.cautionfee}</InfoValue>
                     </InfoCard>
                     <InfoCard>
                       <InfoLabel>About this Venue</InfoLabel>
@@ -331,6 +343,12 @@ const DetailsPage = () => {
                       <span>₦{(theAmount * days * 5) / 100}</span>
                     </BreakdownItem>
                     <BreakdownItem>
+                      <span>Caution Fee</span>
+                      <span>
+                        ₦{venue?.cautionfee}
+                      </span>
+                    </BreakdownItem>
+                    <BreakdownItem>
                       <span>Total</span>
                       <span>
                         ₦{theAmount * days + servicecharge + venue.cautionfee}
@@ -371,9 +389,16 @@ export default DetailsPage;
 
 const EventContainer = styled.div`
   width: 100%;
+<<<<<<< HEAD
   height: auto; /* ✅ allow content like <small> to expand naturally */
   margin-bottom: 1rem; /* optional: gives spacing below */
 
+=======
+  height: auto; 
+  margin-bottom: 1rem; 
+
+  
+>>>>>>> cfbe98c9f07d814c8c3f24940792aca11040128b
   input {
     width: 100%;
     padding: 0.75rem;

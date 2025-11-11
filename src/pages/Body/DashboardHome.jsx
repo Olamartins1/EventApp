@@ -27,39 +27,42 @@ import { Key } from "lucide-react";
 import { toast } from "react-toastify";
 const DashboardHome = () => {
   const [statsData, setStatsData] = useState({});
-  const [showPopup, setShowPopup] = useState(false);
-  const [booking, setBooking] = useState([]);
-  console.log("book", booking);
-  const [loading, setLoading] = useState(true);
+    const [showPopup, setShowPopup] = useState(false); 
+  const [booking, setBooking] = useState([])
+console.log("book", booking)
+  const [loading, setLoading] = useState(true)
   const [rejectionReason, setRejectionReason] = useState("");
-  const [bookingstatus, setBookingstatus] = useState(false);
+  const [bookingstatus, setBookingstatus] = useState(false)
 
-  const { token } = useContext(AuthContext);
-  const { user } = useContext(AuthContext);
 
-  const [deleteid, setDeleteid] = useState("");
+   const {token} = useContext(AuthContext)
+  const {user} = useContext(AuthContext)
+
+const [deleteid, setDeleteid] = useState("")
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
-        const res = await axios.get(
-          "https://eventiq-final-project.onrender.com/api/v1/dashboard",
-          {
+        setLoading(true)
+        const res = await axios.get("https://eventiq-final-project.onrender.com/api/v1/dashboard", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
-        );
-        console.log("the res data checking total", res.data?.data);
+          });
+        console.log("the res data checking total", res.data?.data)
 
-        setStatsData(res.data?.data || {});
-        console.log("the start", res.data?.data);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoading(false);
+        setStatsData(res.data?.data || {}); 
+        console.log("the start", res.data?.data)
+
+      }catch(err){
+        console.log(err)
+      }finally{
+        setLoading(false)
       }
+
+        
+
     };
     fetchData();
   }, [token]);
@@ -67,280 +70,284 @@ const DashboardHome = () => {
   useEffect(() => {
     const fetchBooking = async () => {
       try {
-        setLoading(true);
-        const res = await axios.get(
-          "https://eventiq-final-project.onrender.com/api/v1/allbooking",
+        setLoading(true)
+        const res = await axios.get("https://eventiq-final-project.onrender.com/api/v1/allbooking", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        setBooking(res.data?.data || []); 
+     
+      }catch(err){
+        console.log(err)
+      }finally{
+        setLoading(false)
+      }
+
+        
+
+    };
+    fetchBooking();
+  }, [token]);
+  
+    const acceptBooking = async (bookingid) => {
+      try {
+        setLoading(true)
+        const res = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/acceptbooking/${bookingid}`, 
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
-        );
-        setBooking(res.data?.data || []);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoading(false);
+          });
+        console.log("the am the booking", res)
+     toast.success(res?.data?.message)
+        
+
+      }catch(err){
+        console.log(err)
+      }finally{
+        setLoading(false)
       }
+
+        
+
     };
-    fetchBooking();
-  }, [token]);
+       const rejectBooking = async () => {
+      try {
+        setLoading(true)
+        const res = await axios.post(`https://eventiq-final-project.onrender.com/api/v1/rejectbooking/${deleteid}`,{reason:rejectionReason}, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+console.log("the mess",res.data.message)
+toast.error(res?.data?.message)
+     
+        
 
-  const acceptBooking = async (bookingid) => {
-    try {
-      setLoading(true);
-      const res = await axios.get(
-        `https://eventiq-final-project.onrender.com/api/v1/acceptbooking/${bookingid}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log("the am the booking", res);
-      toast.success(res?.data?.message);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const rejectBooking = async () => {
-    try {
-      setLoading(true);
-      const res = await axios.post(
-        `https://eventiq-final-project.onrender.com/api/v1/rejectbooking/${deleteid}`,
-        { reason: rejectionReason },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log("the mess", res.data.message);
-      toast.error(res?.data?.message);
-    } catch (err) {
-      toast.error(err?.res?.data?.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+      }catch(err){
+        toast.error(err?.res?.data?.message)
 
-  return (
-    <Container>
-      <Wrapper>
-        <WelcomeSection>
-          <WelcomeText>Welcome, {user.firstName}</WelcomeText>
-          <DateText>
-            {new Date().toLocaleDateString("en-US", {
-              weekday: "long",
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </DateText>
-        </WelcomeSection>
+      }finally{
+        setLoading(false)
+      }
 
-        {loading ? (
-          <h1>Loading...</h1>
-        ) : (
-          <StatsGrid>
-            <StatCard>
-              <StatHeader>
-                <StatTitle>Total Venues </StatTitle>
-                <StatIcon
-                  $bgColor={statsData.iconBg}
-                  $color={statsData.iconColor}
-                >
-                  <LuBuilding2 style={{ color: "purple" }} />
-                </StatIcon>
-              </StatHeader>
-              <StatValue>{statsData?.totalVenues}</StatValue>
-            </StatCard>
-            <StatCard>
-              <StatHeader>
-                <StatTitle>Active Bookings </StatTitle>
-                <StatIcon
-                  $bgColor={statsData.iconBg}
-                  $color={statsData.iconColor}
-                >
-                  <FiCalendar style={{ stroke: "yellow" }} />
-                </StatIcon>
-              </StatHeader>
-              <StatValue>{statsData?.activeBooking}</StatValue>
-            </StatCard>
-            <StatCard>
-              <StatHeader>
-                <StatTitle>Revenue (this Month) </StatTitle>
-                <StatIcon
-                  $bgColor={statsData.iconBg}
-                  $color={statsData.iconColor}
-                >
-                  <TbCurrencyNaira style={{ stroke: "green" }} />
-                </StatIcon>
-              </StatHeader>
-              <StatValue>₦{statsData?.revenue}</StatValue>
-            </StatCard>
-            <StatCard>
-              <StatHeader>
-                <StatTitle>Occupancy Rate </StatTitle>
-                <StatIcon
-                  $bgColor={statsData.iconBg}
-                  $color={statsData.iconColor}
-                >
-                  <IoTrendingUpOutline style={{ stroke: "purple" }} />
-                </StatIcon>
-              </StatHeader>
-              <StatValue>{statsData?.occupancyRate?.total}%</StatValue>
-            </StatCard>
-          </StatsGrid>
-        )}
-        {console.log("booooooo", booking)}
-        <BookingCard>
-          {loading ? (
-            <h3 style={{ textAlign: "center", color: "#555" }}>
-              Loading bookings...
-            </h3>
-          ) : booking.length > 0 ? (
-            booking.map((item, index) => {
-              const isPending = item.bookingstatus === "pending" ? true : false;
-              const buttonText =
-                item.bookingstatus === "confirmed" ? "Accepted" : "Accept";
-              console.log("text. ", item.bookingstatus, item);
-              return (
-                <div key={index} style={{ marginBottom: "1.5rem" }}>
-                  <VenueName>{item.venueId.venuename}</VenueName>
+        
 
-                  <div style={{ display: "flex", gap: "7px" }}>
-                    <CustomerName>{item.clientId.firstName}</CustomerName>
-                    <CustomerName>{item.clientId.surname}</CustomerName>
-                  </div>
+    };
+ 
 
-                  <p>{new Date(item.date).toLocaleDateString()}</p>
-                  <Occasion>{item.eventType}</Occasion>
-                  <Price>₦{item.venueId.price}</Price>
+return (
+  <Container>
+    <Wrapper>
+      <WelcomeSection>
+        <WelcomeText>Welcome, {user.firstName}</WelcomeText>
+        <DateText>
+          {new Date().toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </DateText>
+      </WelcomeSection>
 
-                  <Actions
-                    style={{ justifyContent: "flex-end", marginTop: "10px" }}
-                  >
-                    <AcceptButton
-                      disabled={!isPending}
-                      onClick={() => {
-                        acceptBooking(item._id);
+      {loading ? (
+        <h1>Loading...</h1>
+      ) : (
+        <StatsGrid>
+          <StatCard>
+            <StatHeader>
+              <StatTitle>Total Venues  </StatTitle>
+              <StatIcon
+                $bgColor={statsData.iconBg}
+                $color={statsData.iconColor}
+              >
+              <LuBuilding2 style={{color: "purple"}}/>
+              </StatIcon>
+            </StatHeader>
+            <StatValue>{statsData?.totalVenues }</StatValue>
+          </StatCard>
+          <StatCard>
+            <StatHeader>
+              <StatTitle>Active Bookings  </StatTitle>
+              <StatIcon
+                $bgColor={statsData.iconBg}
+                $color={statsData.iconColor}
+              >
+                < FiCalendar style={{stroke: "yellow"}}/>
+              </StatIcon>
+            </StatHeader>
+            <StatValue>{statsData?.activeBooking }</StatValue>
+          </StatCard>
+           <StatCard>
+            <StatHeader>
+              <StatTitle>Revenue (this Month) </StatTitle>
+              <StatIcon
+                $bgColor={statsData.iconBg}
+                $color={statsData.iconColor}
+              >
+               <TbCurrencyNaira style={{stroke: "green"}}/>
+              </StatIcon>
+            </StatHeader>
+            <StatValue>₦{statsData?.revenue}</StatValue>
+          </StatCard>
+           <StatCard>
+            <StatHeader>
+              <StatTitle>Occupancy Rate  </StatTitle>
+              <StatIcon
+                $bgColor={statsData.iconBg}
+                $color={statsData.iconColor}
+              >
+                <IoTrendingUpOutline style={{stroke: "purple"}}/>
+              </StatIcon>
+            </StatHeader>
+            <StatValue>{statsData?.occupancyRate?.total }%</StatValue>
+          </StatCard>
+        </StatsGrid>
+      )}
+      {console.log("booooooo",booking)}
+<BookingCard>
+  {loading ? (
+    <h3 style={{ textAlign: "center", color: "#555" }}>Loading bookings...</h3>
+  ) : booking.length > 0 ? (
+    booking.map((item, index) => {
+      const isPending = item.bookingstatus === "pending" ? true : false ;
+      const buttonText = item.bookingstatus === "confirmed" ? "Accepted" : "Accept";
+console.log("text. ",item.bookingstatus ,item)
+      return (
+        <div key={index} style={{ marginBottom: "1.5rem" }}>
+          <VenueName>{item.venueId.venuename}</VenueName>
 
-                        setTimeout(() => window.location.reload(), 5000);
-                      }}
-                    >
-                      {buttonText}
-                    </AcceptButton>
+          <div style={{ display: "flex", gap: "7px" }}>
+            <CustomerName>{item.clientId.firstName}</CustomerName>
+            <CustomerName>{item.clientId.surname}</CustomerName>
+          </div>
 
-                    {isPending && (
-                      <RejectButton
-                        onClick={() => {
-                          setDeleteid(item._id);
-                          setShowPopup(true);
-                        }}
-                      >
-                        Reject
-                      </RejectButton>
-                    )}
-                  </Actions>
-                </div>
-              );
-            })
-          ) : (
-            <p style={{ textAlign: "center", color: "#777", fontSize: "15px" }}>
-              No bookings available at the moment.
-            </p>
-          )}
+          <p>{new Date(item.date).toLocaleDateString()}</p>
+          <Occasion>{item.eventType}</Occasion>
+          <Price>₦{item.venueId.price}</Price>
 
-          {showPopup && (
-            <div
-              style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100vw",
-                height: "100vh",
-                background: "rgba(0,0,0,0.4)",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                zIndex: 2000,
-              }}
-            >
-              <div
-                style={{
-                  background: "#fff",
-                  width: "360px",
-                  padding: "2rem",
-                  borderRadius: "10px",
-                  textAlign: "center",
-                  boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.2)",
+        <Actions style={{ justifyContent: "flex-end", marginTop: "10px" }}>
+  <AcceptButton
+    disabled={!isPending}
+    onClick={() => {
+      acceptBooking(item._id);
+
+      ;
+      setTimeout(()=>window.location.reload(),5000)
+    }}
+  >
+              {buttonText}
+            </AcceptButton>
+
+            {isPending && (
+              <RejectButton
+                onClick={() => {
+                  setDeleteid(item._id);
+                  setShowPopup(true);
                 }}
               >
-                <h3 style={{ marginBottom: "1rem" }}>Reject Booking</h3>
-                <p style={{ color: "#555", marginBottom: "1.5rem" }}>
-                  Please provide a reason for rejection:
-                </p>
+                Reject
+              </RejectButton>
+            )}
+          </Actions>
+        </div>
+      );
+    })
+  ) : (
+    <p style={{ textAlign: "center", color: "#777", fontSize: "15px" }}>
+      No bookings available at the moment.
+    </p>
+  )}
 
-                <input
-                  type="text"
-                  placeholder="Enter reason..."
-                  value={rejectionReason}
-                  onChange={(e) => setRejectionReason(e.target.value)}
-                  style={{
-                    width: "100%",
-                    height: "70px",
-                    padding: "10px",
-                    border: "1px solid #ccc",
-                    borderRadius: "6px",
-                    marginBottom: "1.5rem",
-                  }}
-                />
+  {showPopup && (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        background: "rgba(0,0,0,0.4)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 2000,
+      }}
+    >
+      <div
+        style={{
+          background: "#fff",
+          width: "360px",
+          padding: "2rem",
+          borderRadius: "10px",
+          textAlign: "center",
+          boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.2)",
+        }}
+      >
+        <h3 style={{ marginBottom: "1rem" }}>Reject Booking</h3>
+        <p style={{ color: "#555", marginBottom: "1.5rem" }}>
+          Please provide a reason for rejection:
+        </p>
 
-                <div style={{ display: "flex", gap: "1rem" }}>
-                  <button
-                    style={{
-                      background: "#e53935",
-                      color: "#fff",
-                      border: "none",
-                      padding: "10px 20px",
-                      borderRadius: "6px",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => {
-                      rejectBooking();
-                      setShowPopup(false);
-                      window.location.reload();
-                    }}
-                  >
-                    Submit
-                  </button>
+        <input
+          type="text"
+          placeholder="Enter reason..."
+          value={rejectionReason}
+          onChange={(e) => setRejectionReason(e.target.value)}
+          style={{
+            width: "100%",
+            height: "70px",
+            padding: "10px",
+            border: "1px solid #ccc",
+            borderRadius: "6px",
+            marginBottom: "1.5rem",
+          }}
+        />
 
-                  <button
-                    style={{
-                      background: "#f1f1f1",
-                      color: "#333",
-                      border: "none",
-                      padding: "10px 20px",
-                      borderRadius: "6px",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => {
-                      setRejectionReason("");
-                      setShowPopup(false);
-                    }}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-        </BookingCard>
+        <div style={{ display: "flex", gap: "1rem" }}>
+          <button
+            style={{
+              background: "#e53935",
+              color: "#fff",
+              border: "none",
+              padding: "10px 20px",
+              borderRadius: "6px",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              rejectBooking();
+              setShowPopup(false);
+              window.location.reload();
+            }}
+          >
+            Submit
+          </button>
 
-        {/* <EmptyState>
+          <button
+            style={{
+              background: "#f1f1f1",
+              color: "#333",
+              border: "none",
+              padding: "10px 20px",
+              borderRadius: "6px",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              setRejectionReason("");
+              setShowPopup(false);
+            }}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  )}
+</BookingCard>
+
+      {/* <EmptyState>
         <EmptyIcon>
           <BsBox />
         </EmptyIcon>
@@ -349,12 +356,14 @@ const DashboardHome = () => {
           Create your first venue to start managing bookings and events
         </EmptyText>
       </EmptyState> */}
-      </Wrapper>
-    </Container>
-  );
+    </Wrapper>
+  </Container>
+);
+
 };
 
 export default DashboardHome;
+
 
 const Container = styled.div`
   width: 100%;
@@ -381,7 +390,7 @@ const Wrapper = styled.div`
     width: 90%;
   }
 `;
-const BookingCard = styled.div`
+ const BookingCard = styled.div`
   background: #fff;
   border-radius: 12px;
   height: 5%;
@@ -392,41 +401,43 @@ const BookingCard = styled.div`
   padding: 0.4rem;
 `;
 
-const BookingInfo = styled.div`
+ const BookingInfo = styled.div`
   display: flex;
   flex-direction: column;
+
 `;
 
-const VenueName = styled.h3`
+ const VenueName = styled.h3`
   font-size: 16px;
   font-weight: 600;
   color: #1e1e1e;
 `;
 
-const CustomerName = styled.p`
+ const CustomerName = styled.p`
   font-size: 14px;
   color: #666;
 `;
 
-const Occasion = styled.p`
+ const Occasion = styled.p`
   font-size: 14px;
   color: #999;
 `;
 
-const Price = styled.p`
+ const Price = styled.p`
   font-size: 16px;
   font-weight: 600;
   color: #6b46c1;
   margin-top: 4px;
+  
 `;
 
-const Actions = styled.div`
+ const Actions = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
 `;
 
-const AcceptButton = styled.button`
+ const AcceptButton = styled.button`
   background: #00c853;
   color: #fff;
   font-size: 14px;
@@ -453,7 +464,7 @@ const AcceptButton = styled.button`
   }
 `;
 
-const RejectButton = styled.button`
+ const RejectButton = styled.button`
   background: transparent;
   color: #e53935;
   font-size: 14px;
@@ -468,7 +479,8 @@ const RejectButton = styled.button`
     background: red;
     color: white;
   }
-      &:hover:not(:disabled) {
+
+  &:hover:not(:disabled) {
     background-color: #e53935;
   }
 
@@ -477,7 +489,7 @@ const RejectButton = styled.button`
     color: white;
     cursor: not-allowed;
     opacity: 0.7;
-♦  }
+  }
 `;
 
 const WelcomeSection = styled.div`
@@ -596,7 +608,7 @@ const StatIcon = styled.div`
   border-radius: 10px;
   /* background-color: ${(props) => props.$bgColor};
   color: ${(props) => props.$color}; */
-  background: #f5e5c3;
+  background: #F5E5C3;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -615,6 +627,7 @@ const StatValue = styled.div`
   font-weight: 700;
   color: #111827;
 
+
   @media (max-width: 768px) {
     font-size: 28px;
   }
@@ -624,70 +637,70 @@ const StatValue = styled.div`
   }
 `;
 
-const EmptyState = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 80px 32px;
-  background: white;
-  border-radius: 16px;
+// const EmptyState = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   padding: 80px 32px;
+//   background: white;
+//   border-radius: 16px;
 
-  @media (max-width: 768px) {
-    padding: 60px 24px;
-    border-radius: 12px;
-  }
+//   @media (max-width: 768px) {
+//     padding: 60px 24px;
+//     border-radius: 12px;
+//   }
 
-  @media (max-width: 480px) {
-    padding: 40px 20px;
-  }
-`;
+//   @media (max-width: 480px) {
+//     padding: 40px 20px;
+//   }
+// `;
 
-const EmptyIcon = styled.div`
-  font-size: 72px;
-  color: #d1d5db;
-  margin-bottom: 20px;
+// const EmptyIcon = styled.div`
+//   font-size: 72px;
+//   color: #d1d5db;
+//   margin-bottom: 20px;
 
-  @media (max-width: 768px) {
-    font-size: 60px;
-    margin-bottom: 16px;
-  }
+//   @media (max-width: 768px) {
+//     font-size: 60px;
+//     margin-bottom: 16px;
+//   }
 
-  @media (max-width: 480px) {
-    font-size: 48px;
-    margin-bottom: 12px;
-  }
-`;
+//   @media (max-width: 480px) {
+//     font-size: 48px;
+//     margin-bottom: 12px;
+//   }
+// `;
 
-const EmptyTitle = styled.h3`
-  font-size: 22px;
-  font-weight: 600;
-  color: #374151;
-  margin: 0 0 8px 0;
+// const EmptyTitle = styled.h3`
+//   font-size: 22px;
+//   font-weight: 600;
+//   color: #374151;
+//   margin: 0 0 8px 0;
 
-  @media (max-width: 768px) {
-    font-size: 20px;
-  }
+//   @media (max-width: 768px) {
+//     font-size: 20px;
+//   }
 
-  @media (max-width: 480px) {
-    font-size: 18px;
-  }
-`;
+//   @media (max-width: 480px) {
+//     font-size: 18px;
+//   }
+// `;
 
-const EmptyText = styled.p`
-  font-size: 15px;
-  color: #9ca3af;
-  margin: 0 0 24px 0;
-  text-align: center;
-  max-width: 400px;
+// const EmptyText = styled.p`
+//   font-size: 15px;
+//   color: #9ca3af;
+//   margin: 0 0 24px 0;
+//   text-align: center;
+//   max-width: 400px;
 
-  @media (max-width: 768px) {
-    font-size: 14px;
-    max-width: 350px;
-  }
+//   @media (max-width: 768px) {
+//     font-size: 14px;
+//     max-width: 350px;
+//   }
 
-  @media (max-width: 480px) {
-    font-size: 13px;
-    max-width: 280px;
-  }
-`;
+//   @media (max-width: 480px) {
+//     font-size: 13px;
+//     max-width: 280px;
+//   }
+// `;

@@ -10,7 +10,8 @@ const Invoice = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { token } = useContext(AuthContext);
-  console.log("the id", invoiceId);
+  const [invoice,setInvoice]= useState({})
+  
 
   useEffect(() => {
     const fetchAllInvoices = async () => {
@@ -34,8 +35,6 @@ const Invoice = () => {
   const getInvoice = async () => {
     try {
       setLoading(true);
-      setError(null);
-
       const res = await axios.get(
         `https://eventiq-final-project.onrender.com/api/v1/invoice/${invoiceId}`,
         {
@@ -45,8 +44,9 @@ const Invoice = () => {
         }
       );
 
-      console.log("responsiveness", res?.data);
-      setInvoicing(res?.data?.data || res?.data);
+      console.log("responsiveness", res?.data?.data);
+   
+       setInvoice(res?.data?.data)
     } catch (err) {
       console.log(err);
       setError(err.response?.data?.message || err.message);
@@ -58,6 +58,7 @@ const Invoice = () => {
   useEffect(() => {
     getInvoice();
   }, [invoiceId]);
+  console.log("the id", invoice);
   return (
     <div>
       <InvoiceContainer>
@@ -67,13 +68,11 @@ const Invoice = () => {
             <p>Your Events start here</p>
           </div>
           <div className="invoice-info">
+          
             <p>
-              <strong>Booking No:</strong> EVT-9283
+              <strong>Date Issued:</strong> {invoice?.issuedDate}
             </p>
-            <p>
-              <strong>Date Issued:</strong> November 5th, 2025
-            </p>
-            <span className="status paid">PAID</span>
+            <span className="status paid">{invoice?.venuebookingId?.paymentstatus}</span>
           </div>
         </div>
 
@@ -83,16 +82,13 @@ const Invoice = () => {
           </h3>
           <div className="content-box">
             <p>
-              <strong>Name:</strong> Princess Umez
+              <strong>Name:</strong> {invoice?.clientId?.firstName}
             </p>
             <p>
-              <strong>Email:</strong> princessumez@gmail.com
+              <strong>Email:</strong> {invoice?.clientId?.email}
             </p>
             <p>
               <strong>Phone:</strong> 08062567835
-            </p>
-            <p>
-              <strong>Booking ID:</strong> EVT-9283
             </p>
           </div>
         </section>
@@ -105,12 +101,12 @@ const Invoice = () => {
             <h4>Lush Garden Paradise</h4>
             <div className="venue-meta">
               <div>
-                <p>📍 6, Jimoh oshodi, Lekki Phase 1, Lagos</p>
-                <p>📅 November 5th, 2025</p>
-                <p>👥 300–600 guests</p>
+                <p>📍 {invoice?.venueId?.location.street}</p>
+                <p>📅 {invoice?.issuedDate}</p>
+                <p>👥 {getInvoice?.capacity?.minimum}–{invoice?.capacity?.maximum} guests</p>
               </div>
               <div>
-                <p>🏞️ Outdoor Venue in Lekki</p>
+                <p>🏞️ {invoice?.venueId?.type}</p>
                 <p>⏱️ Minimum 5 hours</p>
               </div>
             </div>
@@ -132,20 +128,20 @@ const Invoice = () => {
               <tr>
                 <td>Venue Rental</td>
                 <td>1</td>
-                <td>550,000</td>
-                <td>550,000</td>
+                <td>{invoice?.venueId?.price}</td>
+                <td>{invoice?.venueId?.price}</td>
               </tr>
               <tr>
                 <td>Service Fee (10%)</td>
                 <td>1</td>
-                <td>10,500</td>
-                <td>10,500</td>
+                <td>{invoice?.venuebookingId?.servicecharge}</td>
+                <td>{invoice?.venuebookingId?.servicecharge}</td>
               </tr>
               <tr>
                 <td>Caution Fee</td>
                 <td>1</td>
-                <td>50,000</td>
-                <td>50,000</td>
+                <td>{invoice?.venueId?.cautionfee}</td>
+                <td>{invoice?.venueId?.cautionfee}</td>
               </tr>
             </tbody>
             <tfoot>
@@ -153,7 +149,7 @@ const Invoice = () => {
                 <td colSpan="3" className="grand-total-label">
                   Grand Total
                 </td>
-                <td className="grand-total">₦610,500</td>
+                <td className="grand-total">{invoice?.venuebookingId?.total}</td>
               </tr>
             </tfoot>
           </table>
@@ -296,6 +292,7 @@ const InvoiceContainer = styled.div`
           color: #555;
           padding: 8px 0;
           border-bottom: 1px solid #eee;
+
         }
 
         td {
@@ -303,20 +300,21 @@ const InvoiceContainer = styled.div`
           color: #444;
         }
 
-        tfoot {
-          .grand-total-label {
-            text-align: right;
-            font-weight: 600;
-            color: #333;
-          }
+      tfoot {
+  .grand-total-label {
+    font-weight: 600;
+    color: #333;
+    width: 70%;
+  }
 
-          .grand-total {
-            font-weight: 700;
-            color: #5b21b6;
-            background: #f3e8ff;
-            border-radius: 6px;
-            padding: 6px 8px;
-          }
+  .grand-total {
+    font-weight: 700;
+    color: #5b21b6;
+    background: #f3e8ff;
+    border-radius: 6px;
+  }
+}
+
         }
       }
     }
