@@ -642,6 +642,7 @@ const AllVenues = () => {
 
   console.log("this is it", getArr);
 
+
   useEffect(() => {
     const fetchVenues = async () => {
       try {

@@ -9,8 +9,10 @@ const Individual_subHeader = () => {
   const location = useLocation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { selectedArea, setSelectedArea } = useArea();
+const storedArea = JSON.parse(localStorage.getItem("All area"));
 
   const isActive = (path) => location.pathname === path;
+
 
   const areas = [
     "All Areas",
@@ -106,7 +108,6 @@ const Individual_subHeader = () => {
           </FilterSection>
         </NavButtonsWrapper>
 
-        {/* Filter dropdown - mobile position (separate row) */}
         <FilterSection className="mobile-filter">
           <FilterButton
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -125,6 +126,7 @@ const Individual_subHeader = () => {
                 <DropdownItem
                   key={index}
                   onClick={() => {
+                     localStorage.setItem("All area", JSON.stringify(area));
                     setSelectedArea(area);
                     setIsDropdownOpen(false);
                   }}

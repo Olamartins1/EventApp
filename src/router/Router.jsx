@@ -277,7 +277,7 @@ export const Element = createHashRouter([
     element: <Invoice />,
   },
   {
-    path: "/payment-success",
+    path: "/payment-success/:reference",
     element: <SuccessfulPayment />,
   },
   {
