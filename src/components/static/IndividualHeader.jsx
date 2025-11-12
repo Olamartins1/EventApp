@@ -173,38 +173,27 @@ const Individual_header = () => {
 export default Individual_header;
 const HeaderContainer = styled.header`
   background-color: #ffffff;
+  padding: 0.1rem 4rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: sticky;
   top: 0;
   z-index: 100;
-  width: 100%;
-
-  @media (max-width: 1200px) {
-    padding: 0.5rem 3rem;
-  }
 
   @media (max-width: 1024px) {
-    padding: 0.5rem 2rem;
+    padding: 1rem 2rem;
   }
 
   @media (max-width: 768px) {
-    padding: 0.75rem 1.5rem;
+    padding: 1rem 1.5rem;
   }
 
   @media (max-width: 480px) {
-    padding: 0.5rem 1rem;
-  }
-
-  @media (max-width: 360px) {
-    padding: 0.5rem 0.75rem;
+    padding: 0.75rem 1rem;
   }
 `;
 
 const HeaderContent = styled.div`
-  width: 91%;
+  max-width: 1400px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -253,82 +242,6 @@ const HeaderContent = styled.div`
     p {
       margin: 0;
       font-size: 0.9rem;
-      color: #444;
-    }
-  }
-
-  @media (max-width: 1024px) {
-    .holder {
-      h1 {
-        font-size: 1.8rem;
-      }
-      p {
-        font-size: 0.85rem;
-      }
-      small {
-        font-size: 0.75rem;
-      }
-    }
-  }
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    height: auto;
-    align-items: flex-start;
-    gap: 1rem;
-
-    .holder {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-start;
-      text-align: left;
-
-      h1 {
-        font-size: 1.8rem;
-      }
-
-      p {
-        font-size: 0.85rem;
-      }
-
-      small {
-        font-size: 0.75rem;
-      }
-    }
-
-    div:last-child {
-      position: absolute;
-      right: 1.5rem;
-      top: 1rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    gap: 0.8rem;
-
-    .holder {
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-start;
-
-      h1 {
-        font-size: 1.5rem;
-      }
-
-      p {
-        font-size: 0.8rem;
-      }
-
-      small {
-        font-size: 0.7rem;
-      }
-    }
-
-    div:last-child {
-      top: 0.8rem;
-      right: 1rem;
 
       @media (max-width: 768px) {
         font-size: 0.75rem;
@@ -351,29 +264,22 @@ const SearchContainer = styled.div`
   border-radius: 0.5rem;
   overflow: hidden;
 
-  @media (max-width: 1200px) {
-    width: 450px;
+  @media (max-width: 1024px) {
+    width: 400px;
     margin: 0 1.5rem;
   }
 
-  @media (max-width: 1024px) {
-    width: 350px;
-    margin: 0 1rem;
-  }
-
   @media (max-width: 768px) {
-    order: 3;
-    width: 100%;
-    margin: 0;
-    flex: 1 1 100%;
+    width: 300px;
+    margin: 0 1rem;
+       display: none;
+
   }
 
   @media (max-width: 480px) {
-    border-radius: 6px;
-  }
-
-  @media (max-width: 360px) {
-    border-radius: 4px;
+    width: auto;
+    flex: 1;
+    margin: 0 0.75rem;
   }
 `;
 
@@ -399,18 +305,16 @@ const SearchInput = styled.input`
   border: none;
   background: transparent;
 
-  @media (max-width: 480px) {
-    font-size: 0.85rem;
-    padding: 0.6rem 0.4rem;
-    @media (max-width: 768px) {
-      padding: 0.6rem 0.5rem;
-      font-size: 0.875rem;
-    }
+  @media (max-width: 768px) {
+    padding: 0.6rem 0.5rem;
+    font-size: 0.875rem;
+  
+  }
 
-    @media (max-width: 480px) {
-      padding: 0.5rem 0.4rem;
-      font-size: 0.8rem;
-    }
+  @media (max-width: 480px) {
+    padding: 0.5rem 0.4rem;
+    font-size: 0.8rem;
+   
   }
 `;
 
@@ -422,8 +326,7 @@ const UserSection = styled.div`
   cursor: pointer;
 
   &:hover {
-    background: #ede8e8;
-    border-radius: 8px;
+    background: #f0f0f0;
   }
 
   @media (max-width: 768px) {
@@ -445,16 +348,18 @@ const UserSection = styled.div`
     color: white;
     font-weight: 600;
     cursor: pointer;
-    gap: 1rem;
     border: 2px solid #e0aa3d;
 
+    @media (max-width: 768px) {
+      width: 32px;
+      height: 32px;
+      font-size: 0.9rem;
+    }
+
     @media (max-width: 480px) {
-      display: flex;
-      background-color:green; 
-      min-width: 30px;
-      min-height: 30px;
-      width: 30px;
-      height: 30px;
+      width: 28px;
+      height: 28px;
+      font-size: 0.85rem;
     }
   }
 
@@ -464,7 +369,6 @@ const UserSection = styled.div`
     right: 0;
     width: 220px;
     background: #fff;
-    height: 160px;
     border-radius: 10px;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
     padding: 12px 0;
@@ -480,7 +384,7 @@ const UserSection = styled.div`
     @media (max-width: 480px) {
       top: 45px;
       width: 180px;
-      right: 0;
+      right: -10px;
     }
 
     .user-info {
@@ -591,13 +495,12 @@ const UserSection = styled.div`
   }
 
   @media (max-width: 768px) {
-    align-self: flex-start;
+    align-self: flex-end;
     gap: 0.5rem;
 
     .avatar {
       width: 32px;
       height: 32px;
-      display: flex;
       font-size: 0.9rem;
     }
 
@@ -646,28 +549,5 @@ const UserName = styled.h3`
 
   @media (max-width: 480px) {
     font-size: 14px;
-  }
-`;
-
-const LogoutSection = styled.div`
-  padding: 20px;
-  border-top: 1px solid #f3f4f6;
-
-  @media (max-width: 480px) {
-    padding: 16px;
-  }
-`;
-
-const LogoutButton = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color: #ef4444;
-
-  &:hover {
-    background-color: #fef2f2;
   }
 `;

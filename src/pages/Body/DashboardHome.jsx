@@ -8,6 +8,7 @@ import {
   BsBox,
   BsChevronDown,
 } from "react-icons/bs";
+import { GoDotFill } from "react-icons/go";
 import {
   FiCalendar,
   FiCreditCard,
@@ -208,41 +209,50 @@ return (
       )}
       {console.log("booooooo",booking)}
 <BookingCard>
-  {loading ? (
-    <h3 style={{ textAlign: "center", color: "#555" }}>Loading bookings...</h3>
-  ) : booking.length > 0 ? (
-    booking.map((item, index) => {
-      const isPending = item.bookingstatus === "pending" ? true : false ;
-      const buttonText = item.bookingstatus === "confirmed" ? "Accepted" : "Accept";
-console.log("text. ",item.bookingstatus ,item)
+   
+      {loading ? (
+  <h3 style={{ textAlign: "center", color: "#555" }}>Loading bookings...</h3>
+) : booking.length > 0 ? (
+  <BookingList>
+    {/* <div className="book_holder"> */}
+    {booking.map((item, index) => {
+      const isPending = item.bookingstatus === "pending";
+      const buttonText = isPending ? "Accept" : "Accepted";
+
       return (
-        <div key={index} style={{ marginBottom: "1.5rem" }}>
+        <BookingCard key={index}>
+          <div style={{ width: "100%"}}>
           <VenueName>{item.venueId.venuename}</VenueName>
 
           <div style={{ display: "flex", gap: "7px" }}>
             <CustomerName>{item.clientId.firstName}</CustomerName>
-            <CustomerName>{item.clientId.surname}</CustomerName>
+            <CustomerName>{item.clientId.surname}</CustomerName><GoDotFill style={{marginTop: "2rem"}}/>
+            <CustomerName>
+  {new Date(item.date).toLocaleDateString("en-US", {
+    month: "short",   
+    day: "numeric",   
+    year: "numeric",  
+  })}
+</CustomerName>
           </div>
 
-          <p>{new Date(item.date).toLocaleDateString()}</p>
+
           <Occasion>{item.eventType}</Occasion>
           <Price>₦{item.venueId.price}</Price>
 
-        <Actions style={{ justifyContent: "flex-end", marginTop: "10px" }}>
-  <AcceptButton
-    disabled={!isPending}
-    onClick={() => {
-      acceptBooking(item._id);
-
-      ;
-      setTimeout(()=>window.location.reload(),5000)
-    }}
-  >
+          <Actions style={{ justifyContent: "flex-end", marginTop: "10px" }}>
+            <AcceptButton
+              disabled={!isPending}
+              onClick={() => {
+                acceptBooking(item._id);
+                setTimeout(() => window.location.reload(), 5000);
+              }}
+            >
               {buttonText}
             </AcceptButton>
 
             {isPending && (
-              <RejectButton
+              <RejectButton style={{marginTop: "-2rem"}}
                 onClick={() => {
                   setDeleteid(item._id);
                   setShowPopup(true);
@@ -252,99 +262,81 @@ console.log("text. ",item.bookingstatus ,item)
               </RejectButton>
             )}
           </Actions>
-        </div>
+          </div>
+        </BookingCard>
       );
-    })
-  ) : (
-    <p style={{ textAlign: "center", color: "#777", fontSize: "15px" }}>
-      No bookings available at the moment.
-    </p>
-  )}
+    })}
 
-  {showPopup && (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        background: "rgba(0,0,0,0.4)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 2000,
-      }}
-    >
-      <div
-        style={{
-          background: "#fff",
-          width: "360px",
-          padding: "2rem",
-          borderRadius: "10px",
-          textAlign: "center",
-          boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.2)",
-        }}
-      >
-        <h3 style={{ marginBottom: "1rem" }}>Reject Booking</h3>
-        <p style={{ color: "#555", marginBottom: "1.5rem" }}>
-          Please provide a reason for rejection:
-        </p>
+    {showPopup && (
+      <PopupOverlay>
+        <PopupBox>
+          <h3 style={{ marginBottom: "1rem" }}>Reject Booking</h3>
+          <p style={{ color: "#555", marginBottom: "1.5rem" }}>
+            Please provide a reason for rejection:
+          </p>
 
-        <input
-          type="text"
-          placeholder="Enter reason..."
-          value={rejectionReason}
-          onChange={(e) => setRejectionReason(e.target.value)}
-          style={{
-            width: "100%",
-            height: "70px",
-            padding: "10px",
-            border: "1px solid #ccc",
-            borderRadius: "6px",
-            marginBottom: "1.5rem",
-          }}
-        />
-
-        <div style={{ display: "flex", gap: "1rem" }}>
-          <button
+          <input
+            type="text"
+            placeholder="Enter reason..."
+            value={rejectionReason}
+            onChange={(e) => setRejectionReason(e.target.value)}
             style={{
-              background: "#e53935",
-              color: "#fff",
-              border: "none",
-              padding: "10px 20px",
+              width: "100%",
+              height: "70px",
+              padding: "10px",
+              border: "1px solid #ccc",
               borderRadius: "6px",
-              cursor: "pointer",
+              marginBottom: "1.5rem",
             }}
-            onClick={() => {
-              rejectBooking();
-              setShowPopup(false);
-              window.location.reload();
-            }}
-          >
-            Submit
-          </button>
+          />
 
-          <button
-            style={{
-              background: "#f1f1f1",
-              color: "#333",
-              border: "none",
-              padding: "10px 20px",
-              borderRadius: "6px",
-              cursor: "pointer",
-            }}
-            onClick={() => {
-              setRejectionReason("");
-              setShowPopup(false);
-            }}
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
-  )}
+          <div style={{ display: "flex", gap: "1rem" }}>
+            <button
+              style={{
+                background: "#e53935",
+                color: "#fff",
+                border: "none",
+                padding: "10px 20px",
+                borderRadius: "6px",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                rejectBooking();
+                setShowPopup(false);
+                window.location.reload();
+              }}
+            >
+              Submit
+            </button>
+
+            <button
+              style={{
+                background: "#f1f1f1",
+                color: "#333",
+                border: "none",
+                padding: "10px 20px",
+                borderRadius: "6px",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                setRejectionReason("");
+                setShowPopup(false);
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </PopupBox>
+      </PopupOverlay>
+    )}
+    {/* </div> */}
+  </BookingList>
+) : (
+  <p style={{ textAlign: "center", color: "#777", fontSize: "15px" }}>
+    No bookings available at the moment.
+  </p>
+)}
+
 </BookingCard>
 
       {/* <EmptyState>
@@ -398,8 +390,19 @@ const Wrapper = styled.div`
   justify-content: space-between;
   flex-direction: column;
   width: 100%;
-  padding: 0.4rem;
+ 
+  
 `;
+const BookingList = styled.div`
+  display: flex;
+   background: #f8f9fa;
+  flex-direction: column;
+
+  gap: 1.5rem; 
+
+ 
+`;
+
 
  const BookingInfo = styled.div`
   display: flex;
@@ -408,26 +411,29 @@ const Wrapper = styled.div`
 `;
 
  const VenueName = styled.h3`
-  font-size: 16px;
+  font-size: 23px;
   font-weight: 600;
   color: #1e1e1e;
 `;
 
  const CustomerName = styled.p`
-  font-size: 14px;
+  font-size: 23px;
   color: #666;
+
 `;
 
  const Occasion = styled.p`
-  font-size: 14px;
+  font-size: 18px;
+  margin-top: -17px;
   color: #999;
+
 `;
 
  const Price = styled.p`
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 600;
-  color: #6b46c1;
-  margin-top: 4px;
+  color: #805c94;
+  margin-top: -15px;
   
 `;
 
@@ -441,10 +447,11 @@ const Wrapper = styled.div`
   background: #00c853;
   color: #fff;
   font-size: 14px;
+  margin-top: -2rem;
   font-weight: 500;
   border: none;
   border-radius: 8px;
-  padding: 10px 18px;
+  padding: 10px 30px;
   cursor: pointer;
   transition: all 0.3s ease;
 
