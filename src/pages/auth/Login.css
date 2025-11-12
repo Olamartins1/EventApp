@@ -1,10 +1,8 @@
-
-
-
 .signup-container-Login {
   display: flex;
-  height: 100%;
-  width: 100%;
+  height: 80%;
+  gap: 0rem;
+  width: 1250px;
 }
 
 .left-section3 {
@@ -15,16 +13,29 @@
   /* background: linear-gradient(135deg, #4a1d6e 0%, #5a2571 50%, #4a1d6e 100%); */
 }
 
+ /* .bg-image3 {
+  position: absolute;
+  inset: 0;
+    background-image: url('https://res.cloudinary.com/depuy7bkr/image/upload/v1761918729/left_side_log_in_evenitq1_rpxkvp.png'); 
 
+  background-size: cover;
+  background-position: center;
+   
+  width: 100%;
+  height: 100%;
+  
+}  */
 
 .bg-image3 {
   position: absolute;
-  width: 90%;
+  width: 100%;
   height: 800px;
+
   background-image: url('https://res.cloudinary.com/depuy7bkr/image/upload/v1761918729/left_side_log_in_evenitq1_rpxkvp.png');
   background-size: cover;        
   background-position: center;    
   
+  /* opacity: 0.4;               */
 }
 
 
@@ -71,14 +82,17 @@
 .left-content3 p {
   font-size: 1rem;
   color: #ede9fe;
+  line-height: 1.6;
 }
 
 .right-section3 {
   display: flex;
   justify-content: center;
   align-items: center;
+  /* padding: 2rem 3rem; */
   width: 50%;
   height: 100%;
+  /* overflow-y: auto; */
   background-color: white;
   
 }
@@ -88,8 +102,8 @@
   border-radius: 1rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   padding: 2rem;
-  width: 70%;
-  height: 60%;
+  width: 600px;
+  height: 400px;
 margin-top: 50px;
 margin-left: 40px;
   
@@ -149,7 +163,7 @@ margin-left: 40px;
   font-size: 0.875rem;
   outline: none;
   transition: border 0.2s;
-  width: 480px;
+  width: 480px !important;
 }
 
 .input-group-Login_password input:focus {
@@ -193,6 +207,7 @@ margin-left: 40px;
   outline: none;
   transition: border 0.2s;
   width: 93%;
+
 }
 
 .input-group-email-Login input:focus {
@@ -217,18 +232,11 @@ margin-left: 40px;
 
 .password-field-Login .password-box-Login {
   position: relative;
-  
 }
 
 .password-box-Login input {
-  padding: 0.75rem 1rem;
-  border: 2px solid #d1d5db;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  outline: none;
-  transition: border 0.2s;
-  width: 93%;
-  /* background:blue; */
+  width: 75%;
+  padding-right: 2.5rem;
 }
 
 .password-box-Login button {
@@ -341,6 +349,7 @@ margin-left: 40px;
     height: 100%;
     min-height: 500px;
     position: relative;
+    z-index: 1;
   }
 
   .bg-image3 {
@@ -387,9 +396,13 @@ margin-left: 40px;
   /* ====== Right section & form adjustments ====== */
   .right-section3 {
     width: 100%;
-
+    padding: 1.5rem 1.25rem;
     background: white;
-    margin-top: 0;
+    margin-top: -250px;
+    position: relative;
+    z-index: 5;
+
+
   }
 
   .form-wrapper3 {
@@ -397,7 +410,8 @@ margin-left: 40px;
     padding: 0;
     box-shadow: none;
     background: transparent;
-    margin-top: 60px;
+    margin-top: 10px;
+    margin-left: 10px;
   }
 
   /* Hide large headers/subtitles on mobile */
@@ -410,8 +424,8 @@ margin-left: 40px;
   /* ====== Inputs ====== */
   .input-group-email-Login,
   .input-group-Login_password {
-    width: 100%;
-    max-width: 100%;
+    width: 300px;
+    max-width: 400px;
     margin-bottom: 1.25rem;
   }
 
@@ -424,12 +438,16 @@ margin-left: 40px;
 
   .input-group-email-Login input,
   .input-group-Login_password input {
-    width: 100%;
+    width: 330px;
     padding: 0.8rem 1rem;
     font-size: 0.9rem;
     border-radius: 0.5rem;
     border: 1.5px solid #e5e7eb;
     box-sizing: border-box;
+  }
+
+  .input-group-Login_password input{
+    width: 330px !important;
   }
 
   /* ====== Password visibility button ====== */
@@ -454,6 +472,8 @@ margin-left: 40px;
     cursor: pointer;
     color: #9ca3af;
     font-size: 1.1rem;
+    margin-right: -30px;
+    
   }
 
   /* ====== Checkbox and login link ====== */
@@ -472,8 +492,8 @@ margin-left: 40px;
 
   /* ====== Submit button ====== */
   .submit-btn-Login {
-    width: 100%;
-    max-width: 100%;
+    width: 335px;
+    /* max-width: 100%; */
     padding: 0.8rem;
     font-size: 0.95rem;
     margin-top: 0.5rem;
@@ -490,8 +510,10 @@ margin-left: 40px;
   /* ====== Footer and security note ====== */
   .login-text-Login {
     font-size: 0.8rem;
-    margin-top: 1.25rem;
+    margin-top: 2rem;
     text-align: center;
+    margin-left: 15px;
+    width: 300px;
   }
 
   .login-text-Login a {
@@ -509,5 +531,6 @@ margin-left: 40px;
     font-size: 0.7rem;
     text-align: center;
     color: #9ca3af;
+    margin-left: -50px;
   }
 }

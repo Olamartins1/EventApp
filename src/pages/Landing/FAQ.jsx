@@ -78,11 +78,21 @@ const FaqIcon = styled.svg`
   strokelinejoinn: round;
   transition: transform 0.3s ease;
 
+  background-color: #f1f2f9;
+  border-radius: 50%;
+  color: #6f6c8f;
+
   ${({ $open }) =>
     $open &&
     css`
       transform: rotate(180deg);
+      background-color: #603379;
+      color: white;
     `}
+
+  &:active {
+    transform: scale(0.95);
+  }
 `;
 
 const Faq_button = styled.button`
@@ -117,8 +127,8 @@ const Faq_list = styled.div`
 `;
 
 const Faq_question = styled.h3`
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 550;
   color: #1a1a1a;
 `;
 
