@@ -3,9 +3,13 @@ import styled from "styled-components";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { useSearchParams } from "react-router-dom";
 
 const SuccessfulPayment = () => {
-  const { reference } = useParams();
+    const [searchParams] = useSearchParams();
+
+  const reference = searchParams.get("reference"); 
+
   const [query, setQuery] = useState(null);
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState(false);
@@ -18,11 +22,11 @@ const SuccessfulPayment = () => {
         const response = await axios.get(
           `https://eventiq-final-project.onrender.com/api/v1/verify/?reference=${reference}`
         );
-        console.log("Verification response:", response?.data);
+        console.log(response?.data);
 
         setQuery(response?.data);
         // Assuming API returns something like { success: true, ... }
-        setSuccess(response?.data?.status === "success" || response?.data?.success === true);
+        setSuccess(response?.data?.data?.status);
       } catch (err) {
         console.error("Error verifying payment:", err);
         setSuccess(false);
@@ -79,7 +83,7 @@ const SuccessfulPayment = () => {
 
 export default SuccessfulPayment;
 
-// ---------- STYLES ----------
+
 const Container = styled.div`
   width: 100%;
   height: 100vh;
