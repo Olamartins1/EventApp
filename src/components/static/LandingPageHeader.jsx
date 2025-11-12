@@ -128,26 +128,29 @@ const NavLinks = styled.nav`
 
 
 
-  @media (max-width: 768px) {
-    position: fixed;
-    top: 70px;
-    right: ${({ isOpen }) => (isOpen ? "0" : "-100%")};
-    flex-direction: column;
+   @media (max-width: 768px) {
+   position: fixed;
+     top: 70px;
+     right: ${({ isOpen }) => (isOpen ? "0" : "-100%")};
+     flex-direction: column;
     background: #ffffff;
-    width: 100%;
-    height: calc(100vh - 70px);
+     width: 300px;
+    //  height: calc(100vh - 70px);
+    height: 450px;
    
     gap: 2rem;
-    transition: right 0.35s ease-in-out;
+     transition: right 0.35s ease-in-out;
     box-shadow: ${({ isOpen }) =>
       isOpen ? "0 0 20px rgba(0, 0, 0, 0.2)" : "none"};
-  }
+    }
 
-  
+
+
 
 
  @media (max-width: 1024px) {
    gap: 5rem;
+ }
 `;
 
 const StyledLink = styled(Link)`
@@ -167,13 +170,14 @@ const StyledLink = styled(Link)`
     color: #292929;
     font-size: 1.5rem;
     margin-top: 30px;
-    margin-right: 250px;
+    margin-right: 150px;
   }
 
   @media (max-width: 480px) {
     color: #292929;
-    margin-top: 30px;
+    margin-top: 25px;
     text-align: left;
+    font-size: 1.2rem;
   }
 `;
 
@@ -199,13 +203,18 @@ const SignupDropdownWrapper = styled.div`
   @media (max-width: 768px) {
     margin-top: 1rem;
     flex-direction: column;
-    margin-right: 200px;
+    gap: 1rem;
+    // align-items: flex-start;
   }
 
   @media (max-width: 480px) {
-    margin-top: 1rem;
+    margin-top: -3rem;
     flex-direction: column;
-    margin-right: 200px;
+    margin-right: 80px;
+    // margin-right: 0;
+    align-items: center;
+    position: relative;
+    justify-content: center;
   }
 `;
 
@@ -234,10 +243,12 @@ const Login_Button = styled.button`
   }
 
   @media (max-width: 480px) {
-    width: 90%;
+    width: 120px;
+    // width: fit-content;
     font-size: 0.9rem;
     padding: 0.7rem 0.9rem;
     margin-right: 10px;
+    position: relative;
   }
 
   @keyframes fadeIn {
