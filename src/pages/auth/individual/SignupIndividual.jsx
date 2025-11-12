@@ -248,7 +248,7 @@ const SignupIndividual = () => {
 
                 <button
                   className="submit-btn-ind"
-                  style={{ background: "#603379" , color: "white"}}
+                  style={{ background: "#603379", color: "white" }}
                   type="submit"
                   disabled={loading}
                 >
