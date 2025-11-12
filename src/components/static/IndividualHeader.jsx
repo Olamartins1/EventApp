@@ -171,9 +171,22 @@ const Individual_header = () => {
 };
 
 export default Individual_header;
+
 const HeaderContainer = styled.header`
+  @media (max-width: 480px) {
+    padding: 0.5rem 1rem;
+    position: relative;
+  }
+
+  @media (max-width: 320px) {
+    padding: 0.5rem 0.75rem;
+  }
+
+  width: 100%;
   background-color: #ffffff;
-  padding: 0.1rem 4rem;
+  // padding: 0.1rem 4rem;
+  display: flex;
+  justify-content: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
@@ -188,12 +201,28 @@ const HeaderContainer = styled.header`
   }
 
   @media (max-width: 480px) {
-    padding: 0.75rem 1rem;
+  width: 90%;
+  height: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;
 
 const HeaderContent = styled.div`
-  max-width: 1400px;
+  @media (max-width: 480px) {
+    width: 100%;
+    gap: 0.5rem;
+display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (max-width: 320px) {
+    gap: 0.25rem;
+  }
+
+  width: 90%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -204,10 +233,21 @@ const HeaderContent = styled.div`
   }
 
   @media (max-width: 480px) {
+    display: flex;
     height: 60px;
+    align-items: center;
   }
 
   .holder {
+    @media (max-width: 480px) {
+      width: auto;
+      width: 100%;
+    }
+
+    @media (max-width: 320px) {
+      min-width: 100px;
+    }
+
     width: 25%;
     height: auto;
     display: flex;
@@ -224,6 +264,10 @@ const HeaderContent = styled.div`
     }
 
     h1 {
+      @media (max-width: 480px) {
+        line-height: 1.2;
+      }
+
       margin: 0;
       font-weight: lighter;
       color: #603379;
@@ -252,9 +296,71 @@ const HeaderContent = styled.div`
       }
     }
   }
+
+  /* ✅ Improved mobile responsiveness */
+  @media (max-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+    height: 70px;
+    width: 95%;
+
+    .holder {
+      width: 40%;
+      align-items: flex-start;
+    }
+
+    .holder h1 {
+      font-size: 1.6rem;
+    }
+
+    .holder p {
+      font-size: 0.8rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    width: 95%;
+    padding: 0 10px;
+
+    .holder {
+      width: auto;
+      align-items: flex-start;
+    }
+
+    .holder h1 {
+      font-size: 1.4rem;
+    }
+
+    .holder p {
+      display: none;
+    }
+  }
+
+  @media (max-width: 320px) {
+    height: 55px;
+    gap: 0.3rem;
+
+    .holder h1 {
+      font-size: 1.2rem;
+    }
+  }
 `;
 
+
 const SearchContainer = styled.div`
+  @media (max-width: 480px) {
+    margin: 0 0.5rem;
+    min-width: 0;
+  }
+
+  @media (max-width: 320px) {
+    margin: 0 0.25rem;
+  }
+
   width: 550px;
   margin: 0 2rem;
   display: flex;
@@ -284,6 +390,10 @@ const SearchContainer = styled.div`
 `;
 
 const SearchIconHolder = styled.div`
+  @media (max-width: 480px) {
+    min-width: 35px;
+  }
+
   width: 40px;
   height: 100%;
   display: flex;
@@ -297,6 +407,10 @@ const SearchIconHolder = styled.div`
 `;
 
 const SearchInput = styled.input`
+  @media (max-width: 480px) {
+    min-width: 0;
+  }
+
   flex: 1;
   padding: 0.75rem 0.5rem;
   font-size: 0.95rem;
@@ -319,6 +433,11 @@ const SearchInput = styled.input`
 `;
 
 const UserSection = styled.div`
+  @media (max-width: 480px) {
+    min-width: fit-content;
+    padding: 0.25rem;
+  }
+
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -338,6 +457,11 @@ const UserSection = styled.div`
   }
 
   .avatar {
+    @media (max-width: 480px) {
+      min-width: 28px;
+      min-height: 28px;
+    }
+
     width: 35px;
     height: 35px;
     border-radius: 50%;
@@ -364,6 +488,14 @@ const UserSection = styled.div`
   }
 
   .profile-dropdown {
+    @media (max-width: 480px) {
+      transform: translateX(10%);
+    }
+
+    @media (max-width: 320px) {
+      transform: translateX(15%);
+    }
+
     position: absolute;
     top: 60px;
     right: 0;
@@ -539,6 +671,10 @@ const UserSection = styled.div`
 `;
 
 const UserName = styled.h3`
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
+
   font-size: 18px;
   font-weight: 500;
   color: #0a0a0a;

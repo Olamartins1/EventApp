@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
+import { IoArrowBackOutline } from "react-icons/io5";
 
 const Invoice = () => {
   const { invoiceId } = useParams();
@@ -12,9 +13,8 @@ const Invoice = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { token } = useContext(AuthContext);
-  const invoiceRef = useRef(null); // ✅ Reference for the invoice div
+  const invoiceRef = useRef(null);
 
-  // 🔹 Fetch the specific invoice
   const getInvoice = async () => {
     try {
       setLoading(true);
@@ -26,7 +26,6 @@ const Invoice = () => {
           },
         }
       );
-
       setInvoice(res?.data?.data);
     } catch (err) {
       console.log(err);
@@ -40,7 +39,6 @@ const Invoice = () => {
     getInvoice();
   }, [invoiceId]);
 
-  // 🔹 Function to download the invoice as PDF
   const handleDownloadPDF = async () => {
     const element = invoiceRef.current;
 
@@ -55,10 +53,49 @@ const Invoice = () => {
     pdf.save(`Eventiq_Invoice_${invoiceId}.pdf`);
   };
 
+  // 🔹 Show loading screen
+  if (loading) {
+    return (
+      <div
+        style={{
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "1.2rem",
+          fontWeight: "bold",
+        }}
+      >
+        Loading invoice...
+      </div>
+    );
+  }
+
+  // 🔹 Show error if any
+  if (error) {
+    return (
+      <div
+        style={{
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          color: "red",
+          fontSize: "1rem",
+        }}
+      >
+        {error}
+      </div>
+    );
+  }
+
   return (
     <div>
-      {/* Wrap the invoice in a ref */}
       <InvoiceContainer ref={invoiceRef}>
+        <Link to="/individual-dashboard/MyProfile">
+          <IoArrowBackOutline size={20} />
+        </Link>
+
         <div className="invoice-header">
           <div className="brand">
             <h2>Eventiq</h2>
@@ -84,9 +121,6 @@ const Invoice = () => {
             </p>
             <p>
               <strong>Email:</strong> {invoice?.clientId?.email}
-            </p>
-            <p>
-              <strong>Phone:</strong> 08062567835
             </p>
           </div>
         </section>
@@ -162,7 +196,6 @@ const Invoice = () => {
             Thank you for booking with Eventiq. You can download this invoice or
             view it anytime in your dashboard.
           </p>
-          {/* 🔹 Connect button to function */}
           <button className="download-btn" onClick={handleDownloadPDF}>
             ⬇ Download Invoice (PDF)
           </button>
@@ -190,6 +223,8 @@ const InvoiceContainer = styled.div`
     align-items: flex-start;
     border-bottom: 2px solid #f3f3f3;
     padding-bottom: 20px;
+    position: relative
+
 
     .brand {
       h2 {

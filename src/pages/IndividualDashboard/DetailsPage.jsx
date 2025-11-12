@@ -167,7 +167,7 @@ const handleDaysChange = (e) => {
         </>
       ) : (
         <>
-          : (
+          {/* : ( */}
           <DetailContainer>
             <BackButton onClick={() => navigate(-1)}>
               <ChevronLeft size={20} />
