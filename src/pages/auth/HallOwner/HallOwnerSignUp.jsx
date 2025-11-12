@@ -233,7 +233,7 @@ const SignupHallOwner = () => {
                 <div className="checkbox-group-client1">
                   <label>
                     I have read the{" "}
-                    <a href="#" style={{ color: "#603379" }}>
+                    <a href="#" style={{ color: "#603379"}}>
                       Terms and Conditions
                     </a>{" "}
                     and i agree to it

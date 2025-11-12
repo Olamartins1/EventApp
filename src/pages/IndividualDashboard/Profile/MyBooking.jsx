@@ -79,11 +79,21 @@ const MyBooking = () => {
               </div>
             </div>
 
-            <div className="booking-footer">
-              <Link to="/Invoice/:invoiceId">
-                <button className="invoice-btn">View Invoice</button>
-              </Link>
-            </div>
+           <div className="booking-footer">
+  {item.bookingstatus === "pending" ? (
+    <button
+      className="cancel-btn"
+      onClick={() => handleCancelBooking(item._id)}
+    >
+      Cancel Request
+    </button>
+  ) : (
+    <Link to={`/Invoice/${item._id}`}>
+      <button className="invoice-btn">View Invoice</button>
+    </Link>
+  )}
+</div>
+
           </BookingCard>
         ))
       )}
