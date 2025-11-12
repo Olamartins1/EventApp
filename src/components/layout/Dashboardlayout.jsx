@@ -9,7 +9,7 @@ const Dashboardlayout = () => {
       <SideBar />
       <div style={{ width: "100%" }}>
         <Header />
-        <Outlet />
+        <Outlet/>
       </div>
     </div>
   );
