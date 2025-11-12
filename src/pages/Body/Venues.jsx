@@ -184,15 +184,19 @@ const VerifiedBadge = styled.div`
   position: absolute;
   top: 12px;
   right: 12px;
-  color: black;
+  color: #fff;
   padding: 6px 12px;
   border-radius: 20px;
+  background: rgba(34, 197, 94, 0.95);
   display: flex;
   align-items: center;
   gap: 4px;
   font-size: 0.75rem;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const VenueImagePlaceholder = styled.div`
@@ -1321,12 +1325,21 @@ const Venues = () => {
                       <FiPackage />
                     </VenueImagePlaceholder>
                   )}
+                    
+
                   <VerifiedBadge
+
                     style={{
                       color:
                         venue?.status?.toLowerCase() === "pending"
-                          ? "gold"
-                          : "green",
+                          ? "black"
+                          : "white",
+
+                          
+                      background:
+                        venue?.status?.toLowerCase() === "verified"
+                          ? "green"
+                          : "yellow",
                     }}
                   >
                     {venue?.status?.toLowerCase() === "pending" ? (
@@ -1344,7 +1357,8 @@ const Venues = () => {
                   <VenueName>{venue.venuename}</VenueName>
                   <VenueDetail>
                     <FiMapPin size={16} />
-                  {venue.location?.city}
+                    {venue.location?.street} , {venue.location?.city},{" "}
+                    {venue.location?.state}
                   </VenueDetail>
                   <VenueDetail>
                     <FiUsers size={16} />
@@ -1375,12 +1389,7 @@ const Venues = () => {
             ))}
           </VenuesGrid>
 
-        
-            
-
-            
-             
-{/*             
+          {/*             
               {features.map((feature) => (
                 <PlanCard key={feature._id}>
                   <PlanDuration>
@@ -1412,8 +1421,7 @@ const Venues = () => {
                   </SubscribeButton>
                 </PlanCard>
               ))} */}
-            
-          
+
           {/* <Premium /> */}
         </>
       )}

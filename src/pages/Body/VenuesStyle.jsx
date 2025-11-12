@@ -162,21 +162,6 @@ export const VenueImage = styled.img`
   object-fit: cover;
 `;
 
-export const VerifiedBadge = styled.div`
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: rgba(34, 197, 94, 0.95);
-  color: white;
-  padding: 6px 12px;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-`;
 
 export const VenueImagePlaceholder = styled.div`
   width: 100%;
