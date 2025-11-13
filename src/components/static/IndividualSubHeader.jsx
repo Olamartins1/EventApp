@@ -147,7 +147,6 @@ export default Individual_subHeader;
 const SubHeaderContainer = styled.div`
   background-color: #ffffff;
   border-bottom: 1px solid #e5e7eb;
-  position: sticky;
   top: 95px;
   z-index: 99;
 

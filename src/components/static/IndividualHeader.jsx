@@ -173,6 +173,7 @@ const Individual_header = () => {
 export default Individual_header;
 
 const HeaderContainer = styled.header`
+
   @media (max-width: 480px) {
     padding: 0.5rem 1rem;
     position: relative;
@@ -188,7 +189,7 @@ const HeaderContainer = styled.header`
   display: flex;
   justify-content: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 100;
 
@@ -202,7 +203,7 @@ const HeaderContainer = styled.header`
 
   @media (max-width: 480px) {
   width: 90%;
-  height: 10%;
+  height: 5%;
     display: flex;
     align-items: center;
     justify-content: center;
