@@ -2,27 +2,28 @@ import React from "react";
 import styled from "styled-components";
 import { FiBell } from "react-icons/fi";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
-import { useContext,useState,useEffect } from "react";
-
+import { useContext, useState, useEffect } from "react";
 
 const Header = () => {
   const { user } = useContext(AuthContext);
-    const id = JSON.parse(localStorage.getItem('userid'))
-    console.log('id', id)
-    const [data,setData] = useState(null)
-  
-    const getUser = async () => {
-      try {
-        const res = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/client/${id}`)
-        console.log('the res', res)
-        setData(res?.data?.data)
-      } catch (error) {
-        console.log(error)
-      }
+  const id = JSON.parse(localStorage.getItem("userid"));
+  console.log("id", id);
+  const [data, setData] = useState(null);
+
+  const getUser = async () => {
+    try {
+      const res = await axios.get(
+        `https://eventiq-final-project.onrender.com/api/v1/client/${id}`
+      );
+      console.log("the res", res);
+      setData(res?.data?.data);
+    } catch (error) {
+      console.log(error);
     }
-    useEffect(() => {
-      getUser()
-    }, [id])
+  };
+  useEffect(() => {
+    getUser();
+  }, [id]);
 
   return (
     <Holder>

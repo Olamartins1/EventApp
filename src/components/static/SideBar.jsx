@@ -3,23 +3,49 @@ import { useState, useContext } from "react";
 import styled from "styled-components";
 import { MdOutlineDashboard, MdOutlineNotifications } from "react-icons/md";
 import { BsBuilding } from "react-icons/bs";
-import { FiCreditCard, FiSettings, FiLogOut, FiMenu, FiX } from "react-icons/fi";
+import {
+  FiCreditCard,
+  FiSettings,
+  FiLogOut,
+  FiMenu,
+  FiX,
+} from "react-icons/fi";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
 
 const Sidebar = () => {
   const [activeItem, setActiveItem] = useState("Overview");
   const [isOpen, setIsOpen] = useState(false);
-  const [showLogoutPopup, setShowLogoutPopup] = useState(false); 
+  const [showLogoutPopup, setShowLogoutPopup] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { logout } = useContext(AuthContext);
 
   const menuItems = [
-    { name: "Overview", icon: <MdOutlineDashboard />, navigate: "/dashboardHome" },
-    { name: "My Venues", icon: <BsBuilding />, navigate: "/dashboardHome/venues" },
-    { name: "Payments", icon: <FiCreditCard />, navigate: "/dashboardHome/payments" },
-    { name: "Notification", icon: <MdOutlineNotifications />, navigate: "/dashboardHome/notifications" },
-    { name: "Profile Setting", icon: <FiSettings />, navigate: "/dashboardHome/settings" },
+    {
+      name: "Overview",
+      icon: <MdOutlineDashboard />,
+      navigate: "/dashboardHome",
+    },
+    {
+      name: "My Venues",
+      icon: <BsBuilding />,
+      navigate: "/dashboardHome/venues",
+    },
+    {
+      name: "Payments",
+      icon: <FiCreditCard />,
+      navigate: "/dashboardHome/payments",
+    },
+    {
+      name: "Notification",
+      icon: <MdOutlineNotifications />,
+      navigate: "/dashboardHome/notifications",
+    },
+    {
+      name: "Profile Setting",
+      icon: <FiSettings />,
+      navigate: "/dashboardHome/settings",
+    },
   ];
 
   const handleMenuClick = (item) => {
@@ -55,11 +81,16 @@ const Sidebar = () => {
           {menuItems.map((item, index) => (
             <MenuItem
               key={index}
-              $active={activeItem === item.name || location.pathname === item.navigate}
+              $active={
+                activeItem === item.name || location.pathname === item.navigate
+              }
               onClick={() => handleMenuClick(item)}
             >
               <IconWrapper
-                $active={activeItem === item.name || location.pathname === item.navigate}
+                $active={
+                  activeItem === item.name ||
+                  location.pathname === item.navigate
+                }
               >
                 {item.icon}
               </IconWrapper>
@@ -107,7 +138,9 @@ const Sidebar = () => {
             <p style={{ color: "#555", marginBottom: "1.5rem" }}>
               Are you sure you want to log out?
             </p>
-            <div style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
+            <div
+              style={{ display: "flex", justifyContent: "center", gap: "1rem" }}
+            >
               <button
                 onClick={cancelLogout}
                 style={{
@@ -143,7 +176,6 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
 
 const MobileMenuButton = styled.button`
   display: none;
@@ -196,9 +228,9 @@ const Overlay = styled.div`
 `;
 
 const Container = styled.div`
-  width: 22%;
+  width: 18%;
   height: 100vh;
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
   background: white;
