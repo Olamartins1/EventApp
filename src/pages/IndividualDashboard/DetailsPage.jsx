@@ -25,10 +25,9 @@ const DetailsPage = () => {
   const [isBooking, setIsBooking] = useState(false);
   const [errorField, setErrorField] = useState("");
 
-    let theAmount = venue?.price || 0;
-    const validDays = Number(days) > 0 ? Number(days) : 0;
-let servicecharge = days > 0 ? (theAmount * days * 5) / 100 : 0;
-
+  let theAmount = venue?.price || 0;
+  const validDays = Number(days) > 0 ? Number(days) : 0;
+  let servicecharge = days > 0 ? (theAmount * days * 5) / 100 : 0;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,22 +45,23 @@ let servicecharge = days > 0 ? (theAmount * days * 5) / 100 : 0;
     };
     if (id) fetchData();
   }, [id]);
-const handleEventTypeChange = (e) => {
-  const value = e.target.value.trim();
+  const handleEventTypeChange = (e) => {
+    const value = e.target.value.trim();
 
-  if (value === "") {
-    setEventType("");
-    setErrorField("eventType");
-    return;
-  }
+    if (value === "") {
+      setEventType("");
+      setErrorField("eventType");
+      return;
+    }
 
-  setEventType(value);
-  setErrorField(""); // clear error when valid
-};
+    setEventType(value);
+    setErrorField(""); // clear error when valid
+  };
 
-const handleDaysChange = (e) => {
-  const value = e.target.value.trim();
+  const handleDaysChange = (e) => {
+    const value = e.target.value.trim();
 
+   
     if (value === "") {
       setDays("");
       setErrorField("days");
@@ -70,11 +70,21 @@ const handleDaysChange = (e) => {
 
     const numberValue = Number(value);
 
+   
     if (!Number.isInteger(numberValue) || numberValue <= 0) {
       setErrorField("days");
+      toast.error("Days must be a valid number");
       return;
     }
 
+   
+    if (numberValue > 1) {
+      setErrorField("days");
+      toast.error("You can only book for 1 day");
+      return;
+    }
+
+   
     setDays(numberValue);
     setErrorField("");
   };
@@ -143,13 +153,6 @@ const handleDaysChange = (e) => {
           <ChevronLeft size={20} />
           Back
         </BackButton>
-        <ErrorBox>
-          <h2>⚠️ Oops!</h2>
-          <p>{error}</p>
-          <RetryButton onClick={() => window.location.reload()}>
-            Retry
-          </RetryButton>
-        </ErrorBox>
       </DetailContainer>
     );
   }
@@ -179,22 +182,24 @@ const handleDaysChange = (e) => {
             </BackButton>
 
             <VenueHeader>
-              <VenueName>{venue?.venuename}
-                  <VenueMetaInfo>
-                <MetaItemStatus><MdOutlineVerified />{venue?.status}</MetaItemStatus>
-              </VenueMetaInfo>
+              <VenueName>
+                {venue?.venuename}
+                <VenueMetaInfo>
+                  <MetaItemStatus>
+                    <MdOutlineVerified />
+                    {venue?.status}
+                  </MetaItemStatus>
+                </VenueMetaInfo>
               </VenueName>
-            
 
               <MetaItem>
                 <MapPin size={16} />
                 {venue?.location?.city},{venue?.location?.state}
-                 <MetaItemPeople>
-                <MdOutlinePeopleAlt size={20} />
-                {venue?.capacity?.minimum}- {venue?.capacity?.maximum} guests
-              </MetaItemPeople>
+                <MetaItemPeople>
+                  <MdOutlinePeopleAlt size={20} />
+                  {venue?.capacity?.minimum}- {venue?.capacity?.maximum} guests
+                </MetaItemPeople>
               </MetaItem>
-             
             </VenueHeader>
             <ImageGallery>
               {venue?.documents?.images?.[0]?.url && (
@@ -303,7 +308,6 @@ const handleDaysChange = (e) => {
                     <NumberType>Number of Days</NumberType>
                     <input
                       type="text"
-                      placeholder="e.g: 1,2,3,4,5"
                       onChange={handleDaysChange}
                       style={{
                         borderColor: errorField === "days" ? "red" : "#e5e7eb",
@@ -322,44 +326,52 @@ const handleDaysChange = (e) => {
                   <BookButton onClick={bookVenue} disabled={isBooking}>
                     {isBooking ? "Booking..." : "Book This Venue"}
                   </BookButton>
-             <PricingBreakdown>
- <BreakdownItem>
-  <span>Total</span>
-  <span>
-    ₦
-    {validDays
-      ? (theAmount * validDays + servicecharge + venue?.cautionfee).toLocaleString()
-      : "0"}
-  </span>
-</BreakdownItem>
+                  <PricingBreakdown>
+                    <BreakdownItem>
+                      <span>Total</span>
+                      <span>
+                        ₦
+                        {validDays
+                          ? (
+                              theAmount * validDays +
+                              servicecharge +
+                              venue?.cautionfee
+                            ).toLocaleString()
+                          : "0"}
+                      </span>
+                    </BreakdownItem>
 
+                    <BreakdownItem>
+                      <span>Service fee (5%)</span>
+                      <span>
+                        ₦
+                        {days > 0
+                          ? ((theAmount * days * 5) / 100).toLocaleString()
+                          : "0"}
+                      </span>
+                    </BreakdownItem>
 
-  <BreakdownItem>
-    <span>Service fee (5%)</span>
-    <span>
-      ₦{days > 0 ? ((theAmount * days * 5) / 100).toLocaleString() : "0"}
-    </span>
-  </BreakdownItem>
+                    <BreakdownItem>
+                      <span>Caution Fee</span>
+                      <span>
+                        ₦{days > 0 ? venue?.cautionfee?.toLocaleString() : "0"}
+                      </span>
+                    </BreakdownItem>
 
-  <BreakdownItem>
-    <span>Caution Fee</span>
-    <span>
-      ₦{days > 0 ? venue?.cautionfee?.toLocaleString() : "0"}
-    </span>
-  </BreakdownItem>
-
-  <BreakdownItem>
-    <span>Total</span>
-    <span>
-      ₦
-      {days > 0
-        ? (theAmount * days + servicecharge + venue?.cautionfee).toLocaleString()
-        : "0"}
-    </span>
-  </BreakdownItem>
-</PricingBreakdown>
-
-                 
+                    <BreakdownItem>
+                      <span>Total</span>
+                      <span>
+                        ₦
+                        {days > 0
+                          ? (
+                              theAmount * days +
+                              servicecharge +
+                              venue?.cautionfee
+                            ).toLocaleString()
+                          : "0"}
+                      </span>
+                    </BreakdownItem>
+                  </PricingBreakdown>
                 </PricingCard>
               </Sidebar>
             </ContentWrapper>
@@ -394,10 +406,9 @@ export default DetailsPage;
 
 const EventContainer = styled.div`
   width: 100%;
-  height: auto; 
-  margin-bottom: 1rem; 
+  height: auto;
+  margin-bottom: 1rem;
 
-  
   input {
     width: 100%;
     padding: 0.75rem;
@@ -629,7 +640,7 @@ const MetaItemStatus = styled.div`
   border-radius: 0.5rem;
   font-size: 0.95rem;
   margin-top: 1rem;
-   background-color: rgba(52, 150, 35, 1);
+  background-color: rgba(52, 150, 35, 1);
 
   @media (max-width: 768px) {
     font-size: 0.85rem;
