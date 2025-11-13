@@ -704,7 +704,7 @@ const AllVenues = () => {
             <VenueCard
               key={venue._id}
               onClick={() =>
-                navigate(`/individual-dashboard/venue/${venue._id}`)
+                navigate(`/venue/${venue._id}`)
               }
             >
               <ImageWrapper>
@@ -747,6 +747,9 @@ export default AllVenues;
 const PageContainer = styled.div`
   max-width: 1400px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 1rem 3rem;
   @media (max-width: 768px) {
     padding: 1rem 1.5rem;
@@ -754,14 +757,17 @@ const PageContainer = styled.div`
 `;
 
 const PageHeader = styled.div`
-  margin-bottom: 2rem;
+width: 97%;
+display: flex;
+flex-direction: column;
+margin-bottom: 2rem;
 `;
 
 const PageTitle = styled.h1`
   color: #0a0a0a;
   font-family: Poppins, sans-serif;
-  font-size: 30px;
-  font-weight: 500;
+ font-size: 20px;
+  font-weight: 600;
 `;
 
 const PageSubtitle = styled.p`
@@ -771,6 +777,7 @@ const PageSubtitle = styled.p`
 `;
 
 const VenuesGrid = styled.div`
+  width: 97%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 24px;

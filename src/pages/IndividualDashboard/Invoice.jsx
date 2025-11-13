@@ -53,7 +53,6 @@ const Invoice = () => {
     pdf.save(`Eventiq_Invoice_${invoiceId}.pdf`);
   };
 
-  // 🔹 Show loading screen
   if (loading) {
     return (
       <div
@@ -71,7 +70,6 @@ const Invoice = () => {
     );
   }
 
-  // 🔹 Show error if any
   if (error) {
     return (
       <div
