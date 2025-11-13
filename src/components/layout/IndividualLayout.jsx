@@ -11,7 +11,6 @@ const IndividualLayout = () => {
       <IndividualHeader />
       <IndividualSubHeader />
       <Outlet />
-
           </AreaProvider>
 
     </>

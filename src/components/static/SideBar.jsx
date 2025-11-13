@@ -179,10 +179,10 @@ export default Sidebar;
 
 const MobileMenuButton = styled.button`
   display: none;
-  position: fixed;
   top: 20px;
   left: 20px;
   z-index: 1001;
+  position: sticky;
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 8px;

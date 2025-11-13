@@ -85,7 +85,7 @@ const {selectedArea}= useArea()
               venues.map((venue) => (
                 <VenueCard
                   key={venue._id}
-                  onClick={() => navigate(`/individual-dashboard/venue/${venue._id}`)}
+                  onClick={() => navigate(`/venue/${venue._id}`)}
                 >
                   <ImageWrapper>
                     <VenueImage
@@ -102,7 +102,7 @@ const {selectedArea}= useArea()
                     <VenueName>{venue.venuename}</VenueName>
                     <Location>{venue?.location?.city || "Location unavailable"}</Location>
                     <Capacity>
-                      Capacity: {venue?.capacity?.minimum || 0}–{venue?.capacity?.maximum || 0} guests
+                      {venue?.capacity?.minimum || 0}–{venue?.capacity?.maximum || 0} guests
                     </Capacity>
                     <Price>
                       ₦{venue.price.toLocaleString()}
@@ -143,15 +143,15 @@ const PageHeader = styled.div`
 const PageTitle = styled.h1`
   color: #0a0a0a;
   font-family: "Poppins";
-  font-size: 30px;
-  font-weight: 500;
+ font-size: 20px;
+  font-weight: 600;
   margin-bottom: 0.5rem;
 `;
 
 const PageSubtitle = styled.p`
   color: #717182;
   font-family: "Poppins";
-  font-size: 1.2rem;
+  font-size: 1rem;
 `;
 
 const VenuesGrid = styled.div`

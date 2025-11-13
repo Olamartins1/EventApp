@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { FaFileInvoice, FaClock, FaWallet } from "react-icons/fa";
 import { BiMoney } from "react-icons/bi";
 import { FiPackage } from "react-icons/fi";
+import { toast } from "react-toastify";
 
-// ================= Styled Components =================
 const Container = styled.div`
   padding: 2rem;
   background-color: #fafafa;
@@ -138,7 +138,6 @@ const EmptyDescription = styled.p`
   line-height: 1.5;
 `;
 
-// ================= Modal Styled Components =================
 const Overlay = styled.div`
   position: fixed;
   top: 0;
@@ -226,7 +225,6 @@ const WithdrawButton = styled.button`
   }
 `;
 
-// ================= Withdraw Modal Component =================
 const WithdrawModal = ({ isOpen, onClose, onWithdraw }) => {
   const [amount, setAmount] = useState("");
   const [account, setAccount] = useState("");
@@ -239,7 +237,7 @@ const WithdrawModal = ({ isOpen, onClose, onWithdraw }) => {
 
   const handleWithdraw = () => {
     if (!amount || !account || !bankName || !bankType || !accountName) {
-      alert("Please fill in all fields");
+    toast.error("Please fill in all fields");
       return;
     }
     onWithdraw({ amount, account, bankName, bankType, accountName });
@@ -310,13 +308,11 @@ const WithdrawModal = ({ isOpen, onClose, onWithdraw }) => {
   );
 };
 
-// ================= Payment Component =================
 const Payment = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleWithdraw = (data) => {
     console.log("Withdraw request:", data);
-    // TODO: integrate API call
   };
 
   return (

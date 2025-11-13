@@ -147,9 +147,6 @@ export default Individual_subHeader;
 const SubHeaderContainer = styled.div`
   background-color: #ffffff;
   border-bottom: 1px solid #e5e7eb;
-  padding: 0 4rem;
-
-  position: sticky;
   top: 95px;
   z-index: 99;
 
@@ -169,7 +166,7 @@ const SubHeaderContainer = styled.div`
 `;
 
 const SubHeaderContent = styled.div`
-  max-width: 1400px;
+  width: 90%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -191,9 +188,7 @@ const SubHeaderContent = styled.div`
   @media (max-width: 480px) {
     display: flex;
     flex-direction: column;
-    align-items: center;
     padding: 0;
-    gap: 0;
   }
 `;
 
@@ -222,7 +217,7 @@ const NavButtonsWrapper = styled.div`
   }
 
   @media (max-width: 480px) {
-    gap: 0.5rem;
+    gap: 1.2rem;
     padding: 0.75rem 1rem;
     justify-content: center;
   }

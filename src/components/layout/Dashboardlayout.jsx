@@ -10,7 +10,6 @@ const Dashboardlayout = () => {
       style={{
         display: "flex",
         width: "100%",
-        backgroundColor: "red",
         justifyContent: "flex-end",
       }}
     >

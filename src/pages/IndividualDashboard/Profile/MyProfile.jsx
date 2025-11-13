@@ -134,6 +134,44 @@ const Holder = styled.div`
       }
     }
   }
+    @media (max-width: 768px) {
+  .header {
+    height: 80px; /* shrink header for tablets */
+    
+    article {
+      width: 95%;
+      .Logo {
+        width: 50%;
+        h1 {
+          font-size: 1.5rem; 
+        }
+      }
+      .myProfile {
+        width: 40%; /
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    height: 90px; 
+    
+    article {
+      width: 95%;
+      .Logo {
+        width: 60%;
+        h1 {
+          font-size: 1.3rem;
+        }
+      }
+      .myProfile {
+        width: 35%;
+      }
+    }
+  }
+}
+
 
   .sub {
     width: 100%;
@@ -208,6 +246,96 @@ const Holder = styled.div`
     }
   }
 
+  @media (max-width: 768px) {
+  .sub {
+    height: auto; /* let it adjust automatically */
+    padding: 1rem 0;
+
+    article {
+      width: 95%;
+      
+      h2 {
+        font-size: 0.9rem;
+        .micon {
+          font-size: 1.8rem;
+        }
+      }
+
+      .prince {
+        width: 100%;
+        height: auto;
+        gap: 1rem;
+
+        .bob {
+          width: 60px;
+          p {
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+          }
+        }
+
+        .bobby {
+          h3 {
+            font-size: 1.5rem;
+          }
+          p {
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .sub {
+    height: 15%;
+    padding: 0.5rem 0;
+
+    article {
+      width: 95%;
+
+      h2 {
+        font-size: 0.8rem;
+        .micon {
+          font-size: 1.5rem;
+        }
+      }
+
+      .prince {
+        gap: 0.2rem;
+        width: 100%;
+        height: 70%;
+
+
+        .bob {
+          width: 55px;
+
+          p {
+            width: 50px;
+            height: 60px;
+            font-size: 1.1rem;
+          }
+        }
+
+        .bobby {
+
+          h3 {
+            font-size: 1.3rem;
+
+            margin-top: -0rem;
+          }
+          p {
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+
   .dier {
     width: 90%;
 
@@ -246,4 +374,25 @@ const Holder = styled.div`
       }
     }
   }
+
+@media (max-width: 480px) {
+  .dier {
+    width: 100%;
+
+    .tabs {
+      width: 100%;
+      gap: 5px;
+      padding: 3px;
+
+      .tab {
+        padding: 5px 12px;
+        font-size: 0.8rem;
+
+        .icon {
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+}
 `;

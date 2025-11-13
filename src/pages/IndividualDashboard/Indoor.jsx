@@ -91,7 +91,7 @@ const Indoor = () => {
                 {venues.length > 0 ? (
                   venues.map((venue, index) => (
                     <VenueCardWrapper key={index}
-                      onClick={() => navigate(`/individual-dashboard/venue/${venue._id}`)}
+                      onClick={() => navigate(`/venue/${venue._id}`)}
                     >
 
                       <ImageHolder>
@@ -114,12 +114,12 @@ const Indoor = () => {
         
                         <p>{venue?.location?.city || "Location unavailable"}</p>
                         <p>
-                          Capacity: {venue?.capacity?.minimum || 0} -{" "}
-                          {venue?.capacity?.maximum || 0} 
+                          {venue?.capacity?.minimum || 0}-
+                          {venue?.capacity?.maximum || 0} guests
                         </p>
         
                         <HallPrice>
-                          <h3>₦{venue.price}/day</h3>
+                          <h3>₦{venue.price.toLocaleString()}/day</h3>
                         </HallPrice>
                       </HallInfo>
                     </VenueCardWrapper>
@@ -140,6 +140,9 @@ const Indoor = () => {
           max-width: 1400px;
           margin: 0 auto;
           padding: 1rem 3rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
         
           @media (max-width: 768px) {
             padding: 1rem 1.5rem;
@@ -152,13 +155,14 @@ const Indoor = () => {
         
         const PageHeader = styled.div`
           margin-bottom: 2rem;
+        width: 97%;
         `;
         
         const PageTitle = styled.h1`
           color: #0a0a0a;
           font-family: Poppins;
-          font-size: 30px;
-          font-weight: 500;
+         font-size: 20px;
+         font-weight: 600;
           margin-bottom: 0.5rem;
         `;
         
@@ -173,6 +177,8 @@ const Indoor = () => {
           flex-wrap: wrap;
           gap: 25px;
           height: 90%;
+          width: 97%;
+
         
           @media (max-width: 768px) {
             gap: 20px;

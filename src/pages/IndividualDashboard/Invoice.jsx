@@ -1,37 +1,20 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
+import { IoArrowBackOutline } from "react-icons/io5";
 
 const Invoice = () => {
   const { invoiceId } = useParams();
-  const [invoicing, setInvoicing] = useState({});
+  const [invoice, setInvoice] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { token } = useContext(AuthContext);
-  const [invoice,setInvoice]= useState({})
-  
+  const invoiceRef = useRef(null);
 
-  useEffect(() => {
-    const fetchAllInvoices = async () => {
-      try {
-        const res = await axios.get(
-          "https://eventiq-final-project.onrender.com/api/v1/invoices",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        console.log("thee invoice", res.data);
-      } catch (error) {
-        console.log("error fetching invoices:", error);
-      }
-    };
-
-    fetchAllInvoices();
-  }, [token]);
   const getInvoice = async () => {
     try {
       setLoading(true);
@@ -43,10 +26,8 @@ const Invoice = () => {
           },
         }
       );
-
-      console.log("responsiveness", res?.data?.data);
-   
-       setInvoice(res?.data?.data)
+      setInvoice(res?.data?.data);
+      console.log("the invoice",res?.data?.data)
     } catch (err) {
       console.log(err);
       setError(err.response?.data?.message || err.message);
@@ -58,21 +39,74 @@ const Invoice = () => {
   useEffect(() => {
     getInvoice();
   }, [invoiceId]);
-  console.log("the id", invoice);
+
+  const handleDownloadPDF = async () => {
+    const element = invoiceRef.current;
+
+    const canvas = await html2canvas(element, { scale: 2 });
+    const imgData = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save(`Eventiq_Invoice_${invoiceId}.pdf`);
+  };
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "1.2rem",
+          fontWeight: "bold",
+        }}
+      >
+        Loading invoice...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div
+        style={{
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          color: "red",
+          fontSize: "1rem",
+        }}
+      >
+        {error}
+      </div>
+    );
+  }
+
   return (
     <div>
-      <InvoiceContainer>
+      <InvoiceContainer ref={invoiceRef}>
+        <Link to="/individual-dashboard/MyProfile">
+          <IoArrowBackOutline size={20} />
+        </Link>
+
         <div className="invoice-header">
           <div className="brand">
             <h2>Eventiq</h2>
             <p>Your Events start here</p>
           </div>
           <div className="invoice-info">
-          
             <p>
               <strong>Date Issued:</strong> {invoice?.issuedDate}
             </p>
-            <span className="status paid">{invoice?.venuebookingId?.paymentstatus}</span>
+            <span className="status paid">
+              {invoice?.venuebookingId?.paymentstatus}
+            </span>
           </div>
         </div>
 
@@ -87,9 +121,6 @@ const Invoice = () => {
             <p>
               <strong>Email:</strong> {invoice?.clientId?.email}
             </p>
-            <p>
-              <strong>Phone:</strong> 08062567835
-            </p>
           </div>
         </section>
 
@@ -98,12 +129,14 @@ const Invoice = () => {
             <span className="icon">🏛️</span> Venue Details
           </h3>
           <div className="venue-box">
-            <h4>Lush Garden Paradise</h4>
+            <h4>{invoice?.venueId?.name || "Lush Garden Paradise"}</h4>
             <div className="venue-meta">
               <div>
-                <p>📍 {invoice?.venueId?.location.street}</p>
+                <p>📍 {invoice?.venueId?.location?.street}</p>
                 <p>📅 {invoice?.issuedDate}</p>
-                <p>👥 {getInvoice?.capacity?.minimum}–{invoice?.capacity?.maximum} guests</p>
+                <p>
+                  👥 {invoice?.capacity?.minimum}–{invoice?.capacity?.maximum} guests
+                </p>
               </div>
               <div>
                 <p>🏞️ {invoice?.venueId?.type}</p>
@@ -149,7 +182,9 @@ const Invoice = () => {
                 <td colSpan="3" className="grand-total-label">
                   Grand Total
                 </td>
-                <td className="grand-total">{invoice?.venuebookingId?.total}</td>
+                <td className="grand-total">
+                  {invoice?.venuebookingId?.total}
+                </td>
               </tr>
             </tfoot>
           </table>
@@ -160,7 +195,9 @@ const Invoice = () => {
             Thank you for booking with Eventiq. You can download this invoice or
             view it anytime in your dashboard.
           </p>
-          <button className="download-btn">⬇ Download Invoice (PDF)</button>
+          <button className="download-btn" onClick={handleDownloadPDF}>
+            ⬇ Download Invoice (PDF)
+          </button>
         </div>
       </InvoiceContainer>
     </div>
@@ -185,6 +222,8 @@ const InvoiceContainer = styled.div`
     align-items: flex-start;
     border-bottom: 2px solid #f3f3f3;
     padding-bottom: 20px;
+    position: relative
+
 
     .brand {
       h2 {

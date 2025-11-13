@@ -94,12 +94,20 @@ export const Element = createHashRouter([
         path: "multipurpose",
         element: <Multipurpose />,
       },
-      {
-        path: "venue/:id",
-        element: <DetailsPage />,
-      },
+      // {
+      //   path: "venue/:id",
+      //   element: <DetailsPage />,
+      // },
     ],
   },
+  {
+  path: "/venue/:id",
+  element: (
+    <Protect>
+      <DetailsPage />
+    </Protect>
+  ),
+},
   {
     path: "/individual-dashboard/MyProfile",
     element: (
