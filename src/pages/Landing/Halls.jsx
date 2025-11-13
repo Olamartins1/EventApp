@@ -1,15 +1,17 @@
 import { Heart, Sparkle, Star } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../assets/AuthContext/AuthContext";
 
 const Halls = () => {
   const [halls, setHalls] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const navigate = useNavigate();
+  const {user} = useContext(AuthContext)
 
   const fetchHall = async () => {
     try {
@@ -62,18 +64,23 @@ const Halls = () => {
         {halls.length > 0 ? (
           halls.map((hall) => (
             <Hall_card key={hall._id || hall.id}>
-              <Image_holder
-                onClick={() =>
-                  navigate(`/individual-dashboard/venue/${hall._id}`)
-                }
-              >
-                <img
-                  src={hall?.documents?.images[0].url || "/placeholder.jpg"}
-                  alt={hall?.name || "Venue"}
-                />
-                <Wrapper>
-                </Wrapper>
-              </Image_holder>
+             <Image_holder
+  onClick={() => {
+    if (!user || user.role !== "venue-owner") {
+      toast.info("Please login as a venue owner to view this hall");
+      navigate("/login");
+    } else {
+      navigate(`venue/${hall._id}`);
+    }
+  }}
+>
+  <img
+    src={hall?.documents?.images[0]?.url || "/placeholder.jpg"}
+    alt={hall?.name || "Venue"}
+  />
+  <Wrapper></Wrapper>
+</Image_holder>
+
 
               <Hall_info>
                 <Hall_header>
@@ -208,7 +215,8 @@ const Halls_container = styled.div`
   gap: 15px;
   width: 100%;
   height: 100%;
-  justify-content: center;
+  // justify-content: center;
+    overflow-x: auto;
 
   @media (max-width: 768px) {
     width: 90%;
@@ -234,7 +242,6 @@ const Halls_container = styled.div`
 
 const Container = styled.div`
   width: 100%;
-  margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -242,6 +249,7 @@ const Container = styled.div`
   background-color: #ffffff;
   height: 100%;
   margin-bottom: 50px;
+
 
   h2 {
     font-size: 1.875rem;
