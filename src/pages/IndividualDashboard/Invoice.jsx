@@ -27,6 +27,7 @@ const Invoice = () => {
         }
       );
       setInvoice(res?.data?.data);
+      console.log("the invoice",res?.data?.data)
     } catch (err) {
       console.log(err);
       setError(err.response?.data?.message || err.message);

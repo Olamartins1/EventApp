@@ -22,10 +22,9 @@ const SuccessfulPayment = () => {
         const response = await axios.get(
           `https://eventiq-final-project.onrender.com/api/v1/verify/?reference=${reference}`
         );
-        console.log(response?.data);
+        console.log("the data",response?.data);
 
         setQuery(response?.data);
-        // Assuming API returns something like { success: true, ... }
         setSuccess(response?.data?.data?.status);
       } catch (err) {
         console.error("Error verifying payment:", err);
