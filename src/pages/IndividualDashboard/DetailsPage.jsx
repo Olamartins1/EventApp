@@ -7,6 +7,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
+import { MdOutlineVerified } from "react-icons/md";
+import { MdOutlinePeopleAlt } from "react-icons/md";
 
 const DetailsPage = () => {
   const { id } = useParams();
@@ -16,16 +18,18 @@ const DetailsPage = () => {
   const [venue, setVenue] = useState({});
   const [loading, setLoading] = useState(true);
   const [eventDate, setEventDate] = useState("");
-  const [days, setDays] = useState(1);
+  const [days, setDays] = useState("");
   const [eventType, setEventType] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [error, setError] = useState("");
   const [isBooking, setIsBooking] = useState(false);
   const [errorField, setErrorField] = useState("");
 
-      let theAmount = venue.price
-      let  servicecharge = (theAmount * days) * 5/100;
-// : (
+    let theAmount = venue?.price || 0;
+    const validDays = Number(days) > 0 ? Number(days) : 0;
+let servicecharge = days > 0 ? (theAmount * days * 5) / 100 : 0;
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -175,19 +179,22 @@ const handleDaysChange = (e) => {
             </BackButton>
 
             <VenueHeader>
-              <VenueName>{venue?.venuename}</VenueName>
-              <VenueMetaInfo>
-                <MetaItem>{venue?.status}</MetaItem>
+              <VenueName>{venue?.venuename}
+                  <VenueMetaInfo>
+                <MetaItemStatus><MdOutlineVerified />{venue?.status}</MetaItemStatus>
               </VenueMetaInfo>
+              </VenueName>
+            
 
               <MetaItem>
                 <MapPin size={16} />
                 {venue?.location?.city},{venue?.location?.state}
+                 <MetaItemPeople>
+                <MdOutlinePeopleAlt size={20} />
+                {venue?.capacity?.minimum}- {venue?.capacity?.maximum} guests
+              </MetaItemPeople>
               </MetaItem>
-              <MetaItem>
-                <AlertCircle size={16} />
-                {venue?.capacity?.minimum}- {venue?.capacity?.maximum}
-              </MetaItem>
+             
             </VenueHeader>
             <ImageGallery>
               {venue?.documents?.images?.[0]?.url && (
@@ -265,7 +272,7 @@ const handleDaysChange = (e) => {
               <Sidebar>
                 <PricingCard>
                   <PriceDisplay>
-                    <PriceAmount>{venue?.price}</PriceAmount>
+                    <PriceAmount>{venue?.price.toLocaleString()}</PriceAmount>
                     <PriceLabel>/day</PriceLabel>
                   </PriceDisplay>
                   <DateSelector>
@@ -315,28 +322,44 @@ const handleDaysChange = (e) => {
                   <BookButton onClick={bookVenue} disabled={isBooking}>
                     {isBooking ? "Booking..." : "Book This Venue"}
                   </BookButton>
-                  <PricingBreakdown>
-                    <BreakdownItem>
-                      <span>Venue rental</span>
-                      <span>{venue?.price * days}</span>
-                    </BreakdownItem>
-                    <BreakdownItem>
-                      <span>Service fee (5%)</span>
-                      <span>₦{(theAmount * days * 5) / 100}</span>
-                    </BreakdownItem>
-                    <BreakdownItem>
-                      <span>Caution Fee</span>
-                      <span>
-                        ₦{venue?.cautionfee}
-                      </span>
-                    </BreakdownItem>
-                    <BreakdownItem>
-                      <span>Total</span>
-                      <span>
-                        ₦{theAmount * days + servicecharge + venue.cautionfee}
-                      </span>
-                    </BreakdownItem>
-                  </PricingBreakdown>
+             <PricingBreakdown>
+ <BreakdownItem>
+  <span>Total</span>
+  <span>
+    ₦
+    {validDays
+      ? (theAmount * validDays + servicecharge + venue?.cautionfee).toLocaleString()
+      : "0"}
+  </span>
+</BreakdownItem>
+
+
+  <BreakdownItem>
+    <span>Service fee (5%)</span>
+    <span>
+      ₦{days > 0 ? ((theAmount * days * 5) / 100).toLocaleString() : "0"}
+    </span>
+  </BreakdownItem>
+
+  <BreakdownItem>
+    <span>Caution Fee</span>
+    <span>
+      ₦{days > 0 ? venue?.cautionfee?.toLocaleString() : "0"}
+    </span>
+  </BreakdownItem>
+
+  <BreakdownItem>
+    <span>Total</span>
+    <span>
+      ₦
+      {days > 0
+        ? (theAmount * days + servicecharge + venue?.cautionfee).toLocaleString()
+        : "0"}
+    </span>
+  </BreakdownItem>
+</PricingBreakdown>
+
+                 
                 </PricingCard>
               </Sidebar>
             </ContentWrapper>
@@ -534,6 +557,10 @@ const VenueName = styled.h1`
   font-weight: 700;
   color: #1f2937;
   margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  width: 60%;
+  gap: 3rem;
 
   @media (max-width: 768px) {
     font-size: 1.5rem;
@@ -541,6 +568,7 @@ const VenueName = styled.h1`
 
   @media (max-width: 480px) {
     font-size: 1.25rem;
+    width: 100%;
   }
 `;
 
@@ -566,6 +594,42 @@ const MetaItem = styled.div`
   gap: 0.5rem;
   color: #6b7280;
   font-size: 0.95rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+  }
+`;
+const MetaItemPeople = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin-left: 3rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+  }
+`;
+
+const MetaItemStatus = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  padding: 3px 3px;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  margin-top: 1rem;
+   background-color: rgba(52, 150, 35, 1);
 
   @media (max-width: 768px) {
     font-size: 0.85rem;

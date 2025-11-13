@@ -414,12 +414,28 @@ const BookingList = styled.div`
   font-size: 23px;
   font-weight: 600;
   color: #1e1e1e;
+       @media (max-width: 768px) {
+    font-size: 20px;
+  }
+
+  @media (max-width: 480px) {
+  padding: 0.5rem;
+    font-size: 18px;
+  }
 `;
 
  const CustomerName = styled.p`
   font-size: 23px;
   color: #666;
+  
+     @media (max-width: 768px) {
+    font-size: 20px;
+  }
 
+  @media (max-width: 480px) {
+    font-size: 18px;
+    margin-top: 1.5rem;
+  }
 `;
 
  const Occasion = styled.p`
@@ -469,6 +485,14 @@ const BookingList = styled.div`
     cursor: not-allowed;
     opacity: 0.7;
   }
+     @media (max-width: 768px) {
+    font-size: 20px;
+  }
+
+  @media (max-width: 480px) {
+  padding: 0.5rem;
+    font-size: 18px;
+  }
 `;
 
  const RejectButton = styled.button`
@@ -496,6 +520,14 @@ const BookingList = styled.div`
     color: white;
     cursor: not-allowed;
     opacity: 0.7;
+  }
+     @media (max-width: 768px) {
+    font-size: 20px;
+  }
+
+  @media (max-width: 480px) {
+  padding: 0.5rem;
+    font-size: 18px;
   }
 `;
 
@@ -641,6 +673,50 @@ const StatValue = styled.div`
 
   @media (max-width: 480px) {
     font-size: 24px;
+  }
+`;
+const PopupOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+`;
+
+const PopupBox = styled.div`
+  background: #fff;
+  width: 400px;
+  max-width: 90%;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  p {
+    font-size: 14px;
+    color: #555;
   }
 `;
 

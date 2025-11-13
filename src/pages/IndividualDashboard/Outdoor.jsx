@@ -80,7 +80,7 @@ const Outdoor = () => {
             <VenueCardStyled
               key={venue._id}
               onClick={() =>
-                navigate(`/individual-dashboard/venue/${venue._id}`)
+                navigate(`/venue/${venue._id}`)
               }
             >
               <ImageContainer>
@@ -113,13 +113,15 @@ const Outdoor = () => {
 
 export default Outdoor;
 
-// -------------------- STYLES --------------------
 
 const PageHolder = styled.div`
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
   background-color: #f9fafb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   @media (max-width: 768px) {
     padding: 1rem 1.5rem;
@@ -132,6 +134,7 @@ const PageHolder = styled.div`
 
 const PageHeader = styled.div`
   margin-bottom: 1.5rem;
+width: 96%;
 `;
 
 const TitleWrapper = styled.div`
@@ -174,7 +177,7 @@ const OutdoorGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
   gap: 20px;
-
+  width: 95%;
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     gap: 16px;
