@@ -336,7 +336,7 @@ const Payment = () => {
               <FaFileInvoice />
             </IconWrapper>
           </CardHeader>
-          <Amount>#0</Amount>
+          <Amount>₦0</Amount>
           <AmountLabel>All time</AmountLabel>
         </Card>
 
@@ -347,7 +347,7 @@ const Payment = () => {
               <BiMoney />
             </IconWrapper>
           </CardHeader>
-          <Amount>#0</Amount>
+          <Amount>₦0</Amount>
           <AmountLabel>All time</AmountLabel>
         </Card>
 
@@ -358,7 +358,7 @@ const Payment = () => {
               <FaClock />
             </IconWrapper>
           </CardHeader>
-          <Amount>#0</Amount>
+          <Amount>₦0</Amount>
           <AmountLabel>Processing</AmountLabel>
         </Card>
 
@@ -369,7 +369,7 @@ const Payment = () => {
               <FaWallet />
             </IconWrapper>
           </CardHeader>
-          <Amount>#0</Amount>
+          <Amount>₦0</Amount>
           <AmountLabel>Ready to withdraw</AmountLabel>
         </Card>
       </CardsGrid>
