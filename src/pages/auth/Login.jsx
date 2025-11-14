@@ -223,7 +223,7 @@ const Login = () => {
               {/* Forgot Password */}
               <div className="checkbox-group-Login1">
                 <Link to="/ForgotPassword" style={{ color: "#603379" }}>
-                  <strong>Forgot Password?</strong>
+                  <p>Forgot Password?</p>
                 </Link>
               </div>
 

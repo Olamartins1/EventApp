@@ -55,7 +55,7 @@ const DetailsPage = () => {
     }
 
     setEventType(value);
-    setErrorField(""); // clear error when valid
+    setErrorField("");
   };
 
   const handleDaysChange = (e) => {
@@ -323,9 +323,7 @@ const DetailsPage = () => {
                       </small>
                     )}
                   </EventContainer>
-                  <BookButton onClick={bookVenue} disabled={isBooking}>
-                    {isBooking ? "Booking..." : "Book This Venue"}
-                  </BookButton>
+                  
                   <PricingBreakdown>
                     <BreakdownItem>
                       <span>Total</span>
@@ -373,6 +371,9 @@ const DetailsPage = () => {
                     </BreakdownItem>
                   </PricingBreakdown>
                 </PricingCard>
+                <BookButton onClick={bookVenue} disabled={isBooking}>
+                    {isBooking ? "Booking..." : "Book This Venue"}
+                  </BookButton>
               </Sidebar>
             </ContentWrapper>
             {showPopup && (
@@ -636,7 +637,7 @@ const MetaItemStatus = styled.div`
   align-items: center;
   gap: 0.5rem;
   color: white;
-  padding: 3px 3px;
+  padding: 4px 8px;
   border-radius: 0.5rem;
   font-size: 0.95rem;
   margin-top: 1rem;
