@@ -173,7 +173,6 @@ const Individual_header = () => {
 export default Individual_header;
 
 const HeaderContainer = styled.header`
-
   @media (max-width: 480px) {
     padding: 0.5rem 1rem;
     position: relative;
@@ -202,8 +201,8 @@ const HeaderContainer = styled.header`
   }
 
   @media (max-width: 480px) {
-  width: 90%;
-  height: 5%;
+    width: 90%;
+    height: 5%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -214,7 +213,7 @@ const HeaderContent = styled.div`
   @media (max-width: 480px) {
     width: 100%;
     gap: 0.5rem;
-display: flex;
+    display: flex;
     align-items: center;
     justify-content: center;
   }
@@ -298,7 +297,7 @@ display: flex;
     }
   }
 
-  /* ✅ Improved mobile responsiveness */
+  
   @media (max-width: 768px) {
     flex-direction: row;
     justify-content: space-between;
@@ -351,7 +350,6 @@ display: flex;
   }
 `;
 
-
 const SearchContainer = styled.div`
   @media (max-width: 480px) {
     margin: 0 0.5rem;
@@ -379,8 +377,7 @@ const SearchContainer = styled.div`
   @media (max-width: 768px) {
     width: 300px;
     margin: 0 1rem;
-       display: none;
-
+    display: none;
   }
 
   @media (max-width: 480px) {
@@ -423,13 +420,11 @@ const SearchInput = styled.input`
   @media (max-width: 768px) {
     padding: 0.6rem 0.5rem;
     font-size: 0.875rem;
-  
   }
 
   @media (max-width: 480px) {
     padding: 0.5rem 0.4rem;
     font-size: 0.8rem;
-   
   }
 `;
 

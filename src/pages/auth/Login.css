@@ -453,6 +453,10 @@ margin-left: 10px;
     margin: 1.25rem 0;
     flex-direction: row;
     justify-content: space-between;
+
+    p{
+      font-weight: 400;
+    }
   }
 
   .checkbox-group-Login1 input[type="checkbox"] {

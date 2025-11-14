@@ -8,6 +8,7 @@ import { LuUser } from "react-icons/lu";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import VerificationModal from "../../../components/static/VerificationModal/VerificationModal";
+import TermsModal from "../../../components/static/TermsModal";
 
 const SignupHallOwner = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,6 +16,7 @@ const SignupHallOwner = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [isVerificationOpen, setIsVerificationOpen] = useState(false);
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -106,6 +108,20 @@ const SignupHallOwner = () => {
           <VerificationModal
             onClose={() => setIsVerificationOpen(false)}
             email={formData.email}
+          />
+        )}
+
+        {isVerificationOpen && (
+          <VerificationModal
+            onClose={() => setIsVerificationOpen(false)}
+            email={formData.email}
+          />
+        )}
+
+        {isTermsOpen && (
+          <TermsModal
+            show={isTermsOpen}
+            onClose={() => setIsTermsOpen(false)}
           />
         )}
 
@@ -233,12 +249,16 @@ const SignupHallOwner = () => {
                 <div className="checkbox-group-client1">
                   <label>
                     I have read the{" "}
-                    <a href="#" style={{ color: "#603379"}}>
+                    <a
+                      style={{ color: "#603379", cursor: "pointer" }}
+                      onClick={() => setIsTermsOpen(true)}
+                    >
                       Terms and Conditions
                     </a>{" "}
                     and i agree to it
                   </label>
                   <input
+                  style={{accentColor: "#603379"}}
                     type="checkbox"
                     name="termsAccepted"
                     checked={formData.termsAccepted}
