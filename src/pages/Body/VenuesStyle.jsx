@@ -35,8 +35,8 @@ export const AddButton = styled.button`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #800080;
-  color: white;
+  background-color: #fff;
+  color: #252525;
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
@@ -46,7 +46,8 @@ export const AddButton = styled.button`
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: #1d4ed8;
+    background-color: #603379;
+    color: #fff;
   }
 `;
 

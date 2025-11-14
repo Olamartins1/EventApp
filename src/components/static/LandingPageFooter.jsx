@@ -1,7 +1,10 @@
 import styled from "styled-components";
 import { Link } from "react-scroll";
+import { useState } from "react";
+import TermsModal from "../static/TermsModal";
 
 const LandingpageFooter = () => {
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
   return (
     <Footer>
       <Container>
@@ -50,12 +53,28 @@ const LandingpageFooter = () => {
               <h3>Legal</h3>
               <Footer_list>
                 <li>
-                  <Footer_link href="#">Terms and Conditions</Footer_link>
+                  <Footer_link
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault(); // stops the scroll attempt
+                      setIsTermsOpen(true);
+                    }}
+                  >
+                    Terms and Conditions
+                  </Footer_link>
                 </li>
                 <li>
-                  <Footer_link href="#">Privacy Policy</Footer_link>
+                  <Footer_link
+                    style={{ cursor: "pointer", color: "#603379" }}
+                    onClick={() => setIsTermsOpen(true)}
+                  >
+                    Privacy Policy
+                  </Footer_link>
                 </li>
               </Footer_list>
+              {isTermsOpen && (
+                <TermsModal onClose={() => setIsTermsOpen(false)} />
+              )}
             </Footer_section0>
           </Footer_flex_Quicklegal>
 

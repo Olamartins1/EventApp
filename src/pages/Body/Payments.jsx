@@ -4,6 +4,8 @@ import { FaFileInvoice, FaClock, FaWallet } from "react-icons/fa";
 import { BiMoney } from "react-icons/bi";
 import { FiPackage } from "react-icons/fi";
 import { toast } from "react-toastify";
+import axios from "axios";
+
 
 const Container = styled.div`
   padding: 2rem;
@@ -237,7 +239,7 @@ const WithdrawModal = ({ isOpen, onClose, onWithdraw }) => {
 
   const handleWithdraw = () => {
     if (!amount || !account || !bankName || !bankType || !accountName) {
-    toast.error("Please fill in all fields");
+      toast.error("Please fill in all fields");
       return;
     }
     onWithdraw({ amount, account, bankName, bankType, accountName });
@@ -310,8 +312,10 @@ const WithdrawModal = ({ isOpen, onClose, onWithdraw }) => {
 
 const Payment = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleWithdraw = (data) => {
+    
     console.log("Withdraw request:", data);
   };
 

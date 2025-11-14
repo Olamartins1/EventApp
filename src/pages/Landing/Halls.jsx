@@ -11,7 +11,7 @@ const Halls = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const navigate = useNavigate();
-  const {user} = useContext(AuthContext)
+  const { user } = useContext(AuthContext);
 
   const fetchHall = async () => {
     try {
@@ -64,32 +64,31 @@ const Halls = () => {
         {halls.length > 0 ? (
           halls.map((hall) => (
             <Hall_card key={hall._id || hall.id}>
-             <Image_holder
-  onClick={() => {
-    if (!user || user.role !== "venue-owner") {
-      toast.info("Please login as a venue owner to view this hall");
-      navigate("/login");
-    } else {
-      navigate(`venue/${hall._id}`);
-    }
-  }}
->
-  <img
-    src={hall?.documents?.images[0]?.url || "/placeholder.jpg"}
-    alt={hall?.name || "Venue"}
-  />
-  <Wrapper></Wrapper>
-</Image_holder>
-
+              <Image_holder
+                onClick={() => {
+                  if (!user || user.role !== "venue-owner") {
+                    toast.info(
+                      "Please login as a venue owner to view this hall"
+                    );
+                    navigate("/login");
+                  } else {
+                    navigate(`venue/${hall._id}`);
+                  }
+                }}
+              >
+                <img
+                  src={hall?.documents?.images[0]?.url || "/placeholder.jpg"}
+                  alt={hall?.name || "Venue"}
+                />
+                <Wrapper></Wrapper>
+              </Image_holder>
 
               <Hall_info>
                 <Hall_header>
                   <h3>{hall?.venuename}</h3>
                 </Hall_header>
                 {/* <p>{hall?.location || "Unknown location"}</p> */}
-                <p>
-                  {hall?.location?.city}
-                </p>
+                <p>{hall?.location?.city}</p>
 
                 <Hall_price>
                   <h3>
@@ -200,8 +199,8 @@ const Hall_card = styled.div`
   display: flex;
   align-items: center;
 
-  p{
-  color: red;
+  p {
+    color: red;
   }
 
   @media (max-width: 768px) {
@@ -216,7 +215,7 @@ const Halls_container = styled.div`
   width: 100%;
   height: 100%;
   // justify-content: center;
-    overflow-x: auto;
+  overflow-x: auto;
 
   @media (max-width: 768px) {
     width: 90%;
@@ -264,7 +263,6 @@ const Container = styled.div`
   background-color: #ffffff;
   height: 100%;
   margin-bottom: 50px;
-
 
   h2 {
     font-size: 1.875rem;
