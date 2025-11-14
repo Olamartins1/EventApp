@@ -170,10 +170,10 @@ const Holder = styled.div`
   
 
   @media (max-width: 480px) {
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    height: 60px;
+    // justify-content: space-between;
+    height: 100vh;
     width: 95%;
     padding: 0 10px;
 
