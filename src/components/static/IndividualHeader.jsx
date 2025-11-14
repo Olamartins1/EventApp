@@ -65,12 +65,12 @@ const Individual_header = () => {
             <p>Your event starts here</p>
           </div>
 
-          <SearchContainer>
+          {/* <SearchContainer>
             <SearchIconHolder>
               <Search size={18} color="#717182" />
             </SearchIconHolder>
             <SearchInput type="text" placeholder="Search" />
-          </SearchContainer>
+          </SearchContainer> */}
 
           <UserSection>
             <div className="avatar" onClick={toggleDropdown}>
