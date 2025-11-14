@@ -250,7 +250,6 @@ const VerificationModal = ({ email, onClose }) => {
     return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
-  // Verify OTP and then Auto-login
   const handleVerify = async () => {
     const verificationCode = code.join("");
 
@@ -267,7 +266,6 @@ const VerificationModal = ({ email, onClose }) => {
     setIsLoading(true);
 
     try {
-      // Step 1: Verify the user
       const verifyRes = await axios.post(
         "https://eventiq-final-project.onrender.com/api/v1/verify",
         {
@@ -279,8 +277,7 @@ const VerificationModal = ({ email, onClose }) => {
       toast.success(verifyRes.data.message || "Account verified successfully!");
       localStorage.removeItem("signupEmail");
 
-      // Step 2: Automatically log in the user
-      // Ensure you have the saved password from signup
+      
       if (!savedPassword) {
         toast.info("Please log in manually — password not saved.");
         onClose?.();

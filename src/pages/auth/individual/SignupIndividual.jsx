@@ -90,7 +90,7 @@ const SignupIndividual = () => {
 
       toast.success("Signup successful:", response.data);
       localStorage.setItem("signupEmail", response.data.email);
-      localStorage.setItem("userRole", response.data.role);
+      // localStorage.setItem("userRole", response.data.role);
 
       setIsVerificationOpen(true);
     } catch (error) {

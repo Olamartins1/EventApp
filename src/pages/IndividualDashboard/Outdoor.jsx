@@ -154,13 +154,13 @@ const PageTitle = styled.h1`
 `;
 
 const PageDescription = styled.span`
-  color: #ff8c42;
+  color: #717182;
   font-family: "Poppins", sans-serif;
   font-size: 14px;
   font-weight: 400;
 
   &:before {
-    content: "—";
+    content: "------";
     margin-right: 0.5rem;
   }
 `;

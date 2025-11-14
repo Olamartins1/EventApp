@@ -21,6 +21,7 @@ const MyProfile = () => {
   return (
     <Holder>
       <div className="holder">
+        <div className="my_hold">
         <svg
           width="90"
           height="40"
@@ -37,8 +38,17 @@ const MyProfile = () => {
         </svg>
 
         <p>Your event starts here</p>
+        </div>
+        {/* <div className="saviour">
+            <div className="saving">
+              <p>{user?.firstName[0]}</p>
+            </div>
+            <div className="bobble">
+              <h3>{user?.firstName}</h3>
+            </div>
+          </div> */}
       </div>
-
+ 
       <div className="sub">
         <article>
           <Link to="/individual-dashboard" className="classlink">
@@ -110,12 +120,21 @@ const Holder = styled.div`
   align-items: center;
   flex-direction: column;
   font-family: "Arial", sans-serif;
+ 
 
   .holder {
-      width: 100%;
+      width: 90%;
       align-items: flex-start;
-      margin-left: 150px;
       margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .my_hold{
+      width: 90%;
+      align-items: flex-start;
+      margin-top: 20px;
+      }
     }
 
     .holder h1 {
@@ -123,15 +142,38 @@ const Holder = styled.div`
     }
 
     .holder p {
+    margin-top: 0.5rem;
       font-size: 0.8rem;
     }
+
+  //   .saviour{
+  //   width: 8%;
+  //   height: 70%;
+  //   display: flex;
+  //   margin-top: 2rem;
+
+  //   .saving{
+  //   width: 90%;
+  //   height: 60%;
+  //  font-size: 20px;
+  //   border-radius: 90%;
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: center;
+  //   background: yellow;
+  //    }
+  //    .bobble{
+  //   margin-top: 1rem;
+  //   color: red;
+  //   }
+  //   }
   
 
   @media (max-width: 480px) {
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    height: 60px;
+    // justify-content: space-between;
+    height: 100vh;
     width: 95%;
     padding: 0 10px;
 

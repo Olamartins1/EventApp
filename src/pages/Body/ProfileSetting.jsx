@@ -29,14 +29,12 @@ const ProfileSettings = () => {
   });
 
   const [profileImage, setProfileImage] = useState(null);
-  // const [phonenumbeer, setPhonenumber] = useState(null)
   const [isEditMode, setIsEditMode] = useState(false);
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
   const [fetchuser, setFetchuser] = useState({});
   const [loadingBank, setLoadingBank] = useState(false);
-  // const [loadingProfile, setLoadingProfile] = useState(false);
-  // const [loadingEdit, setLoadingEdit] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   console.log("line 39", user._id);
   const handleChange = (e) => {
@@ -114,9 +112,8 @@ const ProfileSettings = () => {
 
   const Updateprofile = async () => {
     try {
-      //  setLoadingProfile(true);
       if (!user?._id) {
-        toast.error(res.data.message);
+        toast.error("User not found");
         return;
       }
 
@@ -150,7 +147,6 @@ const ProfileSettings = () => {
 
   const updateBankDetails = async () => {
     try {
-      // setLoadingBank(true);
       if (!user?._id) {
         toast.error("User not found. Please login again.");
         return;
@@ -298,7 +294,7 @@ const ProfileSettings = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setLoading(true); // start loading
+    setLoading(true);
 
     try {
       const token = user?.accessToken || localStorage.getItem("token");
@@ -308,17 +304,14 @@ const ProfileSettings = () => {
         return;
       }
 
-      // Use FormData for multipart/form-data
       const formDataToSend = new FormData();
 
-      // Append all fields from your formData state
       for (const key in formData) {
         if (formData[key]) {
           formDataToSend.append(key, formData[key]);
         }
       }
 
-      // Append profile image if exists
       if (profileImage) {
         const blob = await (await fetch(profileImage)).blob();
         formDataToSend.append("profilePicture", blob, "profile.png");
@@ -339,212 +332,209 @@ const ProfileSettings = () => {
       toast.success(res.data.message);
     } catch (err) {
       console.error("Error updating profile:", err.response?.data || err);
-      toast.error(res.data.message);
+      toast.error(err.response?.data?.message || "Error updating profile");
     } finally {
-      setLoading(false); // stop loading
+      setLoading(false);
     }
   };
 
   return (
     <Container>
       <Wrapper>
-      {successMessage && (
-        <SuccessMessage>
-          <FiCheck size={20} />
-          {successMessage}
-        </SuccessMessage>
-      )}
+        {successMessage && (
+          <SuccessMessage>
+            <FiCheck size={20} />
+            {successMessage}
+          </SuccessMessage>
+        )}
 
-      <Header>
-        <Title>Profile Settings</Title>
-        <Subtitle>
-          Manage your account information and business details
-        </Subtitle>
-      </Header>
+        <Header>
+          <Title>Profile Settings</Title>
+          <Subtitle>
+            Manage your account information and business details
+          </Subtitle>
+        </Header>
 
-      <Section>
-        <SectionTitle>Profile Picture</SectionTitle>
-        <ProfilePictureWrapper>
-          <Avatar>
-            {profileImage ? (
-              <ProfileImage src={profileImage} alt="Profile" />
-            ) : (
-              <AvatarText>{getInitials()}</AvatarText>
-            )}
-            <CameraIconLabel htmlFor="profile-upload">
-              <FiCamera size={16} />
-            </CameraIconLabel>
-            <HiddenInput
-              id="profile-upload"
-              type="file"
-              accept="image/jpg,image/jpeg,image/png,image/gif"
-              onChange={handleImageUpload}
-            />
-          </Avatar>
-          <UploadText>
-            <UploadTitle>
-              Upload a professional photo to help customers recognize you
-            </UploadTitle>
-            <UploadSubtitle>JPG, PNG or GIF. Max size 5MB</UploadSubtitle>
-          </UploadText>
-        </ProfilePictureWrapper>
-      </Section>
+        <Section>
+          <SectionTitle>Profile Picture</SectionTitle>
+          <ProfilePictureWrapper>
+            <Avatar>
+              {profileImage ? (
+                <ProfileImage src={profileImage} alt="Profile" />
+              ) : (
+                <AvatarText>{getInitials()}</AvatarText>
+              )}
+              <CameraIconLabel htmlFor="profile-upload">
+                <FiCamera size={16} />
+              </CameraIconLabel>
+              <HiddenInput
+                id="profile-upload"
+                type="file"
+                accept="image/jpg,image/jpeg,image/png,image/gif"
+                onChange={handleImageUpload}
+              />
+            </Avatar>
+            <UploadText>
+              <UploadTitle>
+                Upload a professional photo to help customers recognize you
+              </UploadTitle>
+              <UploadSubtitle>JPG, PNG or GIF. Max size 5MB</UploadSubtitle>
+            </UploadText>
+          </ProfilePictureWrapper>
+        </Section>
 
-      <Section>
-        <SectionHeader>
-          <SectionTitle>Personal Information</SectionTitle>
-          <EditButton
-            onClick={() => {
-              if (isEditMode) {
-                Updateprofile();
-              }
-              handleEditToggle();
-            }}
-          >
-            {isEditMode ? (
-              <>
-                <FiCheck size={16} style={{ marginRight: "6px" }} />
-                Save
-              </>
-            ) : (
-              "Edit"
-            )}
-          </EditButton>
-        </SectionHeader>
-        <FormGrid>
-          <FormGroup>
-            <Label>First name</Label>
-            <Input
-              disabled
-              placeholder={fetchuser.firstName}
-              hasError={errors.firstName}
-            />
-            {errors.firstName && <ErrorText>{errors.firstName}</ErrorText>}
-          </FormGroup>
-          <FormGroup>
-            <Label>Surname</Label>
-            <Input disabled placeholder={fetchuser.surname} />
-            {errors.lastName && <ErrorText>{errors.lastName}</ErrorText>}
-          </FormGroup>
-          <FormGroup>
-            <Label>Email</Label>
-            <Input disabled placeholder={fetchuser.email} />
-            {errors.lastName && <ErrorText>{errors.email}</ErrorText>}
-          </FormGroup>
-          <FormGroup>
-            <Label>Phone Number</Label>
-            <Input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              placeholder="phone number"
-              hasError={errors.phone}
-            />
-            {errors.phone && <ErrorText>{errors.phone}</ErrorText>}
-          </FormGroup>
-        </FormGrid>
-      </Section>
-
-      <Section>
-        <SectionTitle>Bank Details</SectionTitle>
-        <FormGrid>
-          <FormGroup>
-            <Label>Account Number</Label>
-            <Input
-              type="text"
-              name="accountNumber"
-              placeholder="please input your account number"
-              value={formData.accountNumber}
-              onChange={handleChange}
-              maxLength={10}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label>Account type </Label>
-            <Select name="type" value={formData.type} onChange={handleChange}>
-              <option value="Select type">Select type</option>
-              <option value="Savings">Savings</option>
-              <option value="Fixed">Fixed</option>
-              <option value="Current">Current</option>
-              <option value="Corporate">Corporate</option>
-            </Select>
-          </FormGroup>
-          <FormGroupFull>
-            <Label>Account Name</Label>
-            <Input
-              type="text"
-              name="accountName"
-              placeholder="please input your account name"
-              value={formData.accountName}
-              onChange={handleChange}
-            />
-          </FormGroupFull>
-        </FormGrid>
-      </Section>
-      <Btn>
-        <Button onClick={submitBankDetails}>
-          {loadingBank ? "Sending..." : "Submit"}
-        </Button>
-        <Button
-          onClick={updateBankDetails}
-          // disabled={loadingBank}
-        >
-          edit
-        </Button>
-      </Btn>
-      <Section>
-        <SectionTitle>Security</SectionTitle>
-        <form onSubmit={handlePasswordChange}>
+        <Section>
+          <SectionHeader>
+            <SectionTitle>Personal Information</SectionTitle>
+            <EditButton
+              onClick={() => {
+                if (isEditMode) {
+                  Updateprofile();
+                }
+                handleEditToggle();
+              }}
+            >
+              {isEditMode ? (
+                <>
+                  <FiCheck size={16} style={{ marginRight: "6px" }} />
+                  Save
+                </>
+              ) : (
+                "Edit"
+              )}
+            </EditButton>
+          </SectionHeader>
           <FormGrid>
-            <FormGroupFull>
-              <Label>Current Password</Label>
+            <FormGroup>
+              <Label>First name</Label>
               <Input
-                type="password"
-                name="currentPassword"
-                placeholder="Enter current password"
-                value={formData.currentPassword}
-                onChange={handleChange}
-                hasError={errors.currentPassword}
+                disabled
+                placeholder={fetchuser.firstName}
+                hasError={errors.firstName}
               />
-              {errors.currentPassword && (
-                <ErrorText>{errors.currentPassword}</ErrorText>
-              )}
-            </FormGroupFull>
-            <FormGroupFull>
-              <Label>New Password</Label>
+              {errors.firstName && <ErrorText>{errors.firstName}</ErrorText>}
+            </FormGroup>
+            <FormGroup>
+              <Label>Surname</Label>
+              <Input disabled placeholder={fetchuser.surname} />
+              {errors.lastName && <ErrorText>{errors.lastName}</ErrorText>}
+            </FormGroup>
+            <FormGroup>
+              <Label>Email</Label>
+              <Input disabled placeholder={fetchuser.email} />
+              {errors.lastName && <ErrorText>{errors.email}</ErrorText>}
+            </FormGroup>
+            <FormGroup>
+              <Label>Phone Number</Label>
               <Input
-                type="password"
-                name="newPassword"
-                placeholder="Enter new password (min 8 characters)"
-                value={formData.newPassword}
+                type="tel"
+                name="phone"
+                value={formData.phone}
                 onChange={handleChange}
-                hasError={errors.newPassword}
+                placeholder="phone number"
+                hasError={errors.phone}
               />
-              {errors.newPassword && (
-                <ErrorText>{errors.newPassword}</ErrorText>
-              )}
-            </FormGroupFull>
-            <FormGroupFull>
-              <Label>Confirm Password</Label>
+              {errors.phone && <ErrorText>{errors.phone}</ErrorText>}
+            </FormGroup>
+          </FormGrid>
+        </Section>
+
+        <Section>
+          <SectionTitle>Bank Details</SectionTitle>
+          <FormGrid>
+            <FormGroup>
+              <Label>Account Number</Label>
               <Input
-                type="password"
-                name="confirmPassword"
-                placeholder="Confirm new password"
-                value={formData.confirmPassword}
+                type="text"
+                name="accountNumber"
+                placeholder="please input your account number"
+                value={formData.accountNumber}
                 onChange={handleChange}
-                hasError={errors.confirmPassword}
+                maxLength={10}
               />
-              {errors.confirmPassword && (
-                <ErrorText>{errors.confirmPassword}</ErrorText>
-              )}
+            </FormGroup>
+            <FormGroup>
+              <Label>Account type </Label>
+              <Select name="type" value={formData.type} onChange={handleChange}>
+                <option value="Select type">Select type</option>
+                <option value="Savings">Savings</option>
+                <option value="Fixed">Fixed</option>
+                <option value="Current">Current</option>
+                <option value="Corporate">Corporate</option>
+              </Select>
+            </FormGroup>
+            <FormGroupFull>
+              <Label>Account Name</Label>
+              <Input
+                type="text"
+                name="accountName"
+                placeholder="please input your account name"
+                value={formData.accountName}
+                onChange={handleChange}
+              />
             </FormGroupFull>
           </FormGrid>
-          <ChangePasswordButton type="submit">
-            Confirm Password
-          </ChangePasswordButton>
-        </form>
-      </Section>
+        </Section>
+        <Btn>
+          <Button onClick={submitBankDetails}>
+            {loadingBank ? "Sending..." : "Submit"}
+          </Button>
+          <Button onClick={updateBankDetails}>
+            {loadingBank ? "Updating..." : "Edit"}
+          </Button>
+        </Btn>
+        <Section>
+          <SectionTitle>Security</SectionTitle>
+          <form onSubmit={handlePasswordChange}>
+            <FormGrid>
+              <FormGroupFull>
+                <Label>Current Password</Label>
+                <Input
+                  type="password"
+                  name="currentPassword"
+                  placeholder="Enter current password"
+                  value={formData.currentPassword}
+                  onChange={handleChange}
+                  hasError={errors.currentPassword}
+                />
+                {errors.currentPassword && (
+                  <ErrorText>{errors.currentPassword}</ErrorText>
+                )}
+              </FormGroupFull>
+              <FormGroupFull>
+                <Label>New Password</Label>
+                <Input
+                  type="password"
+                  name="newPassword"
+                  placeholder="Enter new password (min 8 characters)"
+                  value={formData.newPassword}
+                  onChange={handleChange}
+                  hasError={errors.newPassword}
+                />
+                {errors.newPassword && (
+                  <ErrorText>{errors.newPassword}</ErrorText>
+                )}
+              </FormGroupFull>
+              <FormGroupFull>
+                <Label>Confirm Password</Label>
+                <Input
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="Confirm new password"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  hasError={errors.confirmPassword}
+                />
+                {errors.confirmPassword && (
+                  <ErrorText>{errors.confirmPassword}</ErrorText>
+                )}
+              </FormGroupFull>
+            </FormGrid>
+            <ChangePasswordButton type="submit">
+              Confirm Password
+            </ChangePasswordButton>
+          </form>
+        </Section>
       </Wrapper>
     </Container>
   );
@@ -556,36 +546,61 @@ const Btn = styled.div`
   gap: 12px;
   margin: 20px 0;
 
-  @media (max-width: 600px) {
-    width:500px;
+  @media (max-width: 768px) {
     flex-direction: column;
+    gap: 10px;
+    width:70%;
   }
 `;
 
-  const Container = styled.div`
-  background: #f4f4f4;
-  padding: 40px 20px;
+const Container = styled.div`
   width: 100%;
+  min-height: 100vh;
+  background: #f4f4f4;
   display: flex;
   justify-content: center;
-  
+  align-items: flex-start;
+  padding: 40px 0;
+
+  @media (max-width: 1024px) {
+    padding: 30px 0;
+  }
 
   @media (max-width: 768px) {
-    padding: 20px 5px;
+    padding: 20px 0;
+    background: #fff;
+  }
+
+  @media (max-width: 480px) {
+    padding: 15px 0;
   }
 `;
 
-
 const Wrapper = styled.div`
-background: #fff;
-  width: 100%;
-  max-width: 900px;
+  width: 95%;
+  max-width: 1200px;
+  background: #fff;
   border-radius: 12px;
-  padding: 30px 20px;
-  
+  padding: 40px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+
+  @media (max-width: 1024px) {
+    padding: 35px;
+    width: 92%;
+  }
 
   @media (max-width: 768px) {
+    padding: 30px;
+    width: 90%;
+    border-radius: 10px;
+  }
+
+  @media (max-width: 480px) {
     padding: 20px;
+    width: 95%;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 `;
 
@@ -619,26 +634,50 @@ const SuccessMessage = styled.div`
     left: 20px;
     right: 20px;
     top: 10px;
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+
+  @media (max-width: 480px) {
+    left: 10px;
+    right: 10px;
+    top: 5px;
+    padding: 10px 16px;
+    font-size: 13px;
   }
 `;
 
 const Header = styled.div`
   margin-bottom: 40px;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    margin-bottom: 30px;
+  }
+
+  @media (max-width: 480px) {
+    margin-bottom: 25px;
+  }
 `;
+
 const Select = styled.select`
   padding: 0.75rem;
-  border: 1px solid gray;
+  border: 1px solid #d1d5db;
   border-radius: 8px;
   font-size: 0.95rem;
   transition: border-color 0.2s;
+  background: white;
+  cursor: pointer;
 
   &:focus {
     outline: none;
     border-color: #800080;
-    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+    box-shadow: 0 0 0 3px rgba(128, 0, 128, 0.1);
   }
 
-  option {
+  @media (max-width: 480px) {
+    padding: 0.7rem;
+    font-size: 0.9rem;
   }
 `;
 
@@ -651,25 +690,60 @@ const Title = styled.h1`
   @media (max-width: 768px) {
     font-size: 20px;
   }
+
+  @media (max-width: 480px) {
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
 `;
 
 const Subtitle = styled.p`
   font-size: 14px;
   color: #888;
   margin: 0;
+
+  @media (max-width: 480px) {
+    font-size: 13px;
+  }
 `;
 
 const Section = styled.div`
   margin-bottom: 40px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 30px;
+  }
+
+  @media (max-width: 480px) {
+    margin-bottom: 25px;
+  }
 `;
+
 const Button = styled.div`
   text-align: center;
-  width: 10%;
+  width: 120px;
   border-radius: 0.5rem;
   background: #9476a5;
-  padding: 0.5rem;
+  padding: 0.75rem;
   cursor: pointer;
   color: #fff;
+  font-weight: 500;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #836495;
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 0.85rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.8rem;
+    font-size: 14px;
+  }
 `;
 
 const SectionHeader = styled.div`
@@ -677,31 +751,48 @@ const SectionHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
 `;
 
 const SectionTitle = styled.h2`
   font-size: 16px;
   font-weight: 600;
   color: #1a1a1a;
-  margin: 0 0 20px 0;
+  margin: 0;
+
+  @media (max-width: 480px) {
+    font-size: 15px;
+  }
 `;
 
 const EditButton = styled.button`
   background: transparent;
-  border: 1px solid gray;
+  border: 1px solid #d1d5db;
   padding: 8px 20px;
   border-radius: 6px;
   font-size: 14px;
   color: #000;
-
   display: flex;
   align-items: center;
   font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
 
   &:hover {
     color: #fff;
     background: #800080;
-    cursor: pointer;
+    border-color: #800080;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 20px;
   }
 `;
 
@@ -714,6 +805,7 @@ const ProfilePictureWrapper = styled.div`
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: flex-start;
+    gap: 15px;
   }
 `;
 
@@ -728,6 +820,11 @@ const Avatar = styled.div`
   justify-content: center;
   flex-shrink: 0;
   overflow: hidden;
+
+  @media (max-width: 480px) {
+    width: 70px;
+    height: 70px;
+  }
 `;
 
 const ProfileImage = styled.img`
@@ -740,13 +837,17 @@ const AvatarText = styled.span`
   color: white;
   font-size: 24px;
   font-weight: 600;
+
+  @media (max-width: 480px) {
+    font-size: 20px;
+  }
 `;
 
 const CameraIconLabel = styled.label`
   position: absolute;
   bottom: 0;
   right: 0;
-  background:#603379;
+  background: #603379;
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -761,6 +862,11 @@ const CameraIconLabel = styled.label`
   &:hover {
     transform: scale(1.1);
   }
+
+  @media (max-width: 480px) {
+    width: 28px;
+    height: 28px;
+  }
 `;
 
 const HiddenInput = styled.input`
@@ -770,18 +876,31 @@ const HiddenInput = styled.input`
 const UploadText = styled.div`
   display: flex;
   flex-direction: column;
+  flex: 1;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const UploadTitle = styled.p`
   font-size: 14px;
   color: #1a1a1a;
   margin: 0 0 4px 0;
+
+  @media (max-width: 480px) {
+    font-size: 13px;
+  }
 `;
 
 const UploadSubtitle = styled.p`
   font-size: 12px;
   color: #888;
   margin: 0;
+
+  @media (max-width: 480px) {
+    font-size: 11px;
+  }
 `;
 
 const FormGrid = styled.div`
@@ -790,8 +909,12 @@ const FormGrid = styled.div`
   gap: 20px;
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;
     gap: 16px;
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 15px;
   }
 `;
 
@@ -811,39 +934,37 @@ const Label = styled.label`
   color: #1a1a1a;
   margin-bottom: 8px;
   font-weight: 500;
+
+  @media (max-width: 480px) {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
 `;
 
 const Input = styled.input`
   padding: 12px 16px;
-  border: 1px solid gray;
+  border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 14px;
   transition: all 0.2s;
-  cursor: pointer;
-
-  &:focus {
-    outline: none;
-  }
-`;
-
-const TextArea = styled.textarea`
-  padding: 12px 16px;
-  border: 1px solid #e5e5e5;
-  border-radius: 6px;
-  font-size: 14px;
-  background: #f9f9f9;
-  font-family: inherit;
-  resize: vertical;
-  transition: all 0.2s;
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "text")};
+  background: ${(props) => (props.disabled ? "#f9f9f9" : "white")};
 
   &:focus {
     outline: none;
     border-color: #800080;
-    background: white;
+    box-shadow: 0 0 0 3px rgba(128, 0, 128, 0.1);
   }
 
-  &::placeholder {
-    color: #aaa;
+  ${(props) =>
+    props.hasError &&
+    `
+    border-color: #ef4444;
+  `}
+
+  @media (max-width: 480px) {
+    padding: 10px 14px;
+    font-size: 13px;
   }
 `;
 
@@ -851,6 +972,10 @@ const ErrorText = styled.span`
   color: #ef4444;
   font-size: 12px;
   margin-top: 4px;
+
+  @media (max-width: 480px) {
+    font-size: 11px;
+  }
 `;
 
 const ChangePasswordButton = styled.button`
@@ -862,18 +987,25 @@ const ChangePasswordButton = styled.button`
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
-  border: 1px solid gray;
+  border: 1px solid #d1d5db;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: all 0.2s;
 
   &:hover {
     transform: translateY(-2px);
     background: #800080;
     color: white;
+    border-color: #800080;
   }
 
   &:active {
     transform: translateY(0);
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    padding: 14px 32px;
+    font-size: 14px;
   }
 `;
 

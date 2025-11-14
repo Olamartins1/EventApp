@@ -132,7 +132,9 @@ const Invoice = () => {
             <h4>{invoice?.venueId?.name || "Lush Garden Paradise"}</h4>
             <div className="venue-meta">
               <div>
-                <p>📍 {invoice?.venueId?.location?.street}</p>
+                <p>📍 {invoice?.venueId?.location?.street},
+                  {invoice?.location?.city}
+                </p>
                 <p>📅 {invoice?.issuedDate}</p>
                 <p>
                   👥 {invoice?.capacity?.minimum}–{invoice?.capacity?.maximum} guests
