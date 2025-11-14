@@ -80,6 +80,7 @@ const MyBooking = () => {
             </div>
 
            <div className="booking-footer">
+            {console.log("iiiii itemud. ",item)}
   {item.bookingstatus === "pending" ? (
     <button
       className="cancel-btn"
@@ -88,6 +89,7 @@ const MyBooking = () => {
       Cancel Request
     </button>
   ) : (
+    
     <Link to={`/Invoice/${item._id}`}>
       <button className="invoice-btn">View Invoice</button>
     </Link>

@@ -62,24 +62,6 @@ const Indoor = () => {
     );
   }
 
-  // return (
-  //   <PageHolder>
-  //     <PageHeader>
-        // <PageTitle>Indoor Event Halls in Lagos</PageTitle>
-        // <PageSubtitle>{venues.length} venues available</PageSubtitle>
-
-
-
-
-
-
-
-
-
-
-
-
-
           return (
             <PageContainer>
               <PageHeader>
