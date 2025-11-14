@@ -3,6 +3,7 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { useArea } from "../../assets/AreaContext/AreaContext";
 import { Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
@@ -13,6 +14,7 @@ const AllVenues = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { token } = useContext(AuthContext);
+    const { selectedArea } = useArea();
 
   const getArr = JSON.parse(localStorage.getItem("myArea"));
 
@@ -26,7 +28,7 @@ const AllVenues = () => {
         setError(null);
 
         const response = await axios.get(
-          "https://eventiq-final-project.onrender.com/api/v1/allvenues",
+          `https://eventiq-final-project.onrender.com/api/v1/allvenues/?city=${selectedArea}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -48,7 +50,7 @@ const AllVenues = () => {
     };
 
     fetchVenues();
-  }, [token]);
+  }, [token, selectedArea]);
 
   if (loading) {
     return (

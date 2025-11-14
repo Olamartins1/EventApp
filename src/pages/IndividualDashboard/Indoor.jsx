@@ -83,7 +83,11 @@ const Indoor = () => {
           return (
             <PageContainer>
               <PageHeader>
-                <PageTitle>Indoor Event Halls in Lagos</PageTitle>
+                <PageTitle>Indoor Event Halls in Lagos
+                  <PageDescription>
+            Fully enclosed space suitable for all weather condition
+          </PageDescription>
+                </PageTitle>
                 <PageSubtitle>{venues.length} venues available</PageSubtitle>
               </PageHeader>
         
@@ -164,6 +168,7 @@ const Indoor = () => {
           font-family: Poppins;
          font-size: 20px;
          font-weight: 600;
+         
           margin-bottom: 0.5rem;
         `;
         
@@ -338,4 +343,16 @@ const PriceDay = styled.span`
   font-family: "Poppins", sans-serif;
   font-size: 14px;
   font-weight: 400;
+`;
+const PageDescription = styled.span`
+  color: #717182;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  margin-left: 1rem;
+  font-weight: 400;
+
+  &:before {
+    content: "------";
+    margin-right: 0.5rem;
+  }
 `;

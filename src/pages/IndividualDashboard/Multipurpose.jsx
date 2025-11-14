@@ -76,7 +76,11 @@ const {selectedArea}= useArea()
   return (
     <PageHolder>
       <PageHeader>
-        <PageTitle>Multipurpose Halls in Lagos</PageTitle>
+        <PageTitle>Multipurpose Halls in Lagos 
+          <PageDescription>
+           flexible spaces that can serve both indoor and outdoor setups
+          </PageDescription>
+        </PageTitle>
         <PageSubtitle>{venues.length} venues available</PageSubtitle>
       </PageHeader>
 
@@ -247,4 +251,16 @@ const PriceUnit = styled.span`
   color: #0a0a0a;
   font-size: 13px;
   font-weight: 400;
+`;
+const PageDescription = styled.span`
+  color: #717182;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  margin-left: 1rem;
+
+  &:before {
+    content: "------";
+    margin-right: 0.5rem;
+  }
 `;

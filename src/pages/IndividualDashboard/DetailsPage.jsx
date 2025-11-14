@@ -277,7 +277,7 @@ const DetailsPage = () => {
               <Sidebar>
                 <PricingCard>
                   <PriceDisplay>
-                    <PriceAmount>{venue?.price.toLocaleString()}</PriceAmount>
+                    <PriceAmount>{venue?.price?.toLocaleString()}</PriceAmount>
                     <PriceLabel>/day</PriceLabel>
                   </PriceDisplay>
                   <DateSelector>
@@ -326,14 +326,12 @@ const DetailsPage = () => {
                   
                   <PricingBreakdown>
                     <BreakdownItem>
-                      <span>Total</span>
+                      <span>Venue fee</span>
                       <span>
                         ₦
                         {validDays
                           ? (
-                              theAmount * validDays +
-                              servicecharge +
-                              venue?.cautionfee
+                              theAmount 
                             ).toLocaleString()
                           : "0"}
                       </span>
