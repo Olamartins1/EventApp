@@ -27,7 +27,6 @@ const [loading, setLoading] = useState(false);
 
 getBookingDetails()
  },[id])
-console.log("the book", bookDetails)
 
  const handlePay =async  (id)=>{
  const response = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/booking-payment/${bookDetails._id}`)

@@ -30,7 +30,6 @@ const DashboardHome = () => {
   const [statsData, setStatsData] = useState({});
     const [showPopup, setShowPopup] = useState(false); 
   const [booking, setBooking] = useState([])
-console.log("book", booking)
   const [loading, setLoading] = useState(true)
   const [rejectionReason, setRejectionReason] = useState("");
   const [bookingstatus, setBookingstatus] = useState(false)

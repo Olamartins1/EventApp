@@ -149,7 +149,6 @@ const Hall_info = styled.div`
   display: flex;
   flex-direction: column;
   width: 92%;
-
   justify-content: flex-start;
   p {
     font-size: 18px !important;
@@ -168,6 +167,7 @@ const Wrapper = styled.div`
   background-color: #0000003c;
   padding: 20px;
   z-index: 5;
+  
 `;
 
 const Image_holder = styled.div`
@@ -215,7 +215,8 @@ const Halls_container = styled.div`
   gap: 15px;
   width: 100%;
   height: 100%;
-  // justify-content: center;
+
+  justify-content: center;
     overflow-x: auto;
 
   @media (max-width: 768px) {
