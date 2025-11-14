@@ -7,17 +7,25 @@ import axios from "axios";
 
 const Header = () => {
   const { user } = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
   const id = JSON.parse(localStorage.getItem("userid"));
   console.log("id", id);
   const [data, setData] = useState(null);
+  console.log("this is token", token);
 
   const getUser = async () => {
     try {
       const res = await axios.get(
-        `https://eventiq-final-project.onrender.com/api/v1/client/${id}`
+        `https://eventiq-final-project.onrender.com/api/v1/ownervenue`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      console.log("the res", res?.data?.data);
-      setData(res?.data?.data);
+      console.log("API User Data ===> ", res.data);
+      console.log("the res", res?.data);
+      setData(res?.data);
     } catch (error) {
       console.log(error);
     }
@@ -34,13 +42,13 @@ const Header = () => {
           <div className="box">0</div>
         </div> */}
 
-     
-          <UserSection>
-            <div className="avatar">
-              {data?.firstName?.charAt(0).toUpperCase()}
-            </div>
-            <UserName>{data?.firstName}</UserName>
-          </UserSection>
+        <UserSection>
+          <div className="avatar">
+            {(user.firstName.charAt(0) || "?").toUpperCase()}
+          </div>
+
+          <UserName>{user.firstName}</UserName>
+        </UserSection>
       </Wrapper>
     </Holder>
   );
