@@ -16,6 +16,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import VerificationModal from "../../../components/static/VerificationModal/VerificationModal";
+import TermsModal from "../../../components/static/TermsModal";
 
 const SignupIndividual = () => {
   const [isVerificationOpen, setIsVerificationOpen] = useState(false);
@@ -29,6 +30,7 @@ const SignupIndividual = () => {
     password: "",
     termsAccepted: false,
   });
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -71,7 +73,6 @@ const SignupIndividual = () => {
       toast.error("You must accept the terms and conditions");
       return false;
     }
-
     return true;
   };
 
@@ -116,6 +117,13 @@ const SignupIndividual = () => {
             email={formData.email}
           />
         )}
+        {isTermsOpen && (
+          <TermsModal
+            show={isTermsOpen}
+            onClose={() => setIsTermsOpen(false)}
+          />
+        )}
+
         <div className="left-section2">
           <div
             className="bg-image2"
@@ -232,10 +240,17 @@ const SignupIndividual = () => {
 
                 <div className="checkbox-group-ind1">
                   <label>
-                    I have read the <a href="#">Terms and Conditions</a> and I
-                    agree to it
+                    I have read the{" "}
+                    <a
+                      style={{ color: "#603379", cursor: "pointer" }}
+                      onClick={() => setIsTermsOpen(true)}
+                    >
+                      Terms and Conditions
+                    </a>{" "}
+                    and I agree to it
                   </label>
                   <input
+                  style={{accentColor: "#603379"}}
                     type="checkbox"
                     name="termsAccepted"
                     checked={formData.termsAccepted}
