@@ -192,12 +192,14 @@ const HeaderContainer = styled.header`
   top: 0;
   z-index: 100;
 
+
   @media (max-width: 1024px) {
     padding: 1rem 2rem;
   }
 
   @media (max-width: 768px) {
     padding: 1rem 1.5rem;
+    position: fixed;
   }
 
   @media (max-width: 480px) {
@@ -236,6 +238,7 @@ const HeaderContent = styled.div`
     display: flex;
     height: 60px;
     align-items: center;
+
   }
 
   .holder {

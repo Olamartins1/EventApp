@@ -112,15 +112,16 @@ const Indoor = () => {
                           <h3>{venue.venuename}</h3>
                         </HallHeader>
         
-                        <p>{venue?.location?.city || "Location unavailable"}</p>
-                        <p>
+                        <p style={{fontSize: "13px", fontWeight: "400"}}>{venue?.location?.city || "Location unavailable"}</p>
+                        <p style={{fontSize: "13px", fontWeight: "400"}}>
                           {venue?.capacity?.minimum || 0}-
                           {venue?.capacity?.maximum || 0} guests
                         </p>
         
-                        <HallPrice>
-                          <h3>₦{venue.price.toLocaleString()}/day</h3>
-                        </HallPrice>
+                        <VenuePrice style={{ color: "#5b21b6", fontWeight: "700"}}>
+                  ₦{venue.price.toLocaleString()}
+                  <PriceDay>/day</PriceDay>
+                </VenuePrice>
                       </HallInfo>
                     </VenueCardWrapper>
                   ))
@@ -264,108 +265,6 @@ const Indoor = () => {
             color: #000;
           }
         `;
-        
-        const HallPrice = styled.div`
-          margin-top: 10px;
-        
-          h3 {
-            font-size: 17px;
-            font-weight: 700;
-            color: #603379;
-          }
-        `;
-        
-      {/* </PageHeader>
-  return (
-    <PageHolder>
-      <PageHeader>
-        <PageTitle>Indoor Halls in Lagos</PageTitle>
-        <PageSubtitle>{venues.length} venues available</PageSubtitle>
-      </PageHeader>
-
-      <IndoorGrid>
-        {venues.length > 0 ? (
-          venues.map((venue) => (
-            <VenueCardStyled
-              key={venue._id}
-              onClick={() =>
-                navigate(`/individual-dashboard/venue/${venue._id}`)
-              }
-            >
-              <VenueImage
-                src={venue.documents.images[0].url}
-                alt={venue.venuename}
-              />
-              <VenueInfo>
-                <VenueName>{venue.venuename}</VenueName>
-                <VenueLocation>{venue.location.street}</VenueLocation>
-                <VenueGuests>
-                  {venue.capacity.minimum}-{venue.capacity.maximum} guests
-                </VenueGuests>
-                <VenuePrice>₦{venue.price.toLocaleString()}/day</VenuePrice>
-              </VenueInfo>
-            </VenueCardStyled>
-          ))
-        ) : (
-          <PageSubtitle>No indoor venues found</PageSubtitle>
-        )}
-      </IndoorGrid>
-    </PageHolder>
-  );
-};
-
-export default Indoor;
-
-
-const PageHolder = styled.div`
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem 3rem;
-  background-color: #ffffff;
-
-  @media (max-width: 768px) {
-    padding: 1rem 1.5rem;
-  }
-
-  @media (max-width: 480px) {
-    padding: 1rem 1rem;
-  }
-`;
-
-const PageHeader = styled.div`
-  margin-bottom: 1.5rem;
-`;
-
-const PageTitle = styled.h1`
-  color: #0a0a0a;
-  font-family: "Poppins", sans-serif;
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-`;
-
-const PageSubtitle = styled.p`
-  color: #717182;
-  font-family: "Poppins", sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-`;
-
-const IndoorGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
-
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-  }
-
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-`; */}
 
 
 const VenueCardStyled = styled.div`
@@ -419,10 +318,24 @@ const VenueGuests = styled.p`
   margin: 0 0 8px 0;
 `;
 
+// const VenuePrice = styled.p`
+//   color: #5b21b6;
+//   font-family: "Poppins", sans-serif;
+//   font-size: 16px;
+//   font-weight: 600;
+//   margin: 0;
+// `;
 const VenuePrice = styled.p`
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  display: inline;
+`;
+
+const PriceDay = styled.span`
   color: #5b21b6;
   font-family: "Poppins", sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
 `;
