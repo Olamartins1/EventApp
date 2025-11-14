@@ -148,6 +148,7 @@ const SubHeaderContainer = styled.div`
   background-color: #ffffff;
   border-bottom: 1px solid #e5e7eb;
   top: 95px;
+  margin-top: 6%;
   z-index: 99;
 
   @media (max-width: 1024px) {
@@ -161,7 +162,7 @@ const SubHeaderContainer = styled.div`
 
   @media (max-width: 480px) {
     padding: 0;
-    top: 80px;
+    margin-top: 18%;
   }
 `;
 

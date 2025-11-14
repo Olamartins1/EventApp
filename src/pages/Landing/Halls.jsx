@@ -240,6 +240,21 @@ const Halls_container = styled.div`
   }
 `;
 
+const VenuePrice = styled.p`
+  color: #5b21b6;
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  display: inline;
+`;
+
+const PriceDay = styled.span`
+  color: #5b21b6;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+`;
 const Container = styled.div`
   width: 100%;
   display: flex;
