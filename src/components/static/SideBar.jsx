@@ -66,15 +66,20 @@ const Sidebar = () => {
 
   return (
     <>
-      <MobileMenuButton onClick={toggleSidebar}>
-        {isOpen ? <FiX /> : <FiMenu />}
-      </MobileMenuButton>
+      {isOpen ? null : (
+        <MobileMenuButton2 onClick={toggleSidebar}>
+          <FiMenu />
+        </MobileMenuButton2>
+      )}
 
       <Overlay $isOpen={isOpen} onClick={() => setIsOpen(false)} />
 
       <Container $isOpen={isOpen}>
         <LogoSection>
           <Logo>Eventiq</Logo>
+          <MobileMenuButton2 onClick={toggleSidebar}>
+            <FiX />
+          </MobileMenuButton2>
         </LogoSection>
 
         <MenuList>
@@ -139,7 +144,11 @@ const Sidebar = () => {
               Are you sure you want to log out?
             </p>
             <div
-              style={{ display: "flex", justifyContent: "center", gap: "1rem" }}
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: "1rem",
+              }}
             >
               <button
                 onClick={cancelLogout}
@@ -150,6 +159,7 @@ const Sidebar = () => {
                   padding: "0.7rem 2rem",
                   borderRadius: "6px",
                   cursor: "pointer",
+                  display: "inline-block",
                 }}
               >
                 Cancel
@@ -177,14 +187,14 @@ const Sidebar = () => {
 
 export default Sidebar;
 
-const MobileMenuButton = styled.button`
+const MobileMenuButton2 = styled.button`
   display: none;
   top: 20px;
-  left: 20px;
+  right: 20px;
   z-index: 1001;
   position: sticky;
   background: white;
-  border: 1px solid #e5e7eb;
+  border: none;
   border-radius: 8px;
   width: 40px;
   height: 40px;
@@ -193,7 +203,38 @@ const MobileMenuButton = styled.button`
   font-size: 24px;
   color: #374151;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #f9fafb;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  @media (max-width: 1024px) {
+    display: flex;
+  }
+`;
+const MobileMenuButton = styled.button`
+  display: none;
+  top: 20px;
+  left: 20px;
+  z-index: 1001;
+  position: sticky;
+  background: white;
+  border: none;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #374151;
+  cursor: pointer;
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
   transition: all 0.2s ease;
 
   &:hover {
@@ -256,6 +297,9 @@ const Container = styled.div`
 const LogoSection = styled.div`
   padding: 24px 20px;
   border-bottom: 1px solid #f3f4f6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   @media (max-width: 480px) {
     padding: 20px 16px;
@@ -265,7 +309,7 @@ const LogoSection = styled.div`
 const Logo = styled.h1`
   font-family: "Brush Script MT", cursive;
   font-size: 32px;
-  color: purple;
+  color: #603379;
   margin: 0;
   font-weight: 400;
   font-style: italic;
@@ -291,13 +335,13 @@ const MenuItem = styled.div`
   padding: 12px 20px;
   cursor: pointer;
   transition: all 0.2s ease;
-  background-color: ${(props) => (props.$active ? "purple" : "transparent")};
+  background-color: ${(props) => (props.$active ? "#603379" : "transparent")};
   color: ${(props) => (props.$active ? "white" : "#6b7280")};
   margin: 0 12px 4px 12px;
   border-radius: 8px;
 
   &:hover {
-    background-color: ${(props) => (props.$active ? "purple" : "#f3f4f6")};
+    background-color: ${(props) => (props.$active ? "#603379" : "#f3f4f6")};
   }
 
   @media (max-width: 480px) {

@@ -347,6 +347,7 @@ const ProfileSettings = () => {
 
   return (
     <Container>
+      <Wrapper>
       {successMessage && (
         <SuccessMessage>
           <FiCheck size={20} />
@@ -544,24 +545,44 @@ const ProfileSettings = () => {
           </ChangePasswordButton>
         </form>
       </Section>
+      </Wrapper>
     </Container>
   );
 };
 
 const Btn = styled.div`
   width: 100%;
-  height: 40px;
-  margin-bottom: 10px;
   display: flex;
-  justify-content: space-between;
+  gap: 12px;
+  margin: 20px 0;
+
+  @media (max-width: 600px) {
+    width:500px;
+    flex-direction: column;
+  }
 `;
 
-const Container = styled.div`
-  background: #fff;
-  padding: 40px;
-  max-width: 1200px;
-  margin: 0 auto;
-  position: relative;
+  const Container = styled.div`
+  background: #f4f4f4;
+  padding: 40px 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  
+
+  @media (max-width: 768px) {
+    padding: 20px 5px;
+  }
+`;
+
+
+const Wrapper = styled.div`
+background: #fff;
+  width: 100%;
+  max-width: 900px;
+  border-radius: 12px;
+  padding: 30px 20px;
+  
 
   @media (max-width: 768px) {
     padding: 20px;
@@ -700,7 +721,7 @@ const Avatar = styled.div`
   position: relative;
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #603379;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -725,20 +746,19 @@ const CameraIconLabel = styled.label`
   position: absolute;
   bottom: 0;
   right: 0;
-  background: white;
+  background:#603379;
   width: 32px;
   height: 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 3px solid white;
+  border: 2px solid white;
   cursor: pointer;
-  color: #666;
+  color: white;
   transition: all 0.2s;
 
   &:hover {
-    color: #800080;
     transform: scale(1.1);
   }
 `;
