@@ -76,6 +76,7 @@ const DashboardHome = () => {
               Authorization: `Bearer ${token}`,
             },
           }
+
         );
         setBooking(res.data?.data || []);
       } catch (err) {
@@ -118,7 +119,7 @@ const DashboardHome = () => {
           },
         }
       );
-      console.log("the mess", res.data.message);
+      console.log("the mess", res);
       toast.error(res?.data?.message);
     } catch (err) {
       toast.error(err?.res?.data?.message);
@@ -287,23 +288,33 @@ const DashboardHome = () => {
                     />
 
                     <div style={{ display: "flex", gap: "1rem" }}>
-                      <button
-                        style={{
-                          background: "#e53935",
-                          color: "#fff",
-                          border: "none",
-                          padding: "10px 20px",
-                          borderRadius: "6px",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => {
-                          rejectBooking();
-                          setShowPopup(false);
-                          window.location.reload();
-                        }}
-                      >
-                        Submit
-                      </button>
+  <button
+  style={{
+    background: "#e53935",
+    color: "#fff",
+    border: "none",
+    padding: "10px 20px",
+    borderRadius: "6px",
+    cursor: "pointer",
+  }}
+  onClick={async () => {
+    try {
+      setLoading(true);
+      await rejectBooking(); 
+      toast.success("Booking rejected successfully");
+      setShowPopup(false); 
+      window.location.reload(); 
+    } catch (err) {
+     console.log(err)
+    } finally {
+      setLoading(false);
+    }
+  }}
+>
+  Reject
+</button>
+
+
 
                       <button
                         style={{

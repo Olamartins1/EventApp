@@ -225,16 +225,15 @@ const Halls_container = styled.div`
     margin: 0;
     gap: 15px;
 
-    /* Smooth scrolling */
+    
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
 
-    /* Hide scrollbar but keep functionality */
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;
+    -ms-overflow-style: none; 
 
     &::-webkit-scrollbar {
-      display: none; /* Chrome, Safari, Opera */
+      display: none; 
     }
   }
 `;
