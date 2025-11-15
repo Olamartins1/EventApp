@@ -13,7 +13,7 @@ import {
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
 
 const Sidebar = () => {
-  const [activeItem, setActiveItem] = useState("Overview");
+  // const [activeItem, setActiveItem] = useState("Overview");
   const [isOpen, setIsOpen] = useState(false);
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
   const navigate = useNavigate();
@@ -49,10 +49,9 @@ const Sidebar = () => {
   ];
 
   const handleMenuClick = (item) => {
-    setActiveItem(item.name);
-    navigate(item.navigate);
-    setIsOpen(false);
-  };
+  navigate(item.navigate);
+  setIsOpen(false);
+};
 
   const toggleSidebar = () => setIsOpen(!isOpen);
 
@@ -86,16 +85,12 @@ const Sidebar = () => {
           {menuItems.map((item, index) => (
             <MenuItem
               key={index}
-              $active={
-                activeItem === item.name || location.pathname === item.navigate
-              }
+              $active={location.pathname === item.navigate}
               onClick={() => handleMenuClick(item)}
             >
               <IconWrapper
-                $active={
-                  activeItem === item.name ||
-                  location.pathname === item.navigate
-                }
+                $active={location.pathname === item.navigate}
+
               >
                 {item.icon}
               </IconWrapper>
@@ -146,7 +141,7 @@ const Sidebar = () => {
             <div
               style={{
                 display: "flex",
-                justifyContent: "flex-end",
+                justifyContent: "center",
                 gap: "1rem",
               }}
             >
