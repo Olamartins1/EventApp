@@ -341,69 +341,154 @@ const ProfileSettings = () => {
   return (
     <Container>
       <Wrapper>
-        {successMessage && (
-          <SuccessMessage>
-            <FiCheck size={20} />
-            {successMessage}
-          </SuccessMessage>
-        )}
+      {successMessage && (
+        <SuccessMessage>
+          <FiCheck size={20} />
+          {successMessage}
+        </SuccessMessage>
+      )}
 
-        <Header>
-          <Title>Profile Settings</Title>
-          <Subtitle>
-            Manage your account information and business details
-          </Subtitle>
-        </Header>
+      <Header>
+        <Title>Profile Settings</Title>
+        <Subtitle>
+          Manage your account information and business details
+        </Subtitle>
+      </Header>
 
-        <Section>
-          <SectionTitle>Profile Picture</SectionTitle>
-          <ProfilePictureWrapper>
-            <Avatar>
-              {profileImage ? (
-                <ProfileImage src={profileImage} alt="Profile" />
-              ) : (
-                <AvatarText>{getInitials()}</AvatarText>
-              )}
-              <CameraIconLabel htmlFor="profile-upload">
-                <FiCamera size={16} />
-              </CameraIconLabel>
-              <HiddenInput
-                id="profile-upload"
-                type="file"
-                accept="image/jpg,image/jpeg,image/png,image/gif"
-                onChange={handleImageUpload}
-              />
-            </Avatar>
-            <UploadText>
-              <UploadTitle>
-                Upload a professional photo to help customers recognize you
-              </UploadTitle>
-              <UploadSubtitle>JPG, PNG or GIF. Max size 5MB</UploadSubtitle>
-            </UploadText>
-          </ProfilePictureWrapper>
-        </Section>
+      <Section>
+        <SectionTitle>Profile Picture</SectionTitle>
+        <ProfilePictureWrapper>
+          <Avatar>
+            {profileImage ? (
+              <ProfileImage src={profileImage} alt="Profile" />
+            ) : (
+              <AvatarText>{getInitials()}</AvatarText>
+            )}
+            <CameraIconLabel htmlFor="profile-upload">
+              <FiCamera size={16} />
+            </CameraIconLabel>
+            <HiddenInput
+              id="profile-upload"
+              type="file"
+              accept="image/jpg,image/jpeg,image/png,image/gif"
+              onChange={handleImageUpload}
+            />
+          </Avatar>
+          <UploadText>
+            <UploadTitle>
+              Upload a professional photo to help customers recognize you
+            </UploadTitle>
+            <UploadSubtitle>JPG, PNG or GIF. Max size 5MB</UploadSubtitle>
+          </UploadText>
+        </ProfilePictureWrapper>
+      </Section>
 
-        <Section>
-          <SectionHeader>
-            <SectionTitle>Personal Information</SectionTitle>
-            <EditButton
-              onClick={() => {
-                if (isEditMode) {
-                  Updateprofile();
-                }
-                handleEditToggle();
-              }}
-            >
-              {isEditMode ? (
-                <>
-                  <FiCheck size={16} style={{ marginRight: "6px" }} />
-                  Save
-                </>
-              ) : (
-                "Edit"
-              )}
-            </EditButton>
-          </SectionHeader>
+      <Section>
+        <SectionHeader>
+          <SectionTitle>Personal Information</SectionTitle>
+          <EditButton
+            onClick={() => {
+              if (isEditMode) {
+                Updateprofile();
+              }
+              handleEditToggle();
+            }}
+          >
+            {isEditMode ? (
+              <>
+                <FiCheck size={16} style={{ marginRight: "6px" }} />
+                Save
+              </>
+            ) : (
+              "Edit"
+            )}
+          </EditButton>
+        </SectionHeader>
+        <FormGrid>
+          <FormGroup>
+            <Label>First name</Label>
+            <Input
+              disabled
+              placeholder={fetchuser.firstName}
+              hasError={errors.firstName}
+            />
+            {errors.firstName && <ErrorText>{errors.firstName}</ErrorText>}
+          </FormGroup>
+          <FormGroup>
+            <Label>Surname</Label>
+            <Input disabled placeholder={fetchuser.surname} />
+            {errors.lastName && <ErrorText>{errors.lastName}</ErrorText>}
+          </FormGroup>
+          <FormGroup>
+            <Label>Email</Label>
+            <Input disabled placeholder={fetchuser.email} />
+            {errors.lastName && <ErrorText>{errors.email}</ErrorText>}
+          </FormGroup>
+          <FormGroup>
+            <Label>Phone Number</Label>
+            <Input
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder="phone number"
+              hasError={errors.phone}
+            />
+            {errors.phone && <ErrorText>{errors.phone}</ErrorText>}
+          </FormGroup>
+        </FormGrid>
+      </Section>
+
+      <Section>
+        <SectionTitle>Bank Details</SectionTitle>
+        <FormGrid>
+          <FormGroup>
+            <Label>Account Number</Label>
+            <Input
+              type="text"
+              name="accountNumber"
+              placeholder="please input your account number"
+              value={formData.accountNumber}
+              onChange={handleChange}
+              maxLength={10}
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label>Account type </Label>
+            <Select name="type" value={formData.type} onChange={handleChange}>
+              <option value="Select type">Select type</option>
+              <option value="Savings">Savings</option>
+              <option value="Fixed">Fixed</option>
+              <option value="Current">Current</option>
+              <option value="Corporate">Corporate</option>
+            </Select>
+          </FormGroup>
+          <FormGroupFull>
+            <Label>Account Name</Label>
+            <Input
+              type="text"
+              name="accountName"
+              placeholder="please input your account name"
+              value={formData.accountName}
+              onChange={handleChange}
+            />
+          </FormGroupFull>
+        </FormGrid>
+      </Section>
+      <Btn>
+        <Button onClick={submitBankDetails}>
+          {loadingBank ? "Sending..." : "Submit"}
+        </Button>
+        <Button
+          onClick={updateBankDetails}
+          // disabled={loadingBank}
+        >
+          edit
+        </Button>
+      </Btn>
+      <Section>
+        <SectionTitle>Security</SectionTitle>
+        <form onSubmit={handlePasswordChange}>
           <FormGrid>
             <FormGroup>
               <Label>First name</Label>
@@ -474,67 +559,11 @@ const ProfileSettings = () => {
               />
             </FormGroupFull>
           </FormGrid>
-        </Section>
-        <Btn>
-          <Button onClick={submitBankDetails}>
-            {loadingBank ? "Sending..." : "Submit"}
-          </Button>
-          <Button onClick={updateBankDetails}>
-            {loadingBank ? "Updating..." : "Edit"}
-          </Button>
-        </Btn>
-        <Section>
-          <SectionTitle>Security</SectionTitle>
-          <form onSubmit={handlePasswordChange}>
-            <FormGrid>
-              <FormGroupFull>
-                <Label>Current Password</Label>
-                <Input
-                  type="password"
-                  name="currentPassword"
-                  placeholder="Enter current password"
-                  value={formData.currentPassword}
-                  onChange={handleChange}
-                  hasError={errors.currentPassword}
-                />
-                {errors.currentPassword && (
-                  <ErrorText>{errors.currentPassword}</ErrorText>
-                )}
-              </FormGroupFull>
-              <FormGroupFull>
-                <Label>New Password</Label>
-                <Input
-                  type="password"
-                  name="newPassword"
-                  placeholder="Enter new password (min 8 characters)"
-                  value={formData.newPassword}
-                  onChange={handleChange}
-                  hasError={errors.newPassword}
-                />
-                {errors.newPassword && (
-                  <ErrorText>{errors.newPassword}</ErrorText>
-                )}
-              </FormGroupFull>
-              <FormGroupFull>
-                <Label>Confirm Password</Label>
-                <Input
-                  type="password"
-                  name="confirmPassword"
-                  placeholder="Confirm new password"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  hasError={errors.confirmPassword}
-                />
-                {errors.confirmPassword && (
-                  <ErrorText>{errors.confirmPassword}</ErrorText>
-                )}
-              </FormGroupFull>
-            </FormGrid>
-            <ChangePasswordButton type="submit">
-              Confirm Password
-            </ChangePasswordButton>
-          </form>
-        </Section>
+          <ChangePasswordButton type="submit">
+            Confirm Password
+          </ChangePasswordButton>
+        </form>
+      </Section>
       </Wrapper>
     </Container>
   );
@@ -546,49 +575,33 @@ const Btn = styled.div`
   gap: 12px;
   margin: 20px 0;
 
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
+    width:500px;
     flex-direction: column;
-    gap: 10px;
-    width:70%;
   }
 `;
 
-const Container = styled.div`
-  width: 100%;
-  min-height: 100vh;
+  const Container = styled.div`
   background: #f4f4f4;
+  padding: 40px 20px;
+  width: 100%;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding: 40px 0;
-
-  @media (max-width: 1024px) {
-    padding: 30px 0;
-  }
+  
 
   @media (max-width: 768px) {
-    padding: 20px 0;
-    background: #fff;
-  }
-
-  @media (max-width: 480px) {
-    padding: 15px 0;
+    padding: 20px 5px;
   }
 `;
 
-const Wrapper = styled.div`
-  width: 95%;
-  max-width: 1200px;
-  background: #fff;
-  border-radius: 12px;
-  padding: 40px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin: 0 auto;
 
-  @media (max-width: 1024px) {
-    padding: 35px;
-    width: 92%;
-  }
+const Wrapper = styled.div`
+background: #fff;
+  width: 100%;
+  max-width: 900px;
+  border-radius: 12px;
+  padding: 30px 20px;
+  
 
   @media (max-width: 768px) {
     padding: 30px;
@@ -847,7 +860,7 @@ const CameraIconLabel = styled.label`
   position: absolute;
   bottom: 0;
   right: 0;
-  background: #603379;
+  background:#603379;
   width: 32px;
   height: 32px;
   border-radius: 50%;
