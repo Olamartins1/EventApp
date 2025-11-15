@@ -55,8 +55,10 @@ const SuccessfulPayment = () => {
             <FaCheckCircle className="icon success" />
             <h2>Payment Successful!</h2>
             <p>
-              Your payment has been processed successfully. <br />
-              Thank you for choosing <strong>Eventiq!</strong>
+               🎉 Your payment was successful! <br />
+  Thank you for choosing <strong>Eventiq</strong>. <br />
+  📧 Please check your email inbox (and spam/junk folder just in case) to view  your invoice. <br />
+  We appreciate your business and look forward to serving you again!
             </p>
             <button onClick={() => navigate("/individual-dashboard")}>
               Go to Dashboard

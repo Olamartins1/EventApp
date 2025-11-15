@@ -13,7 +13,6 @@ import {
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
 
 const Sidebar = () => {
-  // const [activeItem, setActiveItem] = useState("Overview");
   const [isOpen, setIsOpen] = useState(false);
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
   const navigate = useNavigate();
@@ -49,12 +48,11 @@ const Sidebar = () => {
   ];
 
   const handleMenuClick = (item) => {
-  navigate(item.navigate);
-  setIsOpen(false);
-};
+    navigate(item.navigate);
+    setIsOpen(false);
+  };
 
   const toggleSidebar = () => setIsOpen(!isOpen);
-
   const handleLogoutClick = () => setShowLogoutPopup(true);
   const confirmLogout = () => {
     logout();
@@ -65,7 +63,7 @@ const Sidebar = () => {
 
   return (
     <>
-      {isOpen ? null : (
+      {!isOpen && (
         <MobileMenuButton2 onClick={toggleSidebar}>
           <FiMenu />
         </MobileMenuButton2>
@@ -88,10 +86,7 @@ const Sidebar = () => {
               $active={location.pathname === item.navigate}
               onClick={() => handleMenuClick(item)}
             >
-              <IconWrapper
-                $active={location.pathname === item.navigate}
-
-              >
+              <IconWrapper $active={location.pathname === item.navigate}>
                 {item.icon}
               </IconWrapper>
               <MenuText>{item.name}</MenuText>

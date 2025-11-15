@@ -67,7 +67,10 @@ const ForgotPassword = () => {
     <Container>
       <ToastContainer />
       <Card>
-        <CloseBtn>×</CloseBtn>
+       <Link to="/login">
+  <CloseBtn>×</CloseBtn>
+</Link>
+
         <Title>Forgot Password</Title>
         <Subtitle>
           Don’t worry we will help your recover your account.

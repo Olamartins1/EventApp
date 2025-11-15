@@ -163,6 +163,7 @@ const SubHeaderContainer = styled.div`
   @media (max-width: 480px) {
     padding: 0;
     margin-top: 18%;
+    z-index: 99;
   }
 `;
 

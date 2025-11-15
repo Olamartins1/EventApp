@@ -148,7 +148,6 @@ const Hall_info = styled.div`
   display: flex;
   flex-direction: column;
   width: 92%;
-
   justify-content: flex-start;
   p {
     font-size: 18px !important;
@@ -167,6 +166,7 @@ const Wrapper = styled.div`
   background-color: #0000003c;
   padding: 20px;
   z-index: 5;
+  
 `;
 
 const Image_holder = styled.div`
@@ -225,16 +225,15 @@ const Halls_container = styled.div`
     margin: 0;
     gap: 15px;
 
-    /* Smooth scrolling */
+    
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
 
-    /* Hide scrollbar but keep functionality */
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;
+    -ms-overflow-style: none; 
 
     &::-webkit-scrollbar {
-      display: none; /* Chrome, Safari, Opera */
+      display: none; 
     }
   }
 `;
