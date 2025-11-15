@@ -66,6 +66,7 @@ const AddButton = styled.button`
     background-color: #800080;
     color: #fff;
   }
+
 `;
 
 const EmptyState = styled.div`
@@ -1544,8 +1545,9 @@ const Venues = () => {
                       name="type"
                       value={formData.type}
                       onChange={handleInputChange}
+                     
                     >
-                      <option value="indoor">Select type</option>
+                      <option value="" disabled>Select type</option>
                       <option value="indoor">Indoor</option>
                       <option value="outdoor">Outdoor</option>
                       <option value="Multipurpose">Multipurpose</option>

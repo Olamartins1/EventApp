@@ -136,7 +136,7 @@ const Sidebar = () => {
             <div
               style={{
                 display: "flex",
-                justifyContent: "flex-end",
+                justifyContent: "center",
                 gap: "1rem",
               }}
             >
