@@ -9,7 +9,8 @@ import axios from "axios";
 const IndividualPayment = () => {
     const navigate = useNavigate()
     const [bookDetails,setBookDetails]= useState({})
- const {id} = useParams("id")
+ const {id} = useParams()
+ console.log("first",id)
 const [loading, setLoading] = useState(false);
  
     const getBookingDetails = async()=>{
@@ -17,6 +18,7 @@ const [loading, setLoading] = useState(false);
     setLoading(true);
          const res = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/paiddetail/${id}`)
        setBookDetails(res?.data?.data)
+       
   } catch (error) {
   console.log(error)  
   } finally {
@@ -161,8 +163,8 @@ flex-direction: column;
 `
 const HeaderContainer = styled.header`
 width: 90%;
-  background-color: #f6f3f3ff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  // background-color: #f6f3f3ff;
+  // box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -332,6 +334,8 @@ const UserSection = styled.div`
 
   &:hover {
     background: #f0f0f0;
+    padding: 0.3rem;
+    border-radius: 2rem;
   }
 
   @media (max-width: 768px) {
@@ -547,7 +551,7 @@ const UserName = styled.h3`
   }
 `;
 const Middle = styled.div`
-  width: 90%;
+  width: 100%;
   height: 90%;
   display: flex;
   align-items: center;

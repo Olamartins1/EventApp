@@ -75,6 +75,13 @@ const storedArea = JSON.parse(localStorage.getItem("All area"));
             <IconWrapper>{getIcon("multipurpose")}</IconWrapper>
             <Label>Multipurpose</Label>
           </NavButton>
+             <NavButton
+            active={isActive("/individual-dashboard/myBooking")}
+            onClick={() => navigate("/individual-dashboard/myBooking")}
+          >
+            <IconWrapper>{getIcon("multipurpose")}</IconWrapper>
+            <Label>My Bookings</Label>
+          </NavButton>
 
           {/* Filter dropdown - desktop position */}
           <FilterSection className="desktop-filter">
