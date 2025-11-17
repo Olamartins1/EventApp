@@ -24,15 +24,16 @@ const DetailsPage = () => {
   const [error, setError] = useState("");
   const [isBooking, setIsBooking] = useState(false);
   const [errorField, setErrorField] = useState("");
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   let theAmount = venue?.price || 0;
   const validDays = Number(days) > 0 ? Number(days) : 0;
   let servicecharge = days > 0 ? (theAmount * days * 5) / 100 : 0;
 
   useEffect(() => {
-  setDays(1);
-}, []);
-
+    setDays(1);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -354,20 +355,67 @@ const DetailsPage = () => {
                     </BreakdownItem>
                   </PricingBreakdown>
                 </PricingCard>
-                <BookButton onClick={bookVenue} disabled={isBooking}>
-                  {isBooking ? "Booking..." : "Book This Venue"}
+                <BookButton
+                  onClick={() => {
+                    if (!eventDate || !eventType ) {
+                      toast.error("Please fill in all fields before booking");
+                      return; 
+                    }
+
+                  
+                    setShowConfirmModal(true);
+                  }}
+                  disabled={isBooking}
+                >
+                  Book this venue
                 </BookButton>
               </Sidebar>
             </ContentWrapper>
+            {showConfirmModal && (
+              <PopupOverlay>
+                <PopupBox>
+                  <p>Are you sure you want to continue with the booking?</p>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      gap: "1rem",
+                      marginTop: "1rem",
+                    }}
+                  >
+                    <CloseButton
+                      style={{ background: "#ccc", color: "#000" }}
+                      onClick={() => setShowConfirmModal(false)}
+                    >
+                      Cancel
+                    </CloseButton>
+
+                    <CloseButton
+                      onClick={async () => {
+                        setIsProcessing(true);
+
+                        setTimeout(async () => {
+                          await bookVenue();
+                          setIsProcessing(false);
+                          setShowConfirmModal(false);
+                          // DO NOT close success popup here
+                        }, 1500);
+                      }}
+                    >
+                      {isProcessing ? "Processing..." : "Continue"}
+                    </CloseButton>
+                  </div>
+                </PopupBox>
+              </PopupOverlay>
+            )}
+
             {showPopup && (
               <PopupOverlay>
                 <PopupBox>
                   <h2>🎉 Thank you for choosing Eventiq!</h2>
                   <p>Your booking request has been submitted successfully.</p>
-                  <p>
-                    Please note that it’s currently pending admin approval.
-                    You’ll receive an email once it’s approved.
-                  </p>
+                  <p>It’s currently pending admin approval.</p>
 
                   <Link
                     to="/individual-dashboard"

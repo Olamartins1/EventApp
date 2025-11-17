@@ -91,9 +91,9 @@ const Individual_header = () => {
                       <span>View Profile</span>
                     </Link>
                   </div>
-                  <div className="menu-item">
+                  {/* <div className="menu-item">
                     <span>Help Center</span>
-                  </div>
+                  </div> */}
                   <div className="menu-item logout">
                     <FiLogOut className="icon" />
                     <span onClick={handleLogoutClick}>Log out</span>
