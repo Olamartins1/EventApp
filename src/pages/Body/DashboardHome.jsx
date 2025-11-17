@@ -27,6 +27,7 @@ import { HiOutlineUserCircle } from "react-icons/hi";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
 import { Key } from "lucide-react";
 import { toast } from "react-toastify";
+import Loading from "../../components/static/Loading/Loading";
 const DashboardHome = () => {
   const [statsData, setStatsData] = useState({});
   const [showPopup, setShowPopup] = useState(false);
@@ -40,6 +41,8 @@ const DashboardHome = () => {
   const { user } = useContext(AuthContext);
 
   const [deleteid, setDeleteid] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4; // Adjust how many bookings per page
 
   useEffect(() => {
     const fetchData = async () => {
@@ -127,6 +130,10 @@ const DashboardHome = () => {
       setLoading(false);
     }
   };
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentBookings = booking.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(booking.length / itemsPerPage);
 
   return (
     <Container>
@@ -144,16 +151,13 @@ const DashboardHome = () => {
         </WelcomeSection>
 
         {loading ? (
-          <h1>Loading...</h1>
+          <Loading />
         ) : (
           <StatsGrid>
             <StatCard>
               <StatHeader>
                 <StatTitle>Total Venues </StatTitle>
-                <StatIcon
-                  style={{ background: "#efebf2", color: "#805c94" }}
-                  
-                >
+                <StatIcon style={{ background: "#efebf2", color: "#805c94" }}>
                   <LuBuilding2 style={{ color: "#805c94" }} />
                 </StatIcon>
               </StatHeader>
@@ -162,7 +166,7 @@ const DashboardHome = () => {
             <StatCard>
               <StatHeader>
                 <StatTitle>Active Bookings </StatTitle>
-                <StatIcon style={{ background: "#f5e5c3",  }}>
+                <StatIcon style={{ background: "#f5e5c3" }}>
                   <FiCalendar style={{ color: "#fddc56" }} />
                 </StatIcon>
               </StatHeader>
@@ -181,7 +185,7 @@ const DashboardHome = () => {
               <StatHeader>
                 <StatTitle>Occupancy Rate </StatTitle>
                 <StatIcon style={{ background: "#efebf2" }}>
-                  <IoTrendingUpOutline style={{color: "#805c94"}} />
+                  <IoTrendingUpOutline style={{ color: "#805c94" }} />
                 </StatIcon>
               </StatHeader>
               <StatValue>{statsData?.occupancyRate?.total}%</StatValue>
@@ -192,12 +196,11 @@ const DashboardHome = () => {
         <BookingCard>
           {loading ? (
             <h3 style={{ textAlign: "center", color: "#555" }}>
-              Loading bookings...
+             <Loading/>
             </h3>
           ) : booking.length > 0 ? (
             <BookingList>
-              {/* <div className="book_holder"> */}
-              {booking.map((item, index) => {
+              {currentBookings.map((item, index) => {
                 const isPending = item.bookingstatus === "pending";
                 const buttonText = isPending ? "Accept" : "Accepted";
 
@@ -327,6 +330,8 @@ const DashboardHome = () => {
               )}
               {/* </div> */}
             </BookingList>
+
+            
           ) : (
             <EmptyState>
               <IconWrapper>
@@ -736,70 +741,3 @@ const PopupBox = styled.div`
   }
 `;
 
-// const EmptyState = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: center;
-//   padding: 80px 32px;
-//   background: white;
-//   border-radius: 16px;
-
-//   @media (max-width: 768px) {
-//     padding: 60px 24px;
-//     border-radius: 12px;
-//   }
-
-//   @media (max-width: 480px) {
-//     padding: 40px 20px;
-//   }
-// `;
-
-// const EmptyIcon = styled.div`
-//   font-size: 72px;
-//   color: #d1d5db;
-//   margin-bottom: 20px;
-
-//   @media (max-width: 768px) {
-//     font-size: 60px;
-//     margin-bottom: 16px;
-//   }
-
-//   @media (max-width: 480px) {
-//     font-size: 48px;
-//     margin-bottom: 12px;
-//   }
-// `;
-
-// const EmptyTitle = styled.h3`
-//   font-size: 22px;
-//   font-weight: 600;
-//   color: #374151;
-//   margin: 0 0 8px 0;
-
-//   @media (max-width: 768px) {
-//     font-size: 20px;
-//   }
-
-//   @media (max-width: 480px) {
-//     font-size: 18px;
-//   }
-// `;
-
-// const EmptyText = styled.p`
-//   font-size: 15px;
-//   color: #9ca3af;
-//   margin: 0 0 24px 0;
-//   text-align: center;
-//   max-width: 400px;
-
-//   @media (max-width: 768px) {
-//     font-size: 14px;
-//     max-width: 350px;
-//   }
-
-//   @media (max-width: 480px) {
-//     font-size: 13px;
-//     max-width: 280px;
-//   }
-// `;

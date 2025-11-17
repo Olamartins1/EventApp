@@ -71,7 +71,6 @@ export const Element = createHashRouter([
   },
   {
     path: "/individual-dashboard",
-
     element: (
       <Protect>
         <IndividualLayout />
@@ -93,6 +92,10 @@ export const Element = createHashRouter([
       {
         path: "multipurpose",
         element: <Multipurpose />,
+      },
+         {
+        path: "MyBooking",
+        element: < MyBooking/>,
       },
       // {
       //   path: "venue/:id",

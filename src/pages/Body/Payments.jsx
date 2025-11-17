@@ -16,12 +16,13 @@ const Container = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding: 0.75rem;
+    padding: 0.5rem 0;
   }
 `;
 
 const Header = styled.div`
   margin-bottom: 2rem;
+  padding: 0 0.75rem;
 
   @media (max-width: 480px) {
     margin-bottom: 1.5rem;
@@ -59,6 +60,7 @@ const CardsGrid = styled.div`
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
   margin-bottom: 3rem;
+  padding: 0 0.75rem;
 
   @media (max-width: 1200px) {
     grid-template-columns: repeat(2, 1fr);
@@ -174,6 +176,7 @@ const EmptyState = styled.div`
   text-align: center;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   border: 1px solid #f0f0f0;
+  margin: 0 0.75rem;
 
   @media (max-width: 768px) {
     padding: 3rem 1.5rem;
