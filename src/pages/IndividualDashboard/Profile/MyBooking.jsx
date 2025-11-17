@@ -11,6 +11,7 @@ const MyBooking = () => {
   const [loading, setLoading] = useState(true);
   const { token } = useContext(AuthContext);
 
+  
   useEffect(() => {
     const fetchBookings = async () => {
       try {
@@ -81,12 +82,14 @@ const MyBooking = () => {
 
            <div className="booking-footer">
   {item.bookingstatus === "pending" ? (
+    <Link to="/IndividualPayment/:id">
     <button
-      className="cancel-btn"
+      className="invoice-btn"
       onClick={() => handleCancelBooking(item._id)}
     >
-      Cancel Request
+      Pay Now
     </button>
+    </Link>
   ) :(
     <Link to={`/Invoice/${item._id}`}>
       <button className="invoice-btn">View Invoice</button>
