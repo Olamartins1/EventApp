@@ -54,7 +54,7 @@ const SignupModal = ({ onClose }) => {
             <Building2 className="option-icon icon-yellow" size={24} />
             <h3 className="option-title option-title-dark"
             >
-              Sign up as Venue Owner
+              Sign up as Venue Manager
             </h3>
             <p className="option-description">List and manage your venues</p>
           </button>

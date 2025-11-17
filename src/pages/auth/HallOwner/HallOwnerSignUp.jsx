@@ -151,7 +151,7 @@ const SignupHallOwner = () => {
           </button>
 
           <div className="left-content1">
-            <div className="badge1">FOR VENUE OWNERS</div>
+            <div className="badge1">FOR VENUE MANAGERS</div>
             <h1>
               List Your Hall, <br /> Get Booked.
             </h1>
@@ -168,7 +168,7 @@ const SignupHallOwner = () => {
               <div className="form-header1">
                 <LuUser className="user-icon1" size={30} />
                 <div className="form-header-text1">
-                  <h2>Venue Owner/Manager </h2>
+                  <h2>Venue Manager </h2>
                   <p className="form-subtitle1">
                     Create your account to get started
                   </p>

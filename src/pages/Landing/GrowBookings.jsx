@@ -42,7 +42,7 @@ const Grow_booking = () => {
             </li>
           </Grow_points>
           <Link to="/signup-hallowner" className="link">
-            <Button>Sign Up as Venue Owner</Button>
+            <Button>Sign Up as Venue Manager</Button>
           </Link>
         </Grow_content>
       </Container>

@@ -112,7 +112,7 @@ const SignupDropdown = () => {
                 />
               </svg>
 
-              <span className="dropdown-text">As a Venue Owner</span>
+              <span className="dropdown-text">As a Venue Manager</span>
             </button>
           </div>
         )}
