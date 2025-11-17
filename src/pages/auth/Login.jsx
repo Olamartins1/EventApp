@@ -132,7 +132,6 @@ const Login = () => {
     <>
       {loading && <Loading />}
       <section className="signup-container-Login">
-        <ToastContainer position="top-right" autoClose={3000} />
 
         {/* LEFT SECTION */}
         <div className="left-section3">
