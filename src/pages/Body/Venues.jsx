@@ -1267,7 +1267,6 @@ const Venues = () => {
         );
         setVenues(response.data.data);
       } catch (err) {
-        // console.error("❌ Features fetch error:", err);
 
         toast.error(err.response.data.message);
       } finally {

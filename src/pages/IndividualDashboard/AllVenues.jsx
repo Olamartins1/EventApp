@@ -7,6 +7,7 @@ import { useArea } from "../../assets/AreaContext/AreaContext";
 import { Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
+import Loading from "../../components/static/Loading/Loading";
 
 const AllVenues = () => {
   const [venues, setVenues] = useState([]);
@@ -55,7 +56,7 @@ const AllVenues = () => {
   if (loading) {
     return (
       <PageContainer>
-        <PageTitle>Loading Venues...</PageTitle>
+        <PageTitle> <Loading /></PageTitle>
       </PageContainer>
     );
   }
@@ -70,6 +71,8 @@ const AllVenues = () => {
   }
 
   return (
+    <>
+     {loading && <Loading />}
     <PageContainer>
       <PageHeader>
         <PageTitle>Event Venues in Lagos</PageTitle>
@@ -102,7 +105,7 @@ const AllVenues = () => {
                   {venue?.location?.city || "Location unavailable"}
                 </Location>
                 <Capacity>
-                  Capacity: {venue?.capacity?.minimum || 0}–
+                 {venue?.capacity?.minimum || 0}–
                   {venue?.capacity?.maximum || 0} guests
                 </Capacity>
                 <Price>
@@ -117,6 +120,7 @@ const AllVenues = () => {
         )}
       </VenuesGrid>
     </PageContainer>
+    </>
   );
 };
 

@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
 import { MdOutlineVerified } from "react-icons/md";
 import { MdOutlinePeopleAlt } from "react-icons/md";
+import Loading from "../../components/static/Loading/Loading";
 
 const DetailsPage = () => {
   const { id } = useParams();
@@ -27,7 +28,7 @@ const DetailsPage = () => {
 
   let theAmount = venue?.price || 0;
   const validDays = Number(days) > 0 ? Number(days) : 0;
-  let servicecharge = days > 0 ? (theAmount * days * 5) / 100 : 0;
+  // let servicecharge = days > 0 ? (theAmount * days * 5) / 100 : 0;
 
   useEffect(() => {
   setDays(1);
@@ -107,7 +108,7 @@ const DetailsPage = () => {
     try {
       setIsBooking(true);
       console.log({
-        servicecharge: venue.price * 0.05,
+        // servicecharge: venue.price * 0.05,
         total: venue.price * 0.05 + venue.price,
       });
       const res = await axios.post(
@@ -160,6 +161,7 @@ const DetailsPage = () => {
 
   return (
     <>
+      {loading && <Loading />}
       {!venue ? (
         <>
           <DetailContainer>
@@ -323,13 +325,13 @@ const DetailsPage = () => {
                     </BreakdownItem>
 
                     <BreakdownItem>
-                      <span>Service fee (5%)</span>
+                      {/* <span>Service fee (5%)</span>
                       <span>
                         ₦
                         {days > 0
                           ? ((theAmount * 1 * 5) / 100).toLocaleString()
                           : "0"}
-                      </span>
+                      </span> */}
                     </BreakdownItem>
 
                     <BreakdownItem>
@@ -346,7 +348,6 @@ const DetailsPage = () => {
                         {days > 0
                           ? (
                               theAmount * days +
-                              servicecharge +
                               venue?.cautionfee
                             ).toLocaleString()
                           : "0"}
@@ -365,8 +366,7 @@ const DetailsPage = () => {
                   <h2>🎉 Thank you for choosing Eventiq!</h2>
                   <p>Your booking request has been submitted successfully.</p>
                   <p>
-                    Please note that it’s currently pending admin approval.
-                    You’ll receive an email once it’s approved.
+                   Please note that it will be reviewed, and you will receive an update within 24 hours.
                   </p>
 
                   <Link

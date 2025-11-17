@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../assets/AuthContext/AuthContext";
+import Loading from "../../../components/static/Loading/Loading";
 
 const MyBooking = () => {
   const [bookings, setBookings] = useState([]);
@@ -31,29 +32,30 @@ const MyBooking = () => {
 //  },[id])
   
 
- useEffect(() => {
-    const getOneBookinng = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          `https://eventiq-final-project.onrender.com/api/v1/get-booking/${bookingId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+//  useEffect(() => {
+//     const getOneBookinng = async () => {
+//       try {
+//         setLoading(true);
+//         const response = await axios.get(
+//           `https://eventiq-final-project.onrender.com/api/v1/get-booking/${bookingId}`,
+//           {
+//             headers: {
+//               Authorization: `Bearer ${token}`,
+//             },
+//           }
+//         );
 
-        setBookings(response.data?.data || []);
-      } catch (error) {
-        console.error("Error fetching bookings:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    getOneBookinng();
-  }, [token]);
+
+//       } catch (error) {
+//         console.error("Error fetching bookings:", error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     getOneBookinng();
+//   }, [token]);
 
 
   useEffect(() => {
@@ -69,7 +71,10 @@ const MyBooking = () => {
           }
         );
 
-        setBookings(response.data?.data || []);
+          const sorted = [...response.data?.data].sort(
+  (a, b) => new Date(b.date) - new Date(a.date)
+);
+setBookings(sorted);
       } catch (error) {
         console.error("Error fetching bookings:", error);
       } finally {
@@ -81,10 +86,12 @@ const MyBooking = () => {
   }, [token]);
 
   if (loading) {
-    return <p style={{ textAlign: "center" }}>Loading bookings...</p>;
+    return <p style={{ textAlign: "center" }}><Loading /></p>;
   }
 
   return (
+    <>
+     {loading && <Loading />}
     <Bookhall>
       {bookings.length === 0 ? (
         <p style={{ textAlign: "center" }}>No bookings found</p>
@@ -151,6 +158,7 @@ const MyBooking = () => {
         ))
       )}
     </Bookhall>
+    </>
   );
 };
 
