@@ -9,6 +9,7 @@ import { IoArrowBackOutline } from "react-icons/io5";
 
 const Invoice = () => {
   const { invoiceId } = useParams();
+  console.log(invoiceId)
   const [invoice, setInvoice] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -17,7 +18,7 @@ const Invoice = () => {
 
 
 
-  
+
   const getInvoice = async () => {
     try {
       setLoading(true);

@@ -28,7 +28,7 @@ const DetailsPage = () => {
 
   let theAmount = venue?.price || 0;
   const validDays = Number(days) > 0 ? Number(days) : 0;
-  // let servicecharge = days > 0 ? (theAmount * days * 5) / 100 : 0;
+  let servicecharge = days > 0 ? (theAmount * days * 7.5) / 100 : 0;
 
   useEffect(() => {
   setDays(1);
@@ -108,8 +108,8 @@ const DetailsPage = () => {
     try {
       setIsBooking(true);
       console.log({
-        // servicecharge: venue.price * 0.05,
-        total: venue.price * 0.05 + venue.price,
+        servicecharge: venue.price * 0.075,
+        total: (venue.price * 0.075) + venue.price,
       });
       const res = await axios.post(
         `https://eventiq-final-project.onrender.com/api/v1/booking/${id}`,
@@ -325,13 +325,13 @@ const DetailsPage = () => {
                     </BreakdownItem>
 
                     <BreakdownItem>
-                      {/* <span>Service fee (5%)</span>
+                      <span>VAT (7.5%)</span>
                       <span>
                         ₦
                         {days > 0
-                          ? ((theAmount * 1 * 5) / 100).toLocaleString()
+                          ? ((theAmount  * 7.5) / 100).toLocaleString()
                           : "0"}
-                      </span> */}
+                      </span>
                     </BreakdownItem>
 
                     <BreakdownItem>
@@ -348,6 +348,7 @@ const DetailsPage = () => {
                         {days > 0
                           ? (
                               theAmount * days +
+                              servicecharge +
                               venue?.cautionfee
                             ).toLocaleString()
                           : "0"}

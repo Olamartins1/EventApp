@@ -1600,7 +1600,7 @@ const Venues = () => {
                       Opening Time <span>*</span>
                     </Label>
                     <Input
-                      type="text"
+                      type="time"
                       name="openingtime"
                       value={formData.openingtime}
                       onChange={handleInputChange}
@@ -1612,7 +1612,7 @@ const Venues = () => {
                       Closing Time <span>*</span>
                     </Label>
                     <Input
-                      type="text"
+                      type="time"
                       name="closingtime"
                       value={formData.closingtime}
                       onChange={handleInputChange}

@@ -117,7 +117,7 @@ const [showLogoutPopup, setShowLogoutPopup] = useState(false);
             <div
               style={{
                 display: "flex",
-                justifyContent: "flex-end",
+                justifyContent: "center",
                 gap: "1rem",
               }}
             >
@@ -204,6 +204,8 @@ const Hamburger = styled.div`
 const NavLinks = styled.nav`
   display: flex;
   align-items: center;
+  justify-content: center;
+  /* background:pink; */
   gap: 15rem;
 
   @media (max-width: 768px) {
@@ -257,6 +259,8 @@ const StyledLink = styled(Link)`
 
 const StyledLinks = styled.div`
   display: flex;
+  align-items: center;
+  /* background:red; */
   gap: 6rem;
 
   @media (max-width: 768px) {

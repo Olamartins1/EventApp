@@ -6,7 +6,6 @@ import { FiPackage } from "react-icons/fi";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-
 const Container = styled.div`
   padding: 2rem;
   background-color: #fafafa;
@@ -15,11 +14,20 @@ const Container = styled.div`
   @media (max-width: 768px) {
     padding: 1rem;
   }
+
+  @media (max-width: 480px) {
+    padding: 0.75rem;
+  }
 `;
 
 const Header = styled.div`
   margin-bottom: 2rem;
+
+  @media (max-width: 480px) {
+    margin-bottom: 1.5rem;
+  }
 `;
+
 const Title = styled.h1`
   font-size: 1.75rem;
   font-weight: 600;
@@ -29,11 +37,21 @@ const Title = styled.h1`
   @media (max-width: 768px) {
     font-size: 1.5rem;
   }
+
+  @media (max-width: 480px) {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+  }
 `;
+
 const Subtitle = styled.p`
   font-size: 0.95rem;
   color: #999;
   font-weight: 400;
+
+  @media (max-width: 480px) {
+    font-size: 0.85rem;
+  }
 `;
 
 const CardsGrid = styled.div`
@@ -41,12 +59,21 @@ const CardsGrid = styled.div`
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
   margin-bottom: 3rem;
+  padding: 0 0.75rem;
 
   @media (max-width: 1200px) {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
   }
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
   }
 `;
 
@@ -58,8 +85,14 @@ const Card = styled.div`
   border: 1px solid #f0f0f0;
   cursor: ${(props) => (props.clickable ? "pointer" : "default")};
   transition: transform 0.2s;
+
   &:hover {
     transform: ${(props) => (props.clickable ? "scale(1.03)" : "none")};
+  }
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+    border-radius: 10px;
   }
 `;
 
@@ -80,12 +113,22 @@ const CardHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
+
+  @media (max-width: 480px) {
+    margin-bottom: 1rem;
+  }
 `;
+
 const CardLabel = styled.span`
   font-size: 0.9rem;
   color: #999;
   font-weight: 400;
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+  }
 `;
+
 const IconWrapper = styled.div`
   width: 40px;
   height: 40px;
@@ -96,17 +139,33 @@ const IconWrapper = styled.div`
   font-size: 1.2rem;
   background-color: ${(props) => props.bgColor || "#f5f5f5"};
   color: ${(props) => props.color || "#666"};
+
+  @media (max-width: 480px) {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+  }
 `;
+
 const Amount = styled.div`
   font-size: 2rem;
   font-weight: 600;
   color: #1a1a1a;
   margin-bottom: 0.25rem;
+
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+  }
 `;
+
 const AmountLabel = styled.div`
   font-size: 0.85rem;
   color: #999;
   font-weight: 400;
+
+  @media (max-width: 480px) {
+    font-size: 0.75rem;
+  }
 `;
 
 const EmptyState = styled.div`
@@ -116,28 +175,49 @@ const EmptyState = styled.div`
   text-align: center;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   border: 1px solid #f0f0f0;
+
   @media (max-width: 768px) {
     padding: 3rem 1.5rem;
   }
+
+  @media (max-width: 480px) {
+    padding: 2.5rem 1rem;
+  }
 `;
+
 const EmptyIcon = styled.div`
   font-size: 4rem;
   color: #666;
   margin-bottom: 1.5rem;
   display: flex;
   justify-content: center;
+
+  @media (max-width: 480px) {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
 `;
+
 const EmptyTitle = styled.h3`
   font-size: 1rem;
   font-weight: 500;
   color: #1a1a1a;
   margin-bottom: 0.5rem;
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
 `;
+
 const EmptyDescription = styled.p`
   font-size: 0.875rem;
   color: #999;
   font-weight: 400;
   line-height: 1.5;
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const Overlay = styled.div`
@@ -152,6 +232,7 @@ const Overlay = styled.div`
   align-items: center;
   z-index: 1000;
 `;
+
 const ModalContainer = styled.div`
   width: 400px;
   background: #fff;
@@ -159,59 +240,77 @@ const ModalContainer = styled.div`
   overflow: hidden;
   display: flex;
   flex-direction: column;
+
   @media (max-width: 480px) {
     width: 90%;
   }
 `;
+
 const HeaderModal = styled.div`
   padding: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #eee;
+
   h2 {
     margin: 0;
     font-size: 1.25rem;
   }
+
+  @media (max-width: 480px) {
+    h2 {
+      font-size: 1.1rem;
+    }
+  }
 `;
+
 const CloseButton = styled.button`
   font-size: 1.5rem;
   background: none;
   border: none;
   cursor: pointer;
 `;
+
 const Content = styled.div`
   padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
 `;
+
 const Label = styled.label`
   font-size: 0.9rem;
   color: #333;
+
+  @media (max-width: 480px) {
+    font-size: 0.85rem;
+  }
 `;
+
 const Input = styled.input`
   padding: 10px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 0.95rem;
+
   &:focus {
     outline: none;
     border-color: #5d3fd3;
   }
-  /* remove scroll for number inputs
-  ::-webkit-outer-spin-button,
-  ::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  } */
-  /* -moz-appearance: textfield; */
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+    padding: 9px 11px;
+  }
 `;
+
 const Footer = styled.div`
   padding: 16px;
   display: flex;
   justify-content: flex-end;
 `;
+
 const WithdrawButton = styled.button`
   padding: 10px 20px;
   background: transparent;
@@ -221,9 +320,15 @@ const WithdrawButton = styled.button`
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s;
+
   &:hover {
     background: #603379;
     color: #fff;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+    padding: 9px 18px;
   }
 `;
 
@@ -315,7 +420,6 @@ const Payment = () => {
   const [loading, setLoading] = useState(false);
 
   const handleWithdraw = (data) => {
-    
     console.log("Withdraw request:", data);
   };
 
@@ -332,7 +436,7 @@ const Payment = () => {
         <Card>
           <CardHeader>
             <CardLabel>Total Earnings</CardLabel>
-            <IconWrapper bgColor="#f5f5f5" color="#666">
+            <IconWrapper bgColor="#efebf2" color="#0f0d11">
               <FaFileInvoice />
             </IconWrapper>
           </CardHeader>
@@ -343,7 +447,7 @@ const Payment = () => {
         <Card>
           <CardHeader>
             <CardLabel>This Month</CardLabel>
-            <IconWrapper bgColor="#d4f4dd" color="#34a853">
+            <IconWrapper bgColor="#c2ffd5" color="#14dd50">
               <BiMoney />
             </IconWrapper>
           </CardHeader>
@@ -354,7 +458,7 @@ const Payment = () => {
         <Card>
           <CardHeader>
             <CardLabel>Pending</CardLabel>
-            <IconWrapper bgColor="#fff9e6" color="#f4b400">
+            <IconWrapper bgColor="#fef5cc" color="#fccd0e">
               <FaClock />
             </IconWrapper>
           </CardHeader>
@@ -365,7 +469,7 @@ const Payment = () => {
         <Card clickable onClick={() => setModalOpen(true)}>
           <CardHeader>
             <CardLabel>Available</CardLabel>
-            <IconWrapper bgColor="#f5f5f5" color="#666">
+            <IconWrapper bgColor="#efebf2" color="#603379">
               <FaWallet />
             </IconWrapper>
           </CardHeader>

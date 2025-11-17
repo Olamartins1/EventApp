@@ -41,14 +41,14 @@ const Header = () => {
           <FiBell />
           <div className="box">0</div>
         </div> */}
-
+{/* 
         <UserSection>
           <div className="avatar">
             {(user.firstName.charAt(0) || "?").toUpperCase()}
           </div>
 
           <UserName>{user.firstName}</UserName>
-        </UserSection>
+        </UserSection> */}
       </Wrapper>
     </Holder>
   );

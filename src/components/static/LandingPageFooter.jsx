@@ -5,7 +5,7 @@ import TermsModal from "../static/TermsModal";
 
 const LandingpageFooter = () => {
   const [isTermsOpen, setIsTermsOpen] = useState(false);
-  
+
   return (
     <Footer>
       <Container>
@@ -54,16 +54,14 @@ const LandingpageFooter = () => {
               <h3>Legal</h3>
               <Footer_list>
                 <li>
-                  <Footer_link
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setIsTermsOpen(true);
-                    }}
-                  >
+                  <Footer_link onClick={() => setIsTermsOpen(true)}>
                     Terms and Conditions
                   </Footer_link>
                 </li>
+                {isTermsOpen && (
+                  <TermsModal onClose={() => setIsTermsOpen(false)} />
+                )}
+
                 <li>
                   <Footer_link
                     style={{ cursor: "pointer", color: "#603379" }}

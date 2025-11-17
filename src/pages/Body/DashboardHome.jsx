@@ -10,6 +10,7 @@ import {
 } from "react-icons/bs";
 import { GoDotFill } from "react-icons/go";
 import {
+  FiPackage,
   FiCalendar,
   FiCreditCard,
   FiSettings,
@@ -26,6 +27,7 @@ import { HiOutlineUserCircle } from "react-icons/hi";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
 import { Key } from "lucide-react";
 import { toast } from "react-toastify";
+import Loading from "../../components/static/Loading/Loading";
 const DashboardHome = () => {
   const [statsData, setStatsData] = useState({});
   const [showPopup, setShowPopup] = useState(false);
@@ -39,6 +41,8 @@ const DashboardHome = () => {
   const { user } = useContext(AuthContext);
 
   const [deleteid, setDeleteid] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4; // Adjust how many bookings per page
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,7 +80,6 @@ const DashboardHome = () => {
               Authorization: `Bearer ${token}`,
             },
           }
-
         );
         setBooking(res.data?.data || []);
       } catch (err) {
@@ -127,6 +130,10 @@ const DashboardHome = () => {
       setLoading(false);
     }
   };
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentBookings = booking.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(booking.length / itemsPerPage);
 
   return (
     <Container>
@@ -144,17 +151,17 @@ const DashboardHome = () => {
         </WelcomeSection>
 
         {loading ? (
-          <h1>Loading...</h1>
+          <Loading />
         ) : (
           <StatsGrid>
             <StatCard>
               <StatHeader>
                 <StatTitle>Total Venues </StatTitle>
                 <StatIcon
-                  $bgColor={statsData.iconBg}
-                  $color={statsData.iconColor}
+                  style={{ background: "#efebf2", color: "#805c94" }}
+                  
                 >
-                  <LuBuilding2 style={{ color: "purple" }} />
+                  <LuBuilding2 style={{ color: "#805c94" }} />
                 </StatIcon>
               </StatHeader>
               <StatValue>{statsData?.totalVenues}</StatValue>
@@ -162,11 +169,8 @@ const DashboardHome = () => {
             <StatCard>
               <StatHeader>
                 <StatTitle>Active Bookings </StatTitle>
-                <StatIcon
-                  $bgColor={statsData.iconBg}
-                  $color={statsData.iconColor}
-                >
-                  <FiCalendar style={{ stroke: "yellow" }} />
+                <StatIcon style={{ background: "#f5e5c3",  }}>
+                  <FiCalendar style={{ color: "#fddc56" }} />
                 </StatIcon>
               </StatHeader>
               <StatValue>{statsData?.activeBooking}</StatValue>
@@ -174,11 +178,8 @@ const DashboardHome = () => {
             <StatCard>
               <StatHeader>
                 <StatTitle>Revenue (this Month) </StatTitle>
-                <StatIcon
-                  $bgColor={statsData.iconBg}
-                  $color={statsData.iconColor}
-                >
-                  <TbCurrencyNaira style={{ stroke: "green" }} />
+                <StatIcon style={{ background: "#c2ffd5" }}>
+                  <TbCurrencyNaira style={{ color: "#14dd50" }} />
                 </StatIcon>
               </StatHeader>
               <StatValue>₦{statsData?.revenue}</StatValue>
@@ -186,27 +187,23 @@ const DashboardHome = () => {
             <StatCard>
               <StatHeader>
                 <StatTitle>Occupancy Rate </StatTitle>
-                <StatIcon
-                  $bgColor={statsData.iconBg}
-                  $color={statsData.iconColor}
-                >
-                  <IoTrendingUpOutline style={{ stroke: "purple" }} />
+                <StatIcon style={{ background: "#efebf2" }}>
+                  <IoTrendingUpOutline style={{color: "#805c94"}} />
                 </StatIcon>
               </StatHeader>
               <StatValue>{statsData?.occupancyRate?.total}%</StatValue>
             </StatCard>
           </StatsGrid>
         )}
-        {console.log("booooooo", booking)}
+        {/* {console.log("booooooo", booking)} */}
         <BookingCard>
           {loading ? (
             <h3 style={{ textAlign: "center", color: "#555" }}>
-              Loading bookings...
+             <Loading/>
             </h3>
           ) : booking.length > 0 ? (
             <BookingList>
-              {/* <div className="book_holder"> */}
-              {booking.map((item, index) => {
+              {currentBookings.map((item, index) => {
                 const isPending = item.bookingstatus === "pending";
                 const buttonText = isPending ? "Accept" : "Accepted";
 
@@ -288,33 +285,31 @@ const DashboardHome = () => {
                     />
 
                     <div style={{ display: "flex", gap: "1rem" }}>
-  <button
-  style={{
-    background: "#e53935",
-    color: "#fff",
-    border: "none",
-    padding: "10px 20px",
-    borderRadius: "6px",
-    cursor: "pointer",
-  }}
-  onClick={async () => {
-    try {
-      setLoading(true);
-      await rejectBooking(); 
-      toast.success("Booking rejected successfully");
-      setShowPopup(false); 
-      window.location.reload(); 
-    } catch (err) {
-     console.log(err)
-    } finally {
-      setLoading(false);
-    }
-  }}
->
-  Reject
-</button>
-
-
+                      <button
+                        style={{
+                          background: "#e53935",
+                          color: "#fff",
+                          border: "none",
+                          padding: "10px 20px",
+                          borderRadius: "6px",
+                          cursor: "pointer",
+                        }}
+                        onClick={async () => {
+                          try {
+                            setLoading(true);
+                            await rejectBooking();
+                            toast.success("Booking rejected successfully");
+                            setShowPopup(false);
+                            window.location.reload();
+                          } catch (err) {
+                            console.log(err);
+                          } finally {
+                            setLoading(false);
+                          }
+                        }}
+                      >
+                        Reject
+                      </button>
 
                       <button
                         style={{
@@ -338,10 +333,18 @@ const DashboardHome = () => {
               )}
               {/* </div> */}
             </BookingList>
+
+            
           ) : (
-            <p style={{ textAlign: "center", color: "#777", fontSize: "15px" }}>
-              No bookings available at the moment.
-            </p>
+            <EmptyState>
+              <IconWrapper>
+                <FiPackage />
+              </IconWrapper>
+              <EmptyTitle>No Venue record yet</EmptyTitle>
+              <EmptyDescription>
+                Upload your venue details to get noticed
+              </EmptyDescription>
+            </EmptyState>
           )}
         </BookingCard>
 
@@ -360,6 +363,34 @@ const DashboardHome = () => {
 };
 
 export default DashboardHome;
+
+const EmptyState = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+`;
+
+const IconWrapper = styled.div`
+  font-size: 4rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+`;
+
+const EmptyTitle = styled.h2`
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #333;
+  margin: 0;
+`;
+
+const EmptyDescription = styled.p`
+  font-size: 0.95rem;
+  color: #999;
+  margin: 0;
+`;
 
 const Container = styled.div`
   width: 100%;
@@ -641,9 +672,7 @@ const StatIcon = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  /* background-color: ${(props) => props.$bgColor};
-  color: ${(props) => props.$color}; */
-  background: #f5e5c3;
+  /* color:black; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -715,70 +744,3 @@ const PopupBox = styled.div`
   }
 `;
 
-// const EmptyState = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: center;
-//   padding: 80px 32px;
-//   background: white;
-//   border-radius: 16px;
-
-//   @media (max-width: 768px) {
-//     padding: 60px 24px;
-//     border-radius: 12px;
-//   }
-
-//   @media (max-width: 480px) {
-//     padding: 40px 20px;
-//   }
-// `;
-
-// const EmptyIcon = styled.div`
-//   font-size: 72px;
-//   color: #d1d5db;
-//   margin-bottom: 20px;
-
-//   @media (max-width: 768px) {
-//     font-size: 60px;
-//     margin-bottom: 16px;
-//   }
-
-//   @media (max-width: 480px) {
-//     font-size: 48px;
-//     margin-bottom: 12px;
-//   }
-// `;
-
-// const EmptyTitle = styled.h3`
-//   font-size: 22px;
-//   font-weight: 600;
-//   color: #374151;
-//   margin: 0 0 8px 0;
-
-//   @media (max-width: 768px) {
-//     font-size: 20px;
-//   }
-
-//   @media (max-width: 480px) {
-//     font-size: 18px;
-//   }
-// `;
-
-// const EmptyText = styled.p`
-//   font-size: 15px;
-//   color: #9ca3af;
-//   margin: 0 0 24px 0;
-//   text-align: center;
-//   max-width: 400px;
-
-//   @media (max-width: 768px) {
-//     font-size: 14px;
-//     max-width: 350px;
-//   }
-
-//   @media (max-width: 480px) {
-//     font-size: 13px;
-//     max-width: 280px;
-//   }
-// `;
