@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useContext } from "react";
+import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../assets/AuthContext/AuthContext";
 
@@ -10,8 +11,51 @@ const MyBooking = () => {
   console.log("the booking", bookings);
   const [loading, setLoading] = useState(true);
   const { token } = useContext(AuthContext);
+ 
+ const {bookkingId} = useParams()
 
+//    const getBookingDetails = async()=>{
+//   try {
+//     setLoading(true);
+//          const res = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/paiddetail/${id}`)
+//        setBookDetails(res?.data?.data)
+//   } catch (error) {
+//   console.log(error)  
+//   } finally {
+//     setLoading(false);
+//   }
+//     }
+//  useEffect(()=>{
+
+// getBookingDetails()
+//  },[id])
   
+
+ useEffect(() => {
+    const getOneBookinng = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `https://eventiq-final-project.onrender.com/api/v1/get-booking/${bookingId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setBookings(response.data?.data || []);
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getOneBookinng();
+  }, [token]);
+
+
   useEffect(() => {
     const fetchBookings = async () => {
       try {
@@ -49,9 +93,11 @@ const MyBooking = () => {
           <BookingCard key={item._id}>
             <div className="booking-header">
               <div>
-                <h3 className="venue-name">{item.venueName}</h3>
+                <h3 className="venue-name">{item.venueId.venuename}</h3>
                 <p className="venue-location">{item.venueLocation}</p>
               </div>
+
+
               <span
                 className={`status ${
                   item.bookingstatus === "confirmed" ? "confirmed" : "pending"
@@ -83,16 +129,20 @@ const MyBooking = () => {
            <div className="booking-footer">
   {item.bookingstatus === "pending" ? (
     <Link to="/IndividualPayment/:id">
-    <button
+    {/* <button
       className="invoice-btn"
       onClick={() => handleCancelBooking(item._id)}
     >
-      Pay Now
-    </button>
+      View Invoice
+    </button> */}
     </Link>
   ) :(
-    <Link to={`/Invoice/${item._id}`}>
-      <button className="invoice-btn">View Invoice</button>
+    <Link to={`/IndividualPayment/${item._id}`}>
+      <button className="invoice-btn"
+
+      >
+        Pay Now
+      </button>
     </Link>
   )}
 </div>

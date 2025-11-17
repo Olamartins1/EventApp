@@ -71,7 +71,6 @@ export const Element = createHashRouter([
   },
   {
     path: "/individual-dashboard",
-
     element: (
       <Protect>
         <IndividualLayout />
