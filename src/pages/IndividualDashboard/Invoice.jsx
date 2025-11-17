@@ -15,19 +15,6 @@ const Invoice = () => {
   const { token } = useContext(AuthContext);
   const invoiceRef = useRef(null);
 
- useEffect(() => {
-    const fetchInvoice = async () => {
-      try {
-        const response = await axios.get(``);
-        console.log( "the ven",`https://eventiq-final-project.onrender.com/api/v1/allvenues-multipurpose?city=${selectedArea}`,
-)
-      } catch (err) {
-        console.error("Error fetching indoor venues:", err);
-      } 
-    };
-
-    fetchInvoice();
-  }, []);
 
   const getInvoice = async () => {
     try {
