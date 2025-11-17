@@ -5,6 +5,7 @@ import TermsModal from "../static/TermsModal";
 
 const LandingpageFooter = () => {
   const [isTermsOpen, setIsTermsOpen] = useState(false);
+  
   return (
     <Footer>
       <Container>
@@ -56,7 +57,7 @@ const LandingpageFooter = () => {
                   <Footer_link
                     href="#"
                     onClick={(e) => {
-                      e.preventDefault(); // stops the scroll attempt
+                      e.preventDefault();
                       setIsTermsOpen(true);
                     }}
                   >
