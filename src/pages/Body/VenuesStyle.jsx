@@ -49,6 +49,8 @@ export const AddButton = styled.button`
     background-color: #603379;
     color: #fff;
   }
+
+  
 `;
 
 export const EmptyState = styled.div`
