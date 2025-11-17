@@ -18,7 +18,7 @@ const DetailsPage = () => {
   const [venue, setVenue] = useState({});
   const [loading, setLoading] = useState(true);
   const [eventDate, setEventDate] = useState("");
-  const [days, setDays] = useState("");
+  const [days, setDays] = useState(1);
   const [eventType, setEventType] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [error, setError] = useState("");
@@ -28,6 +28,11 @@ const DetailsPage = () => {
   let theAmount = venue?.price || 0;
   const validDays = Number(days) > 0 ? Number(days) : 0;
   let servicecharge = days > 0 ? (theAmount * days * 5) / 100 : 0;
+
+  useEffect(() => {
+  setDays(1);
+}, []);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,7 +66,6 @@ const DetailsPage = () => {
   const handleDaysChange = (e) => {
     const value = e.target.value.trim();
 
-   
     if (value === "") {
       setDays("");
       setErrorField("days");
@@ -70,30 +74,27 @@ const DetailsPage = () => {
 
     const numberValue = Number(value);
 
-   
     if (!Number.isInteger(numberValue) || numberValue <= 0) {
       setErrorField("days");
       toast.error("Days must be a valid number");
       return;
     }
 
-   
     if (numberValue > 1) {
       setErrorField("days");
       toast.error("You can only book for 1 day");
       return;
     }
 
-   
     setDays(numberValue);
     setErrorField("");
   };
 
   const bookVenue = async () => {
-    if (isNaN(days) || days <= 0) {
-      <small>please input a valid number of days</small>;
-      return;
-    }
+    // if (isNaN(days) || days <= 0) {
+    //   <small>please input a valid number of day</small>;
+    //   return;
+    // }
 
     if (!eventDate || !eventType || !days) {
       toast.error("Please fill in all fields before booking");
@@ -245,10 +246,6 @@ const DetailsPage = () => {
                       <InfoValue>₦{venue?.cautionfee}</InfoValue>
                     </InfoCard>
                     <InfoCard>
-                      <InfoLabel>About this Venue</InfoLabel>
-                      <InfoValue>{venue?.description}</InfoValue>
-                    </InfoCard>
-                    <InfoCard>
                       <SectionTitle>Amenities & Facilities</SectionTitle>
                       <InfoValue>{venue?.amenities}</InfoValue>
                     </InfoCard>
@@ -305,35 +302,23 @@ const DetailsPage = () => {
                       }}
                     />
 
-                    <NumberType>Number of Days</NumberType>
+                    <NumberType>Number of Day</NumberType>
                     <input
                       type="text"
-                      onChange={handleDaysChange}
+                      value={days}
+                      disabled
                       style={{
-                        borderColor: errorField === "days" ? "red" : "#e5e7eb",
-                        boxShadow:
-                          errorField === "days"
-                            ? "0 0 0 3px rgba(255, 0, 0, 0.1)"
-                            : "none",
+                        background: "#f3f4f6",
+                        cursor: "not-allowed",
                       }}
                     />
-                    {errorField === "days" && (
-                      <small style={{ color: "red", fontSize: "0.8rem" }}>
-                        Please input a valid number of days
-                      </small>
-                    )}
                   </EventContainer>
-                  
+
                   <PricingBreakdown>
                     <BreakdownItem>
                       <span>Venue fee</span>
                       <span>
-                        ₦
-                        {validDays
-                          ? (
-                              theAmount 
-                            ).toLocaleString()
-                          : "0"}
+                        ₦{validDays ? theAmount.toLocaleString() : "0"}
                       </span>
                     </BreakdownItem>
 
@@ -342,7 +327,7 @@ const DetailsPage = () => {
                       <span>
                         ₦
                         {days > 0
-                          ? ((theAmount * days * 5) / 100).toLocaleString()
+                          ? ((theAmount * 1 * 5) / 100).toLocaleString()
                           : "0"}
                       </span>
                     </BreakdownItem>
@@ -370,8 +355,8 @@ const DetailsPage = () => {
                   </PricingBreakdown>
                 </PricingCard>
                 <BookButton onClick={bookVenue} disabled={isBooking}>
-                    {isBooking ? "Booking..." : "Book This Venue"}
-                  </BookButton>
+                  {isBooking ? "Booking..." : "Book This Venue"}
+                </BookButton>
               </Sidebar>
             </ContentWrapper>
             {showPopup && (

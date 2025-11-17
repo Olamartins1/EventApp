@@ -489,81 +489,41 @@ const ProfileSettings = () => {
       <Section>
         <SectionTitle>Security</SectionTitle>
         <form onSubmit={handlePasswordChange}>
-          <FormGrid>
-            <FormGroup>
-              <Label>First name</Label>
-              <Input
-                disabled
-                placeholder={fetchuser.firstName}
-                hasError={errors.firstName}
-              />
-              {errors.firstName && <ErrorText>{errors.firstName}</ErrorText>}
-            </FormGroup>
-            <FormGroup>
-              <Label>Surname</Label>
-              <Input disabled placeholder={fetchuser.surname} />
-              {errors.lastName && <ErrorText>{errors.lastName}</ErrorText>}
-            </FormGroup>
-            <FormGroup>
-              <Label>Email</Label>
-              <Input disabled placeholder={fetchuser.email} />
-              {errors.lastName && <ErrorText>{errors.email}</ErrorText>}
-            </FormGroup>
-            <FormGroup>
-              <Label>Phone Number</Label>
-              <Input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="phone number"
-                hasError={errors.phone}
-              />
-              {errors.phone && <ErrorText>{errors.phone}</ErrorText>}
-            </FormGroup>
-          </FormGrid>
-        </Section>
+    <FormGrid>
+      <FormGroup>
+        <Label>First name</Label>
+        <Input disabled placeholder={fetchuser.firstName} hasError={errors.firstName} />
+        {errors.firstName && <ErrorText>{errors.firstName}</ErrorText>}
+      </FormGroup>
 
-        <Section>
-          <SectionTitle>Bank Details</SectionTitle>
-          <FormGrid>
-            <FormGroup>
-              <Label>Account Number</Label>
-              <Input
-                type="text"
-                name="accountNumber"
-                placeholder="please input your account number"
-                value={formData.accountNumber}
-                onChange={handleChange}
-                maxLength={10}
-              />
-            </FormGroup>
-            <FormGroup>
-              <Label>Account type </Label>
-              <Select name="type" value={formData.type} onChange={handleChange}>
-                <option value="Select type">Select type</option>
-                <option value="Savings">Savings</option>
-                <option value="Fixed">Fixed</option>
-                <option value="Current">Current</option>
-                <option value="Corporate">Corporate</option>
-              </Select>
-            </FormGroup>
-            <FormGroupFull>
-              <Label>Account Name</Label>
-              <Input
-                type="text"
-                name="accountName"
-                placeholder="please input your account name"
-                value={formData.accountName}
-                onChange={handleChange}
-              />
-            </FormGroupFull>
-          </FormGrid>
-          <ChangePasswordButton type="submit">
-            Confirm Password
-          </ChangePasswordButton>
-        </form>
-      </Section>
+      <FormGroup>
+        <Label>Surname</Label>
+        <Input disabled placeholder={fetchuser.surname} />
+      </FormGroup>
+
+      <FormGroup>
+        <Label>Email</Label>
+        <Input disabled placeholder={fetchuser.email} />
+      </FormGroup>
+
+      <FormGroup>
+        <Label>Phone Number</Label>
+        <Input
+          type="tel"
+          name="phone"
+          value={formData.phone}
+          onChange={handleChange}
+          placeholder="phone number"
+          hasError={errors.phone}
+        />
+      </FormGroup>
+    </FormGrid>
+
+    <ChangePasswordButton type="submit">
+      Confirm Password
+    </ChangePasswordButton>
+  </form>
+  </Section>
       </Wrapper>
     </Container>
   );

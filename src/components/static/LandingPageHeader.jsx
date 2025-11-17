@@ -125,32 +125,25 @@ const NavLinks = styled.nav`
   align-items: center;
   gap: 15rem;
 
-
-
-
-   @media (max-width: 768px) {
-   position: fixed;
-     top: 70px;
-     right: ${({ isOpen }) => (isOpen ? "0" : "-100%")};
-     flex-direction: column;
+  @media (max-width: 768px) {
+    position: fixed;
+    top: 70px;
+    right: ${({ isOpen }) => (isOpen ? "0" : "-100%")};
+    flex-direction: column;
     background: #ffffff;
-     width: 300px;
+    width: 300px;
     //  height: calc(100vh - 70px);
     height: 450px;
-   
+
     gap: 2rem;
-     transition: right 0.35s ease-in-out;
+    transition: right 0.35s ease-in-out;
     box-shadow: ${({ isOpen }) =>
       isOpen ? "0 0 20px rgba(0, 0, 0, 0.2)" : "none"};
-    }
+  }
 
-
-
-
-
- @media (max-width: 1024px) {
-   gap: 5rem;
- }
+  @media (max-width: 1024px) {
+    gap: 5rem;
+  }
 `;
 
 const StyledLink = styled(Link)`

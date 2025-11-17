@@ -1547,7 +1547,7 @@ const Venues = () => {
                       onChange={handleInputChange}
                      
                     >
-                      <option value="" disabled>Select type</option>
+                      <option  value="" disabled>Select type</option>
                       <option value="indoor">Indoor</option>
                       <option value="outdoor">Outdoor</option>
                       <option value="Multipurpose">Multipurpose</option>
