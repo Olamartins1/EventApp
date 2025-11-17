@@ -59,6 +59,7 @@ const CardsGrid = styled.div`
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
   margin-bottom: 3rem;
+  padding: 0 0.75rem;
 
   @media (max-width: 1200px) {
     grid-template-columns: repeat(2, 1fr);
