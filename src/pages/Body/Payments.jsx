@@ -16,13 +16,12 @@ const Container = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding: 0.5rem 0;
+    padding: 0.75rem;
   }
 `;
 
 const Header = styled.div`
   margin-bottom: 2rem;
-  padding: 0 0.75rem;
 
   @media (max-width: 480px) {
     margin-bottom: 1.5rem;
@@ -176,7 +175,6 @@ const EmptyState = styled.div`
   text-align: center;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   border: 1px solid #f0f0f0;
-  margin: 0 0.75rem;
 
   @media (max-width: 768px) {
     padding: 3rem 1.5rem;
