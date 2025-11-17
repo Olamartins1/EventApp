@@ -67,9 +67,7 @@ const Halls = () => {
               <Image_holder
                 onClick={() => {
                   if (!user || user.role !== "venue-owner") {
-                    toast.info(
-                      "Please login as a venue owner to view this hall"
-                    );
+                    toast.info("Please login");
                     navigate("/login");
                   } else {
                     navigate(`venue/${hall._id}`);
@@ -166,7 +164,6 @@ const Wrapper = styled.div`
   background-color: #0000003c;
   padding: 20px;
   z-index: 5;
-  
 `;
 
 const Image_holder = styled.div`
@@ -225,15 +222,14 @@ const Halls_container = styled.div`
     margin: 0;
     gap: 15px;
 
-    
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
 
     scrollbar-width: none;
-    -ms-overflow-style: none; 
+    -ms-overflow-style: none;
 
     &::-webkit-scrollbar {
-      display: none; 
+      display: none;
     }
   }
 `;

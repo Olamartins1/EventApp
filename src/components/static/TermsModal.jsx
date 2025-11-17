@@ -199,9 +199,9 @@ const TermsModal = ({ show, onClose }) => {
 
         </Content>
 
-        <ButtonWrapper>
+        {/* <ButtonWrapper>
           <button onClick={onClose}>Close</button>
-        </ButtonWrapper>
+        </ButtonWrapper> */}
       </ModalBox>
     </Overlay>
   );
