@@ -157,7 +157,10 @@ const DashboardHome = () => {
             <StatCard>
               <StatHeader>
                 <StatTitle>Total Venues </StatTitle>
-                <StatIcon style={{ background: "#efebf2", color: "#805c94" }}>
+                <StatIcon
+                  style={{ background: "#efebf2", color: "#805c94" }}
+                  
+                >
                   <LuBuilding2 style={{ color: "#805c94" }} />
                 </StatIcon>
               </StatHeader>
@@ -166,7 +169,7 @@ const DashboardHome = () => {
             <StatCard>
               <StatHeader>
                 <StatTitle>Active Bookings </StatTitle>
-                <StatIcon style={{ background: "#f5e5c3" }}>
+                <StatIcon style={{ background: "#f5e5c3",  }}>
                   <FiCalendar style={{ color: "#fddc56" }} />
                 </StatIcon>
               </StatHeader>
@@ -185,7 +188,7 @@ const DashboardHome = () => {
               <StatHeader>
                 <StatTitle>Occupancy Rate </StatTitle>
                 <StatIcon style={{ background: "#efebf2" }}>
-                  <IoTrendingUpOutline style={{ color: "#805c94" }} />
+                  <IoTrendingUpOutline style={{color: "#805c94"}} />
                 </StatIcon>
               </StatHeader>
               <StatValue>{statsData?.occupancyRate?.total}%</StatValue>
