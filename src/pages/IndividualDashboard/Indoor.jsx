@@ -6,6 +6,7 @@ import {useArea} from "../../assets/AreaContext/AreaContext"
 import { Sparkles } from "lucide-react"; 
 import { Navigate, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
+import Loading from "../../components/static/Loading/Loading";
 
 const Indoor = () => {
   const [venues, setVenues] = useState([]);
@@ -48,7 +49,7 @@ const Indoor = () => {
   if (loading) {
     return (
       <PageContainer>
-        <PageTitle>Loading Indoor Venues...</PageTitle>
+        <PageTitle><Loading /></PageTitle>
       </PageContainer>
     );
   }
@@ -63,6 +64,8 @@ const Indoor = () => {
   }
 
           return (
+            <>
+             {loading && <Loading />}
             <PageContainer>
               <PageHeader>
                 <PageTitle>Indoor Event Halls in Lagos
@@ -116,6 +119,7 @@ const Indoor = () => {
                 )}
               </VenuesGrid>
             </PageContainer>
+            </>
           );
         };
         
