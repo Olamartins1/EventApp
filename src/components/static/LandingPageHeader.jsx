@@ -1,17 +1,27 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-scroll";
 import { useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import SignupDropdown from "./signupDropdown/SignupDropdown";
+import { AuthContext } from "../../assets/AuthContext/AuthContext";
 
 const LandingpageHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+    const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-
+const [showLogoutPopup, setShowLogoutPopup] = useState(false);
   const toggleMenu = () => setIsOpen(!isOpen);
+   const handleLogoutClick = () => setShowLogoutPopup(true);
+   const confirmLogout = () => {
+    logout();
+    setShowLogoutPopup(false);
+    navigate("/login");
+  };
+  const cancelLogout = () => setShowLogoutPopup(false);
 
   return (
+    <>
     <Container>
       <NavContent>
         <Logo onClick={() => navigate("/")}>
@@ -29,12 +39,10 @@ const LandingpageHeader = () => {
           </svg>
         </Logo>
 
-        {/* Hamburger Icon */}
         <Hamburger onClick={toggleMenu}>
           {isOpen ? <X size={26} /> : <Menu size={26} />}
         </Hamburger>
-
-        {/* Nav Links */}
+{/* save */}
         <NavLinks isOpen={isOpen}>
           <StyledLinks>
             <StyledLink
@@ -63,15 +71,88 @@ const LandingpageHeader = () => {
             </StyledLink>
           </StyledLinks>
 
-          <SignupDropdownWrapper>
+         {user? (
+          <button onClick={handleLogoutClick} style={{width: "95px", height: "35px", fontSize: "1.2rem", borderRadius: "20px", cursor: "pointer"}}>Logout</button>
+         ) : (
+           <SignupDropdownWrapper>
             <SignupDropdown />
             <Login_Button onClick={() => navigate("/login")}>
               Log In
             </Login_Button>
           </SignupDropdownWrapper>
+         )}
+        
         </NavLinks>
       </NavContent>
     </Container>
+     {showLogoutPopup && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            background: "rgba(0,0,0,0.4)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 2000,
+          }}
+        >
+          <div
+            style={{
+              background: "#fff",
+              width: "360px",
+              padding: "2.5rem",
+              borderRadius: "10px",
+              textAlign: "center",
+              boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.2)",
+            }}
+          >
+            <h3 style={{ marginBottom: "1rem" }}>Leaving Already?</h3>
+            <p style={{ color: "#555", marginBottom: "1.5rem" }}>
+              Are you sure you want to log out?
+            </p>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: "1rem",
+              }}
+            >
+              <button
+                onClick={cancelLogout}
+                style={{
+                  background: "#ccc",
+                  color: "#000",
+                  border: "none",
+                  padding: "0.7rem 2rem",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  display: "inline-block",
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmLogout}
+                style={{
+                  background: "red",
+                  color: "#fff",
+                  border: "none",
+                  padding: "0.7rem 2rem",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                }}
+              >
+                Log Out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

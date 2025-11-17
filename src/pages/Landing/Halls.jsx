@@ -20,7 +20,7 @@ const Halls = () => {
       );
 
       if (res?.data?.data && Array.isArray(res.data.data)) {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         setHalls(res.data.data);
       } else {
         setHalls([]);

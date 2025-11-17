@@ -337,10 +337,10 @@ const ProfileSettings = () => {
       setLoading(false);
     }
   };
-
+// saving grace
   return (
-    <Container>
-      <Wrapper>
+  <Container>
+    <Wrapper>
       {successMessage && (
         <SuccessMessage>
           <FiCheck size={20} />
@@ -355,6 +355,7 @@ const ProfileSettings = () => {
         </Subtitle>
       </Header>
 
+      {/* PROFILE PICTURE */}
       <Section>
         <SectionTitle>Profile Picture</SectionTitle>
         <ProfilePictureWrapper>
@@ -364,9 +365,11 @@ const ProfileSettings = () => {
             ) : (
               <AvatarText>{getInitials()}</AvatarText>
             )}
+
             <CameraIconLabel htmlFor="profile-upload">
               <FiCamera size={16} />
             </CameraIconLabel>
+
             <HiddenInput
               id="profile-upload"
               type="file"
@@ -374,6 +377,7 @@ const ProfileSettings = () => {
               onChange={handleImageUpload}
             />
           </Avatar>
+
           <UploadText>
             <UploadTitle>
               Upload a professional photo to help customers recognize you
@@ -383,14 +387,14 @@ const ProfileSettings = () => {
         </ProfilePictureWrapper>
       </Section>
 
+      {/* PERSONAL INFORMATION */}
       <Section>
         <SectionHeader>
           <SectionTitle>Personal Information</SectionTitle>
+
           <EditButton
             onClick={() => {
-              if (isEditMode) {
-                Updateprofile();
-              }
+              if (isEditMode) Updateprofile();
               handleEditToggle();
             }}
           >
@@ -404,26 +408,23 @@ const ProfileSettings = () => {
             )}
           </EditButton>
         </SectionHeader>
+
         <FormGrid>
           <FormGroup>
             <Label>First name</Label>
-            <Input
-              disabled
-              placeholder={fetchuser.firstName}
-              hasError={errors.firstName}
-            />
-            {errors.firstName && <ErrorText>{errors.firstName}</ErrorText>}
+            <Input disabled placeholder={fetchuser.firstName} />
           </FormGroup>
+
           <FormGroup>
             <Label>Surname</Label>
             <Input disabled placeholder={fetchuser.surname} />
-            {errors.lastName && <ErrorText>{errors.lastName}</ErrorText>}
           </FormGroup>
+
           <FormGroup>
             <Label>Email</Label>
             <Input disabled placeholder={fetchuser.email} />
-            {errors.lastName && <ErrorText>{errors.email}</ErrorText>}
           </FormGroup>
+
           <FormGroup>
             <Label>Phone Number</Label>
             <Input
@@ -439,8 +440,10 @@ const ProfileSettings = () => {
         </FormGrid>
       </Section>
 
+      {/* BANK DETAILS */}
       <Section>
         <SectionTitle>Bank Details</SectionTitle>
+
         <FormGrid>
           <FormGroup>
             <Label>Account Number</Label>
@@ -453,16 +456,18 @@ const ProfileSettings = () => {
               maxLength={10}
             />
           </FormGroup>
+
           <FormGroup>
-            <Label>Account type </Label>
+            <Label>Account Type</Label>
             <Select name="type" value={formData.type} onChange={handleChange}>
-              <option value="Select type">Select type</option>
+              <option value="">Select type</option>
               <option value="Savings">Savings</option>
               <option value="Fixed">Fixed</option>
               <option value="Current">Current</option>
               <option value="Corporate">Corporate</option>
             </Select>
           </FormGroup>
+
           <FormGroupFull>
             <Label>Account Name</Label>
             <Input
@@ -474,59 +479,77 @@ const ProfileSettings = () => {
             />
           </FormGroupFull>
         </FormGrid>
+
+        <Btn>
+          <Button onClick={submitBankDetails}>
+            {loadingBank ? "Sending..." : "Submit"}
+          </Button>
+
+          <Button onClick={updateBankDetails}>Edit</Button>
+        </Btn>
       </Section>
-      <Btn>
-        <Button onClick={submitBankDetails}>
-          {loadingBank ? "Sending..." : "Submit"}
-        </Button>
-        <Button
-          onClick={updateBankDetails}
-          // disabled={loadingBank}
-        >
-          edit
-        </Button>
-      </Btn>
+
+      {/* SECURITY */}
       <Section>
         <SectionTitle>Security</SectionTitle>
+
         <form onSubmit={handlePasswordChange}>
-    <FormGrid>
-      <FormGroup>
-        <Label>First name</Label>
-        <Input disabled placeholder={fetchuser.firstName} hasError={errors.firstName} />
-        {errors.firstName && <ErrorText>{errors.firstName}</ErrorText>}
-      </FormGroup>
+          <FormGrid>
+            <FormGroup>
+              <Label>Current Password</Label>
+              <Input
+                type="password"
+                name="currentPassword"
+                value={formData.currentPassword}
+                onChange={handleChange}
+                placeholder="Enter current password"
+                hasError={errors.currentPassword}
+              />
+              {errors.currentPassword && (
+                <ErrorText>{errors.currentPassword}</ErrorText>
+              )}
+            </FormGroup>
 
-      <FormGroup>
-        <Label>Surname</Label>
-        <Input disabled placeholder={fetchuser.surname} />
-      </FormGroup>
+            <FormGroup>
+              <Label>New Password</Label>
+              <Input
+                type="password"
+                name="newPassword"
+                value={formData.newPassword}
+                onChange={handleChange}
+                placeholder="Enter new password"
+                hasError={errors.newPassword}
+              />
+              {errors.newPassword && (
+                <ErrorText>{errors.newPassword}</ErrorText>
+              )}
+            </FormGroup>
 
-      <FormGroup>
-        <Label>Email</Label>
-        <Input disabled placeholder={fetchuser.email} />
-      </FormGroup>
+            <FormGroup>
+              <Label>Confirm Password</Label>
+              <Input
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="Confirm new password"
+                hasError={errors.confirmPassword}
+              />
+              {errors.confirmPassword && (
+                <ErrorText>{errors.confirmPassword}</ErrorText>
+              )}
+            </FormGroup>
+          </FormGrid>
 
-      <FormGroup>
-        <Label>Phone Number</Label>
-        <Input
-          type="tel"
-          name="phone"
-          value={formData.phone}
-          onChange={handleChange}
-          placeholder="phone number"
-          hasError={errors.phone}
-        />
-      </FormGroup>
-    </FormGrid>
+          <ChangePasswordButton type="submit">
+            Update Password
+          </ChangePasswordButton>
+        </form>
+      </Section>
+    </Wrapper>
+  </Container>
+);
 
-    <ChangePasswordButton type="submit">
-      Confirm Password
-    </ChangePasswordButton>
-  </form>
-  </Section>
-      </Wrapper>
-    </Container>
-  );
 };
 
 const Btn = styled.div`
