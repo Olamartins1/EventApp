@@ -1,66 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { useContext } from "react";
-import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../assets/AuthContext/AuthContext";
+import Loading from "../../../components/static/Loading/Loading";
 
 const MyBooking = () => {
-  const [bookings, setBookings] = useState([]);
-  console.log("the booking", bookings);
-  const [loading, setLoading] = useState(true);
   const { token } = useContext(AuthContext);
- 
- const {bookkingId} = useParams()
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-//    const getBookingDetails = async()=>{
-//   try {
-//     setLoading(true);
-//          const res = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/paiddetail/${id}`)
-//        setBookDetails(res?.data?.data)
-//   } catch (error) {
-//   console.log(error)  
-//   } finally {
-//     setLoading(false);
-//   }
-//     }
-//  useEffect(()=>{
-
-// getBookingDetails()
-//  },[id])
-  
-
- useEffect(() => {
-    const getOneBookinng = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          `https://eventiq-final-project.onrender.com/api/v1/get-booking/${bookingId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        setBookings(response.data?.data || []);
-      } catch (error) {
-        console.error("Error fetching bookings:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getOneBookinng();
-  }, [token]);
-
-
+  // Fetch bookings
   useEffect(() => {
-    const fetchBookings = async () => {
+    const fetchBookingsAndInvoices = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(
+
+        // Fetch bookings
+        const bookingsResponse = await axios.get(
           "https://eventiq-final-project.onrender.com/api/v1/client-bookings",
           {
             headers: {
@@ -69,19 +26,63 @@ const MyBooking = () => {
           }
         );
 
-        setBookings(response.data?.data || []);
+        console.log("Bookings API Response:", bookingsResponse.data);
+
+        // Fetch invoices
+        const invoiceResponse = await axios.get(
+          "https://eventiq-final-project.onrender.com/api/v1/invoices",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        console.log("Invoices API Response:", invoiceResponse.data);
+
+        // Sort bookings by most recent
+        const sortedBookings = [...bookingsResponse.data.data].sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+
+        console.log("Sorted Bookings:", sortedBookings);
+
+        // Create a map of invoices by booking ID
+        const invoiceMap = {};
+        invoiceResponse.data.data.forEach((invoice) => {
+          // The invoice has venuebookingId._id which is the booking ID
+          if (invoice.venuebookingId && invoice.venuebookingId._id) {
+            invoiceMap[invoice.venuebookingId._id] = invoice;
+          }
+        });
+
+        console.log("Invoice Map:", invoiceMap);
+
+        // Attach invoice to each booking
+        const bookingsWithInvoices = sortedBookings.map((booking) => ({
+          ...booking,
+          invoice: invoiceMap[booking._id] || null,
+        }));
+
+        console.log("Final Bookings with Invoices:", bookingsWithInvoices);
+
+        setBookings(bookingsWithInvoices);
       } catch (error) {
-        console.error("Error fetching bookings:", error);
+        console.error("Error fetching bookings and invoices:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchBookings();
+    fetchBookingsAndInvoices();
   }, [token]);
 
   if (loading) {
-    return <p style={{ textAlign: "center" }}>Loading bookings...</p>;
+    return (
+      <p style={{ textAlign: "center" }}>
+        <Loading />
+      </p>
+    );
   }
 
   return (
@@ -93,10 +94,14 @@ const MyBooking = () => {
           <BookingCard key={item._id}>
             <div className="booking-header">
               <div>
-                <h3 className="venue-name">{item.venueId.venuename}</h3>
-                <p className="venue-location">{item.venueLocation}</p>
+                <h3 className="venue-name">{item.venueId?.venuename || "Venue Name Not Available"}</h3>
+                <p className="venue-location">
+                  {item.venueLocation || 
+                   (item.venueId?.location ? 
+                    `${item.venueId.location.street}, ${item.venueId.location.city}, ${item.venueId.location.state}` 
+                    : "Location not available")}
+                </p>
               </div>
-
 
               <span
                 className={`status ${
@@ -110,43 +115,48 @@ const MyBooking = () => {
             <div className="booking-details">
               <div className="detail">
                 <span className="label">Event Date</span>
-                <span className="value">{item?.date}</span>
+                <span className="value">{item?.date || "Date not available"}</span>
               </div>
               <div className="detail">
                 <span className="label">Event Type</span>
-                <span className="value">{item.eventType}</span>
+                <span className="value">{item.eventType || "Not specified"}</span>
               </div>
               <div className="detail">
                 <span className="label">Total Paid</span>
-                <span className="value">₦{item.total}</span>
+                <span className="value">₦{item.total || 0}</span>
               </div>
               <div className="detail">
-                {/* <span className="label">booking Paid</span>
-                <span className="value">{item.bookingId}</span> */}
+                <span className="label">Payment Status</span>
+                <span className="value" style={{ 
+                  color: item.paymentstatus === 'paid' ? 'green' : 'orange',
+                  fontWeight: 'bold'
+                }}>
+                  {item.paymentstatus || "pending"}
+                </span>
               </div>
             </div>
 
-           <div className="booking-footer">
-  {item.bookingstatus === "pending" ? (
-    <Link to="/IndividualPayment/:id">
-    {/* <button
-      className="invoice-btn"
-      onClick={() => handleCancelBooking(item._id)}
-    >
-      View Invoice
-    </button> */}
-    </Link>
-  ) :(
-    <Link to={`/IndividualPayment/${item._id}`}>
-      <button className="invoice-btn"
-
-      >
-        Pay Now
-      </button>
-    </Link>
-  )}
-</div>
-
+            <div className="booking-footer">
+              <div className="booking-footer">
+              {item.bookingstatus !== "pending" && (
+                <>
+                  {item.paymentstatus === "paid" && item.invoice ? (
+                    <Link to={`/Invoice/${item.invoice._id}`}>
+                      <button className="invoice-btn">View Invoice</button>
+                    </Link>
+                  ) : item.paymentstatus === "paid" && !item.invoice ? (
+                    <button className="invoice-btn" disabled>
+                      Invoice Not Available
+                    </button>
+                  ) : (
+                    <Link to={`/IndividualPayment/${item._id}`}>
+                      <button className="invoice-btn">Pay Now</button>
+                    </Link>
+                  )}
+                </>
+              )}
+            </div>
+            </div>
           </BookingCard>
         ))
       )}
@@ -156,10 +166,10 @@ const MyBooking = () => {
 
 export default MyBooking;
 
+// Styled Components (keep the same as before)
 const Bookhall = styled.div`
   width: 90%;
   margin: 0 auto;
-  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -249,8 +259,13 @@ const BookingCard = styled.div`
       cursor: pointer;
       transition: all 0.2s ease;
 
-      &:hover {
+      &:hover:not(:disabled) {
         background: #f0f0f0;
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
       }
     }
   }

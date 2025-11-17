@@ -6,6 +6,7 @@ import {useArea} from "../../assets/AreaContext/AreaContext"
 import {useEffect, useState} from "react"
 import {Navigate, useNavigate} from "react-router-dom";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
+import Loading from "../../components/static/Loading/Loading";
 
  
 const Multipurpose = () => {
@@ -59,7 +60,7 @@ const {selectedArea}= useArea()
  if (loading) {
     return (
       <PageHolder>
-        <PageTitle>Loading Multipurpose Venues...</PageTitle>
+        <PageTitle><Loading /></PageTitle>
       </PageHolder>
     );
   }
@@ -74,6 +75,8 @@ const {selectedArea}= useArea()
   }
 
   return (
+    <>
+     {loading && <Loading />}
     <PageHolder>
       <PageHeader>
         <PageTitle>Multipurpose Halls in Lagos 
@@ -120,6 +123,7 @@ const {selectedArea}= useArea()
             )}
           </VenuesGrid>
     </PageHolder>
+    </>
   );
 
 };

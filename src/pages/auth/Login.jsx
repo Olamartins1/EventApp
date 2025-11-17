@@ -32,7 +32,7 @@ const Login = () => {
   const validateForm = () => {
     if (!formData.email.trim()) {
       toast.error("Email is required");
-      return false;
+      return false; 
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       toast.error("Invalid email format");

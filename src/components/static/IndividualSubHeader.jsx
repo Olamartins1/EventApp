@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Table, Building2, TreePine, MapPin, ChevronDown } from "lucide-react";
+import { Table, Building2, TreePine, MapPin, ChevronDown,NotebookPen } from "lucide-react";
 import { useState } from "react";
 import { useArea } from "../../assets/AreaContext/AreaContext";
 
@@ -34,6 +34,8 @@ const storedArea = JSON.parse(localStorage.getItem("All area"));
     "indoor-halls": Building2,
     "outdoor-halls": TreePine,
     multipurpose: Table,
+    "booking": NotebookPen ,
+
   };
 
   const getIcon = (type) => {
@@ -79,7 +81,7 @@ const storedArea = JSON.parse(localStorage.getItem("All area"));
             active={isActive("/individual-dashboard/myBooking")}
             onClick={() => navigate("/individual-dashboard/myBooking")}
           >
-            <IconWrapper>{getIcon("multipurpose")}</IconWrapper>
+            <IconWrapper>{getIcon("booking")}</IconWrapper>
             <Label>My Bookings</Label>
           </NavButton>
 
@@ -226,8 +228,8 @@ const NavButtonsWrapper = styled.div`
   }
 
   @media (max-width: 480px) {
-    gap: 1.2rem;
-    padding: 0.75rem 1rem;
+    gap: 0.2rem;
+    // padding: 0.75rem 1rem;
     justify-content: center;
   }
 `;
@@ -281,7 +283,7 @@ const NavButton = styled.button`
   @media (max-width: 480px) {
     padding: 0.4rem 0.6rem;
     min-width: 70px;
-    gap: 0.25rem;
+    gap: 0.2rem;
   }
 `;
 

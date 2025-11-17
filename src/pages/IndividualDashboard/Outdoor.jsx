@@ -5,6 +5,7 @@ import { useArea } from "../../assets/AreaContext/AreaContext";
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
+import Loading from "../../components/static/Loading/Loading";
 
 const Outdoor = () => {
 
@@ -48,7 +49,7 @@ const Outdoor = () => {
   if (loading) {
     return (
       <PageHolder>
-        <PageTitle>Loading Outdoor Venues...</PageTitle>
+        <PageTitle><Loading /></PageTitle>
       </PageHolder>
     );
   }
@@ -63,6 +64,8 @@ const Outdoor = () => {
   }
 
   return (
+    <>
+     {loading && <Loading />}
     <PageHolder>
       <PageHeader>
         <TitleWrapper>
@@ -108,6 +111,7 @@ const Outdoor = () => {
         )}
       </OutdoorGrid>
     </PageHolder>
+    </>
   );
 };
 

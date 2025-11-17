@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../components/static/Loading/Loading";
 // save
 import axios from "axios";
 const IndividualPayment = () => {
@@ -46,6 +47,8 @@ getBookingDetails()
   };
 
   return (
+    <>
+      {loading && <Loading />}
     <Pay>
     <HeaderContainer>
       <HeaderContent>
@@ -141,15 +144,21 @@ getBookingDetails()
           <h4>₦{bookDetails?.total}</h4>
         </div>
 
-        <button onClick={handlePay} disabled={loading}>
-          {loading ? "Processing..." : "Pay Now"}
-        </button>
+
+  <button onClick={handlePay} disabled={loading}>
+    {loading ? "Processing..." : "Pay Now"}
+  </button>
+
+
+
+
       </div>
     </div>
   </Middle>
 )}
 
     </Pay>
+    </>
   );
 };
 
