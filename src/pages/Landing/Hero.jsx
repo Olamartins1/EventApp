@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../assets/AuthContext/AuthContext";
 import SignupModal from "../../components/static/signupModal/signupModal";
 
 const Hero = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -11,6 +15,23 @@ const Hero = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handleButtonClick = () => {
+    if (user) {
+      // User is logged in - navigate to their dashboard
+      if (user.role === "venue-owner") {
+        navigate("/dashboardHomed"); // Replace with your actual venue owner dashboard route
+      } else if (user.role === "client" || user.role === "customer") {
+        navigate("/individual-dashboard"); // Replace with your actual client dashboard route
+      } else {
+        // Default dashboard or handle other roles
+        navigate("/dashboard");
+      }
+    } else {
+      // User is not logged in - open signup modal
+      openModal();
+    }
   };
 
   useEffect(() => {
@@ -42,7 +63,9 @@ const Hero = () => {
             Eventiq connects hall owners and event organisers in one seamless
             experience.
           </p>
-          <Button onClick={openModal}>Get Started</Button>
+          <Button onClick={handleButtonClick}>
+            {user ? "Back to Dashboard" : "Get Started"}
+          </Button>
         </Hero_content>
       </Container>
       {isModalOpen && <SignupModal onClose={closeModal} />}

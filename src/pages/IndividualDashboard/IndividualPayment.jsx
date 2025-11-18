@@ -7,11 +7,13 @@ import { useNavigate } from "react-router-dom";
 import Loading from "../../components/static/Loading/Loading";
 // save
 import axios from "axios";
+import { FiLogOut } from "react-icons/fi";
 const IndividualPayment = () => {
     const navigate = useNavigate()
     const [bookDetails,setBookDetails]= useState({})
  const {id} = useParams()
- console.log("first",id)
+ console.log("first", bookDetails)
+ const bookingId = bookDetails._id
 const [loading, setLoading] = useState(false);
  
     const getBookingDetails = async()=>{
@@ -32,7 +34,7 @@ getBookingDetails()
  },[id])
 
  const handlePay =async  (id)=>{
- const response = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/booking-payment/${bookDetails._id}`)
+ const response = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/booking-payment/${bookingId}`)
  console.log(response.data.data.checkout_url)
  
        window.location.href =response.data.data.checkout_url
