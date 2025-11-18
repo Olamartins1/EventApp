@@ -71,8 +71,20 @@ const [showLogoutPopup, setShowLogoutPopup] = useState(false);
             </StyledLink>
           </StyledLinks>
 
-         {user? (
-          <button onClick={handleLogoutClick} style={{width: "95px", height: "35px", fontSize: "1.2rem", borderRadius: "20px", cursor: "pointer"}}>Logout</button>
+         
+        </NavLinks>
+        {user? (
+          <button onClick={handleLogoutClick} 
+          style={{
+            width: "95px", 
+            height: "35px", 
+            fontSize: "1.2rem", 
+            borderRadius: "10px", 
+            cursor: "pointer", 
+            background:"#603278", 
+            color: "#fff",
+            border:"none",
+          }}>Logout</button>
          ) : (
            <SignupDropdownWrapper>
             <SignupDropdown />
@@ -82,7 +94,6 @@ const [showLogoutPopup, setShowLogoutPopup] = useState(false);
           </SignupDropdownWrapper>
          )}
         
-        </NavLinks>
       </NavContent>
     </Container>
      {showLogoutPopup && (
