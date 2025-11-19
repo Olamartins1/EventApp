@@ -30,11 +30,11 @@ const Sidebar = () => {
       icon: <BsBuilding />,
       navigate: "/dashboardHome/venues",
     },
-    {
-      name: "Payments",
-      icon: <FiCreditCard />,
-      navigate: "/dashboardHome/payments",
-    },
+    // {
+    //   name: "Payments",
+    //   icon: <FiCreditCard />,
+    //   navigate: "/dashboardHome/payments",
+    // },
     {
       name: "Notification",
       icon: <MdOutlineNotifications />,

@@ -471,13 +471,14 @@ const Dier = styled.div`
     width: 100%;
 
     .tabs {
-      width: 100%;
+      width: 90%;
       gap: 5px;
       padding: 3px;
 
       .tab {
         padding: 5px 12px;
         font-size: 0.8rem;
+    
 
         .icon {
           font-size: 0.9rem;
