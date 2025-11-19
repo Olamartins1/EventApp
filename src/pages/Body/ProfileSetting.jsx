@@ -565,25 +565,26 @@ const Btn = styled.div`
 `;
 
   const Container = styled.div`
-  background: #f4f4f4;
-  padding: 40px 20px;
+  background: #fff;
+ 
   width: 100%;
   display: flex;
   justify-content: center;
+ 
   
 
   @media (max-width: 768px) {
-    padding: 20px 5px;
+    /* padding: 20px 5px; */
   }
 `;
 
 
 const Wrapper = styled.div`
-background: #fff;
+background: #f8f8f8;
   width: 100%;
   max-width: 900px;
   border-radius: 12px;
-  padding: 30px 20px;
+  padding: 50px 180px;
   
 
   @media (max-width: 768px) {

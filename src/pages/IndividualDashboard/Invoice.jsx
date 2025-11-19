@@ -6,6 +6,7 @@ import { AuthContext } from "../../assets/AuthContext/AuthContext";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import { IoArrowBackOutline } from "react-icons/io5";
+import Loading from "../../components/static/Loading/Loading";
 
 const Invoice = () => {
   const { invoiceId } = useParams();
@@ -70,7 +71,7 @@ const Invoice = () => {
           fontWeight: "bold",
         }}
       >
-        Loading invoice...
+        <Loading />
       </div>
     );
   }
@@ -95,7 +96,7 @@ const Invoice = () => {
   return (
     <div>
       <InvoiceContainer ref={invoiceRef}>
-        <Link to="/individual-dashboard/MyProfile">
+        <Link to="/individual-dashboard">
           <IoArrowBackOutline size={20} />
         </Link>
 

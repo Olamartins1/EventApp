@@ -64,7 +64,6 @@ const LandingpageFooter = () => {
 
                 <li>
                   <Footer_link
-                    style={{ cursor: "pointer", color: "#603379" }}
                     onClick={() => setIsTermsOpen(true)}
                   >
                     Privacy Policy

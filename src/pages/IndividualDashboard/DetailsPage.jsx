@@ -143,7 +143,7 @@ const DetailsPage = () => {
   if (loading) {
     return (
       <DetailContainer>
-        <p>Loading venue details...</p>
+        <Loading />
       </DetailContainer>
     );
   }
@@ -243,10 +243,10 @@ const DetailsPage = () => {
                       </InfoValue>
                     </InfoCard>
 
-                    <InfoCard>
+                    {/* <InfoCard>
                       <InfoLabel>Caution Fee</InfoLabel>
                       <InfoValue>₦{venue?.cautionfee}</InfoValue>
-                    </InfoCard>
+                    </InfoCard> */}
                     <InfoCard>
                       <SectionTitle>Amenities & Facilities</SectionTitle>
                       <InfoValue>{venue?.amenities}</InfoValue>

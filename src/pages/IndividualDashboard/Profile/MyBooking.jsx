@@ -102,14 +102,18 @@ const MyBooking = () => {
                     : "Location not available")}
                 </p>
               </div>
+<div className="status-row">
+  <p className="label">Booking Status:</p>
 
-              <span
-                className={`status ${
-                  item.bookingstatus === "confirmed" ? "confirmed" : "pending"
-                }`}
-              >
-                {item.bookingstatus}
-              </span>
+  <span
+    className={`status ${
+      item.bookingstatus === "confirmed" ? "confirmed" : "pending"
+    }`}
+  >
+    {item.bookingstatus}
+  </span>
+</div>
+
             </div>
 
             <div className="booking-details">
@@ -122,7 +126,7 @@ const MyBooking = () => {
                 <span className="value">{item.eventType || "Not specified"}</span>
               </div>
               <div className="detail">
-                <span className="label">Total Paid</span>
+                <span className="label"> Fee</span>
                 <span className="value">₦{item.total || 0}</span>
               </div>
               <div className="detail">
@@ -177,6 +181,7 @@ const Bookhall = styled.div`
 
 const BookingCard = styled.div`
   border: 1px solid #c8a2ff;
+  margin-top: 1rem;
   border-radius: 10px;
   padding: 20px;
   background: #fff;

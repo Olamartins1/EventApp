@@ -1,29 +1,26 @@
 .signup-container-Login {
   display: flex;
-  height: 80%;
-  gap: 0rem;
+  height: 100vh;
   width: 100%;
+  gap: 0rem;
 }
 
 .left-section3 {
-  color: rgb(252, 252, 252); 
+  color: rgb(252, 252, 252);
   width: 50%;
-  height: 800px;
+  height: 600px;
   position: relative;
 }
-
 
 .bg-image3 {
   position: absolute;
   width: 100%;
-  height: 800px;
+  height: 100vh;
 
-  background-image: url('https://res.cloudinary.com/depuy7bkr/image/upload/v1761918729/left_side_log_in_evenitq1_rpxkvp.png');
-  background-size: cover;        
-  background-position: center;    
-  
+  background-image: url("https://res.cloudinary.com/depuy7bkr/image/upload/v1761918729/left_side_log_in_evenitq1_rpxkvp.png");
+  background-size: cover;
+  background-position: center;
 }
-
 
 .back-btn3 {
   position: absolute;
@@ -69,7 +66,6 @@
   font-size: 1rem;
   color: #ede9fe;
   line-height: 1.6;
-
 }
 
 .right-section3 {
@@ -77,7 +73,7 @@
   justify-content: center;
   align-items: center;
   width: 50%;
-  height: 100vh;
+  height: 100%;
   background-color: white;
 }
 
@@ -86,12 +82,8 @@
   border-radius: 1rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   padding: 2rem;
-  width: 500px;
-  height: 430px;
-margin-top: 10px;
-margin-left: 10px;
-  
-
+  width: 600px;
+  height: 400px;
 }
 
 .form-header3 {
@@ -103,7 +95,7 @@ margin-left: 10px;
 
 .user-icon3 {
   border: none;
-   color: #603379;
+  color: #603379;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -123,14 +115,11 @@ margin-left: 10px;
   font-weight: 400;
 }
 
-
 .input-group-Login_password {
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
 }
-
-
 
 .input-group-Login_password label {
   font-size: 0.875rem;
@@ -146,13 +135,12 @@ margin-left: 10px;
   font-size: 0.875rem;
   outline: none;
   transition: border 0.2s;
-   width: 93%!important;
+  width: 93% !important;
 }
 
 .input-group-Login_password input:focus {
   border-color: #603379;
   box-shadow: 0 0 0 2px rgba(126, 34, 206, 0.2);
-
 }
 
 .input-group1-Login_password label {
@@ -192,7 +180,6 @@ margin-left: 10px;
   outline: none;
   transition: border 0.2s;
   width: 93%;
-
 }
 
 .input-group-email-Login input:focus {
@@ -240,8 +227,6 @@ margin-left: 10px;
   color: #6b7280;
 }
 
-
-
 .submit-btn-Login {
   width: 100%;
   background: #603379;
@@ -264,7 +249,7 @@ margin-left: 10px;
   text-align: center;
   font-size: 0.875rem;
   color: #6b7280;
-  margin-top: 2rem;
+  margin-top: 1rem;
   padding-top: 1.5rem;
   border-top: 1px solid #e5e7eb;
   text-decoration: none;
@@ -291,12 +276,10 @@ margin-left: 10px;
   margin-top: 4rem;
 }
 
-
-
- @media (max-width: 479px) {
-
+@media (max-width: 479px) {
   /* Prevent horizontal overflow */
-  html, body {
+  html,
+  body {
     overflow-x: hidden;
   }
 
@@ -325,7 +308,7 @@ margin-left: 10px;
 
   .back-btn3 {
     top: 1.25rem;
-   left: 20rem;
+    left: 20rem;
     width: 2.25rem;
     height: 2.25rem;
     font-size: 1rem;
@@ -368,16 +351,14 @@ margin-left: 10px;
     margin-top: -250px;
     position: relative;
     z-index: 5;
-
   }
 
   .form-wrapper3 {
-    max-width: 100%;
+    width: 100%;
     padding: 0;
     box-shadow: none;
     background: transparent;
     margin-top: 10px;
-    margin-left: 10px;
   }
 
   /* Hide large headers/subtitles on mobile */
@@ -392,7 +373,7 @@ margin-left: 10px;
   .input-group-Login_password {
     width: 300px;
     max-width: 400px;
-    
+
     margin-bottom: 1.25rem;
   }
 
@@ -411,14 +392,12 @@ margin-left: 10px;
     border-radius: 0.5rem;
     border: 1.5px solid #e5e7eb;
     box-sizing: border-box;
-      height: 30% !important;
-
+    height: 30% !important;
   }
 
-  .input-group-Login_password input{
+  .input-group-Login_password input {
     width: 330px !important;
     height: 30% !important;
-
   }
 
   .password-box-Login {
@@ -443,7 +422,6 @@ margin-left: 10px;
     color: #9ca3af;
     font-size: 1.1rem;
     margin-right: -30px;
-    
   }
 
   /* ====== Checkbox and login link ====== */
@@ -454,7 +432,7 @@ margin-left: 10px;
     flex-direction: row;
     justify-content: space-between;
 
-    p{
+    p {
       font-weight: 400;
     }
   }

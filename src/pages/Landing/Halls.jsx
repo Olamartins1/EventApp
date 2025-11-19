@@ -1,5 +1,5 @@
-import { Heart, Sparkle, Star } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { Heart, Sparkle, Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { useContext, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -10,8 +10,12 @@ const Halls = () => {
   const [halls, setHalls] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+  const carouselRef = useRef(null);
+
+  const itemsPerPage = 4; // Show 4 halls at a time
 
   const fetchHall = async () => {
     try {
@@ -20,7 +24,6 @@ const Halls = () => {
       );
 
       if (res?.data?.data && Array.isArray(res.data.data)) {
-        // console.log(res.data.data);
         setHalls(res.data.data);
       } else {
         setHalls([]);
@@ -38,6 +41,30 @@ const Halls = () => {
   useEffect(() => {
     fetchHall();
   }, []);
+
+  const maxIndex = Math.max(0, halls.length - itemsPerPage);
+
+  const scrollToIndex = (index) => {
+    if (carouselRef.current) {
+      const cardWidth = 340; // 325px card + 15px gap
+      carouselRef.current.scrollTo({
+        left: index * cardWidth,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const handlePrevious = () => {
+    const newIndex = currentIndex > 0 ? currentIndex - 1 : 0;
+    setCurrentIndex(newIndex);
+    scrollToIndex(newIndex);
+  };
+
+  const handleNext = () => {
+    const newIndex = currentIndex < maxIndex ? currentIndex + 1 : maxIndex;
+    setCurrentIndex(newIndex);
+    scrollToIndex(newIndex);
+  };
 
   if (loading) {
     return (
@@ -60,52 +87,133 @@ const Halls = () => {
       <h2>Featured Event Halls</h2>
       <p>Discover our handpicked selection of premium venues</p>
 
-      <Halls_container>
-        {halls.length > 0 ? (
-          halls.map((hall) => (
-            <Hall_card key={hall._id || hall.id}>
-              <Image_holder
-                onClick={() => {
-                  if (!user || user.role !== "venue-owner") {
-                    toast.info("Please login");
-                    navigate("/login");
-                  } else {
-                    navigate(`venue/${hall._id}`);
-                  }
-                }}
-              >
-                <img
-                  src={hall?.documents?.images[0]?.url || "/placeholder.jpg"}
-                  alt={hall?.name || "Venue"}
-                />
-                <Wrapper></Wrapper>
-              </Image_holder>
+      <CarouselWrapper>
+        <ArrowButton
+          onClick={handlePrevious}
+          position="left"
+          disabled={currentIndex === 0}
+        >
+          <ChevronLeft size={28} />
+        </ArrowButton>
 
-              <Hall_info>
-                <Hall_header>
-                  <h3>{hall?.venuename}</h3>
-                </Hall_header>
-                {/* <p>{hall?.location || "Unknown location"}</p> */}
-                <p>{hall?.location?.city}</p>
+        <Halls_container ref={carouselRef}>
+          {halls.length > 0 ? (
+            halls.map((hall) => (
+              <Hall_card key={hall._id || hall.id}>
+                <Image_holder
+                  onClick={() => {
+                    if (!user || user.role !== "venue-owner") {
+                      toast.info("Please login");
+                      navigate("/login");
+                    } else {
+                      navigate(`venue/${hall._id}`);
+                    }
+                  }}
+                >
+                  <img
+                    src={hall?.documents?.images[0]?.url || "/placeholder.jpg"}
+                    alt={hall?.venuename || "Venue"}
+                  />
+                  <Wrapper></Wrapper>
+                </Image_holder>
 
-                <Hall_price>
-                  <h3>
-                    {hall?.price ? `₦ ${hall.price}` : "Price unavailable"}{" "}
-                    <span>/day</span>
-                  </h3>
-                </Hall_price>
-              </Hall_info>
-            </Hall_card>
-          ))
-        ) : (
-          <p>No halls available right now.</p>
-        )}
-      </Halls_container>
+                <Hall_info>
+                  <Hall_header>
+                    <h3>{hall?.venuename}</h3>
+                  </Hall_header>
+                  <p>{hall?.location?.city}</p>
+
+                  <Hall_price>
+                    <h3>
+                      {hall?.price ? `₦ ${hall.price}` : "Price unavailable"}{" "}
+                      <span>/day</span>
+                    </h3>
+                  </Hall_price>
+                </Hall_info>
+              </Hall_card>
+            ))
+          ) : (
+            <p>No halls available right now.</p>
+          )}
+        </Halls_container>
+
+        <ArrowButton
+          onClick={handleNext}
+          position="right"
+          disabled={currentIndex >= maxIndex}
+        >
+          <ChevronRight size={28} />
+        </ArrowButton>
+      </CarouselWrapper>
     </Container>
   );
 };
 
 export default Halls;
+
+const CarouselWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 1400px; // Contains exactly 4 cards
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 60px;
+  margin: 0 auto;
+
+  @media (max-width: 1400px) {
+    max-width: 1050px; // 3 cards on smaller screens
+  }
+
+  @media (max-width: 1100px) {
+    max-width: 700px; // 2 cards on tablets
+  }
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    padding: 0 50px;
+  }
+`;
+
+const ArrowButton = styled.button`
+  position: absolute;
+  ${(props) => props.position}: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  transition: all 0.3s ease;
+
+  &:hover:not(:disabled) {
+    background-color: #603379;
+    color: white;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+    ${(props) => props.position}: 5px;
+  }
+`;
 
 const Hall_price = styled.div`
   display: flex;
@@ -116,15 +224,6 @@ const Hall_price = styled.div`
     font-weight: 700;
     color: #603379;
   }
-`;
-
-const Hall_rating = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.15rem 0.8rem;
-  border-radius: 0.375rem;
-  margin-right: 20px;
 `;
 
 const Hall_header = styled.div`
@@ -150,7 +249,6 @@ const Hall_info = styled.div`
   p {
     font-size: 18px !important;
     color: #545454 !important;
-    // margin: 0 0 0.5rem 0;
     width: 100%;
   }
 `;
@@ -172,6 +270,7 @@ const Image_holder = styled.div`
   height: 290px;
   overflow: hidden;
   border-radius: 12px;
+  cursor: pointer;
 
   img {
     width: 100%;
@@ -195,10 +294,7 @@ const Hall_card = styled.div`
   flex-direction: column;
   display: flex;
   align-items: center;
-
-  p {
-    color: red;
-  }
+  flex-shrink: 0;
 
   @media (max-width: 768px) {
     width: 280px;
@@ -210,45 +306,21 @@ const Halls_container = styled.div`
   flex-wrap: nowrap;
   gap: 15px;
   width: 100%;
-  height: 100%;
-  // justify-content: center;
-  overflow-x: auto;
+  overflow: hidden; // Changed from overflow-x: auto
+  scroll-behavior: smooth;
+
+  /* Hide scrollbar completely */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   @media (max-width: 768px) {
-    width: 90%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: 0 20px;
-    margin: 0;
-    gap: 15px;
-
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    overflow-x: auto; // Allow manual scroll on mobile
   }
 `;
 
-const VenuePrice = styled.p`
-  color: #5b21b6;
-  font-family: "Poppins", sans-serif;
-  font-size: 18px;
-  font-weight: 700;
-  margin: 0;
-  display: inline;
-`;
-
-const PriceDay = styled.span`
-  color: #5b21b6;
-  font-family: "Poppins", sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-`;
 const Container = styled.div`
   width: 100%;
   display: flex;
@@ -269,7 +341,6 @@ const Container = styled.div`
   p {
     font-size: 1.25rem;
     color: #4b5563 !important;
-    color: red;
   }
 
   @media (max-width: 768px) {

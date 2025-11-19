@@ -131,7 +131,7 @@ const {selectedArea}= useArea()
 export default Multipurpose;
 
 const PageHolder = styled.div`
-  max-width: 1400px;
+ width: 95%;
   margin: 0 auto;
   padding: 1rem 3rem;
 
@@ -264,7 +264,7 @@ const PageDescription = styled.span`
   margin-left: 1rem;
 
   &:before {
-    content: "------";
+    content: "-";
     margin-right: 0.5rem;
   }
 `;
