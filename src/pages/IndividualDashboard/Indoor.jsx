@@ -128,7 +128,7 @@ const Indoor = () => {
         
         
         const PageContainer = styled.div`
-          max-width: 1400px;
+          width: 95%;
           margin: 0 auto;
           padding: 1rem 3rem;
           display: flex;
@@ -338,7 +338,7 @@ const PageDescription = styled.span`
   font-weight: 400;
 
   &:before {
-    content: "------";
+    content: "-";
     margin-right: 0.5rem;
   }
 `;
