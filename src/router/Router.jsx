@@ -31,6 +31,8 @@ import Protect from "./Protect";
 import IndividualPayment from "../pages/IndividualDashboard/IndividualPayment";
 import SuccessfulPayment from "../components/SuccessfulPayment";
 import Invoice from "../pages/IndividualDashboard/Invoice";
+import OwnerBookings from "../pages/Body/OwnerBookings";
+import Withdraw from "../pages/Body/Withdraw";
 
 
 export const Element = createHashRouter([
@@ -39,36 +41,48 @@ export const Element = createHashRouter([
     element: <LandingPageLayout />,
     children: [{ index: true, element: <HomePage /> }],
   },
-  {
-    path: "/dashboardHome",
-    element: (
-      <Protect>
-        <Dashboardlayout />
-      </Protect>
-    ),
-    children: [
-      {
-        index: true,
-        element: <DashboardHome />,
-      },
-      {
-        path: "venues",
-        element: <Venues />,
-      },
-      {
-        path: "payments",
-        element: <Payments />,
-      },
-      {
-        path: "notifications",
-        element: <Notification />,
-      },
-      {
-        path: "settings",
-        element: <ProfileSetting />,
-      },
-    ],
-  },
+ {
+  path: "/dashboardHome",
+  element: (
+    <Protect>
+      <Dashboardlayout />
+    </Protect>
+  ),
+  children: [
+    {
+      path: "",                  
+      element: <DashboardHome />,
+      children: [
+        {
+          index: true,
+          element: <OwnerBookings />, 
+        },
+        {
+          path: "withdraw",
+          element: <Withdraw />,
+        },
+      ],
+    },
+
+    {
+      path: "venues",
+      element: <Venues />,
+    },
+    {
+      path: "payments",
+      element: <Payments />,
+    },
+    {
+      path: "notifications",
+      element: <Notification />,
+    },
+    {
+      path: "settings",
+      element: <ProfileSetting />,
+    },
+  ],
+},
+
   {
     path: "/individual-dashboard",
     element: (

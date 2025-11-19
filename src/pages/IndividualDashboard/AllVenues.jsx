@@ -1,5 +1,3 @@
-
-
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
@@ -15,12 +13,11 @@ const AllVenues = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { token } = useContext(AuthContext);
-    const { selectedArea } = useArea();
+  const { selectedArea } = useArea();
 
   const getArr = JSON.parse(localStorage.getItem("myArea"));
 
   console.log("this is it", getArr);
-
 
   useEffect(() => {
     const fetchVenues = async () => {
@@ -56,7 +53,10 @@ const AllVenues = () => {
   if (loading) {
     return (
       <PageContainer>
-        <PageTitle> <Loading /></PageTitle>
+        <PageTitle>
+          {" "}
+          <Loading />
+        </PageTitle>
       </PageContainer>
     );
   }
@@ -72,54 +72,56 @@ const AllVenues = () => {
 
   return (
     <>
-     {loading && <Loading />}
-    <PageContainer>
-      <PageHeader>
-        <PageTitle>Event Venues in Lagos</PageTitle>
-        <PageSubtitle>{venues.length} venues available</PageSubtitle>
-      </PageHeader>
+      {loading && <Loading />}
+      <PageContainer>
+        <PageHeader>
+          <PageTitle>Event Venues in Lagos</PageTitle>
+          <PageSubtitle>{venues.length} venues available</PageSubtitle>
+        </PageHeader>
 
-      <VenuesGrid>
-        {venues.length > 0 ? (
-          venues.map((venue) => (
-            <VenueCard
-              key={venue._id}
-              onClick={() =>
-                navigate(`/venue/${venue._id}`)
-              }
-            >
-              <ImageWrapper>
-                <VenueImage
-                  src={venue?.documents?.images?.[0]?.url || "/placeholder.jpg"}
-                  alt={venue.venuename}
-                />
-                {/* <FeaturedBadge>
+        <VenuesGrid>
+          {venues.length > 0 ? (
+            venues.map((venue) => (
+              <VenueCard
+                key={venue._id}
+                onClick={() => navigate(`/venue/${venue._id}`)}
+              >
+                <ImageWrapper>
+                  <VenueImage
+                    src={
+                      venue?.documents?.images?.[0]?.url || "/placeholder.jpg"
+                    }
+                    alt={venue.venuename}
+                  />
+                  {/* <FeaturedBadge>
                   <Sparkles size={14} />
                   Featured
                 </FeaturedBadge> */}
-              </ImageWrapper>
+                </ImageWrapper>
 
-              <CardContent>
-                <VenueName>{venue.venuename}</VenueName>
-                <Location>
-                  {venue?.location?.city || "Location unavailable"}
-                </Location>
-                <Capacity>
-                 {venue?.capacity?.minimum || 0}–
-                  {venue?.capacity?.maximum || 0} guests
-                </Capacity>
-                <Price>
-                  ₦{venue.price.toLocaleString()}
-                  <PriceUnit>/day</PriceUnit>
-                </Price>
-              </CardContent>
-            </VenueCard>
-          ))
-        ) : (
-          <PageSubtitle>No venues found</PageSubtitle>
-        )}
-      </VenuesGrid>
-    </PageContainer>
+                <CardContent>
+                  <VenueName>{venue.venuename}</VenueName>
+                  <Location>
+                    {venue?.location?.city.charAt(0).toUpperCase() +
+                      venue?.location?.city.slice(1).toLowerCase() ||
+                      "Location unavailable"}
+                  </Location>
+                  <Capacity>
+                    {venue?.capacity?.minimum || 0}–
+                    {venue?.capacity?.maximum || 0} guests
+                  </Capacity>
+                  <Price>
+                    ₦{venue.price.toLocaleString()}
+                    <PriceUnit>/day</PriceUnit>
+                  </Price>
+                </CardContent>
+              </VenueCard>
+            ))
+          ) : (
+            <PageSubtitle>No venues found</PageSubtitle>
+          )}
+        </VenuesGrid>
+      </PageContainer>
     </>
   );
 };
@@ -139,16 +141,16 @@ const PageContainer = styled.div`
 `;
 
 const PageHeader = styled.div`
-width: 97%;
-display: flex;
-flex-direction: column;
-margin-bottom: 2rem;
+  width: 97%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
 `;
 
 const PageTitle = styled.h1`
   color: #0a0a0a;
   font-family: Poppins, sans-serif;
- font-size: 20px;
+  font-size: 20px;
   font-weight: 600;
 `;
 

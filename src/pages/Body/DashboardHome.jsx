@@ -1,6 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { Outlet, useNavigate } from "react-router-dom";
+// import OwnerBookings from "../pages/Body/OwnerBookings";
+// import Withdraw from "../pages/Body/Withdraw";
 import {
   BsBuilding,
   BsCalendar2Check,
@@ -22,27 +25,41 @@ import {
 } from "react-icons/fi";
 import { TbCurrencyNaira } from "react-icons/tb";
 import { LuBuilding2 } from "react-icons/lu";
-import { IoTrendingUpOutline, IoAddCircleOutline } from "react-icons/io5";
+import {
+  IoTrendingUpOutline,
+  IoAddCircleOutline,
+  IoNotificationsOutline,
+} from "react-icons/io5";
 import { HiOutlineUserCircle } from "react-icons/hi";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
 import { Key } from "lucide-react";
 import { toast } from "react-toastify";
 import Loading from "../../components/static/Loading/Loading";
+import { FaWallet } from "react-icons/fa";
+import { AiOutlineTable } from "react-icons/ai";
+
 const DashboardHome = () => {
+  const navigate = useNavigate();
   const [statsData, setStatsData] = useState({});
   const [showPopup, setShowPopup] = useState(false);
   const [booking, setBooking] = useState([]);
-  console.log("book", booking);
   const [loading, setLoading] = useState(true);
   const [rejectionReason, setRejectionReason] = useState("");
-  const [bookingstatus, setBookingstatus] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [show, setShow] = useState("ownerbookings");
+  const [formData, setFormData] = useState({
+    accountName: "",
+    bank: "",
+    amount: "",
+    bankType: "",
+    accountNumber: "",
+  });
 
-  const { token } = useContext(AuthContext);
-  const { user } = useContext(AuthContext);
+  const { token, user } = useContext(AuthContext);
 
   const [deleteid, setDeleteid] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 4; // Adjust how many bookings per page
+  const itemsPerPage = 4;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,16 +67,9 @@ const DashboardHome = () => {
         setLoading(true);
         const res = await axios.get(
           "https://eventiq-final-project.onrender.com/api/v1/dashboard",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
-        console.log("the res data checking total", res.data?.data);
-
         setStatsData(res.data?.data || {});
-        console.log("the start", res.data?.data);
       } catch (err) {
         console.log(err);
       } finally {
@@ -75,11 +85,7 @@ const DashboardHome = () => {
         setLoading(true);
         const res = await axios.get(
           "https://eventiq-final-project.onrender.com/api/v1/allbooking",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         setBooking(res.data?.data || []);
       } catch (err) {
@@ -96,13 +102,8 @@ const DashboardHome = () => {
       setLoading(true);
       const res = await axios.get(
         `https://eventiq-final-project.onrender.com/api/v1/acceptbooking/${bookingid}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log("the am the booking", res);
       toast.success(res?.data?.message);
     } catch (err) {
       console.log(err);
@@ -110,19 +111,15 @@ const DashboardHome = () => {
       setLoading(false);
     }
   };
+
   const rejectBooking = async () => {
     try {
       setLoading(true);
       const res = await axios.post(
         `https://eventiq-final-project.onrender.com/api/v1/rejectbooking/${deleteid}`,
         { reason: rejectionReason },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      console.log("the mess", res);
       toast.error(res?.data?.message);
     } catch (err) {
       toast.error(err?.res?.data?.message);
@@ -130,10 +127,66 @@ const DashboardHome = () => {
       setLoading(false);
     }
   };
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentBookings = booking.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(booking.length / itemsPerPage);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleWithdraw = async () => {
+    // Validate form
+    if (
+      !formData.accountName ||
+      !formData.bank ||
+      !formData.amount ||
+      !formData.bankType ||
+      !formData.accountNumber
+    ) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const res = await axios.post(
+        "https://eventiq-final-project.onrender.com/api/v1/withdrawal",
+        formData, // sending the accountName, bank, amount, bankType
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      toast.success(res.data?.message || "Withdrawal successful!");
+      setShowModal(false); // close the modal
+      setFormData({
+        accountName: "",
+        bank: "",
+        amount: "",
+        bankType: "",
+      });
+
+      // Optionally, update statsData to reflect new balance after withdrawal
+      // setStatsData(prev => ({
+      //   ...prev,
+      //   occupancyRate: {
+      //     ...prev.occupancyRate,
+      //     total: prev.occupancyRate.total - Number(formData.amount)
+      //   }
+      // }));
+    } catch (err) {
+      console.log(err);
+      toast.error(err.response?.data?.message || "Withdrawal failed");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Container>
@@ -157,10 +210,7 @@ const DashboardHome = () => {
             <StatCard>
               <StatHeader>
                 <StatTitle>Total Venues </StatTitle>
-                <StatIcon
-                  style={{ background: "#efebf2", color: "#805c94" }}
-                  
-                >
+                <StatIcon style={{ background: "#efebf2", color: "#805c94" }}>
                   <LuBuilding2 style={{ color: "#805c94" }} />
                 </StatIcon>
               </StatHeader>
@@ -169,7 +219,7 @@ const DashboardHome = () => {
             <StatCard>
               <StatHeader>
                 <StatTitle>Active Bookings </StatTitle>
-                <StatIcon style={{ background: "#f5e5c3",  }}>
+                <StatIcon style={{ background: "#f5e5c3" }}>
                   <FiCalendar style={{ color: "#fddc56" }} />
                 </StatIcon>
               </StatHeader>
@@ -184,22 +234,103 @@ const DashboardHome = () => {
               </StatHeader>
               <StatValue>₦{statsData?.revenue}</StatValue>
             </StatCard>
-            <StatCard>
+            {/* Withdraw Card */}
+            <StatCard onClick={() => setShowModal(true)}>
               <StatHeader>
-                <StatTitle>Occupancy Rate </StatTitle>
+                <StatTitle>Withdraw</StatTitle>
                 <StatIcon style={{ background: "#efebf2" }}>
-                  <IoTrendingUpOutline style={{color: "#805c94"}} />
+                  <FaWallet style={{ color: "#805c94" }} />
                 </StatIcon>
               </StatHeader>
-              <StatValue>{statsData?.occupancyRate?.total}%</StatValue>
+              <StatValue>{statsData?.occupancyRate?.total}₦</StatValue>
             </StatCard>
           </StatsGrid>
         )}
-        {/* {console.log("booooooo", booking)} */}
-        <BookingCard>
+
+        <Dier>
+          <div className="tabs">
+            <div
+              className={show === "ownerbookings" ? "tab active" : "tab"}
+              onClick={() => {
+                setShow("ownerbookings");
+                navigate("/dashboardHome");
+              }}
+            >
+              <AiOutlineTable className="icon" />
+              <span>Bookings</span>
+            </div>
+
+            <div
+              className={show === "Withdraw" ? "tab active" : "tab"}
+              onClick={() => {
+                setShow("Withdraw");
+                navigate("/dashboardHome/Withdraw");
+              }}
+            >
+              <IoNotificationsOutline className="icon" />
+              <span>Withdrawal Request</span>
+            </div>
+          </div>
+        </Dier>
+
+
+        {/* Withdraw Modal */}
+        {showModal && (
+          <ModalBackground onClick={() => setShowModal(false)}>
+            <ModalContent onClick={(e) => e.stopPropagation()}>
+              <CloseIcon onClick={() => setShowModal(false)} />
+              <h2>Withdraw Funds</h2>
+              <Input
+                type="text"
+                name="accountName"
+                placeholder="Account Name"
+                value={formData.accountName}
+                onChange={handleChange}
+              />
+              <Input
+                type="text"
+                name="bank"
+                placeholder="Bank Name"
+                value={formData.bank}
+                onChange={handleChange}
+              />
+              <Input
+                type="number"
+                name="amount"
+                placeholder="Amount"
+                value={formData.amount}
+                onChange={handleChange}
+              />
+              <Input
+                type="number"
+                name="accountNumber"
+                placeholder="Account Number"
+                value={formData.amountNumber}
+                onChange={handleChange}
+              />
+              <Select
+                name="bankType"
+                value={formData.bankType}
+                onChange={handleChange}
+              >
+                <option value="">Select Bank Type</option>
+                <option value="savings">Savings</option>
+                <option value="current">Current</option>
+                <option value="fixed">Fixed</option>
+                <option value="coporate">Corporate</option>
+              </Select>
+              <Button onClick={handleWithdraw} disabled={loading}>
+                {loading ? "Processing..." : "Withdraw"}
+              </Button>
+            </ModalContent>
+          </ModalBackground>
+        )}
+
+        {/* Booking Section */}
+        {/* <BookingCard>
           {loading ? (
             <h3 style={{ textAlign: "center", color: "#555" }}>
-             <Loading/>
+              <Loading />
             </h3>
           ) : booking.length > 0 ? (
             <BookingList>
@@ -260,81 +391,7 @@ const DashboardHome = () => {
                   </BookingCard>
                 );
               })}
-
-              {showPopup && (
-                <PopupOverlay>
-                  <PopupBox>
-                    <h3 style={{ marginBottom: "1rem" }}>Reject Booking</h3>
-                    <p style={{ color: "#555", marginBottom: "1.5rem" }}>
-                      Please provide a reason for rejection:
-                    </p>
-
-                    <input
-                      type="text"
-                      placeholder="Enter reason..."
-                      value={rejectionReason}
-                      onChange={(e) => setRejectionReason(e.target.value)}
-                      style={{
-                        width: "100%",
-                        height: "70px",
-                        padding: "10px",
-                        border: "1px solid #ccc",
-                        borderRadius: "6px",
-                        marginBottom: "1.5rem",
-                      }}
-                    />
-
-                    <div style={{ display: "flex", gap: "1rem" }}>
-                      <button
-                        style={{
-                          background: "#e53935",
-                          color: "#fff",
-                          border: "none",
-                          padding: "10px 20px",
-                          borderRadius: "6px",
-                          cursor: "pointer",
-                        }}
-                        onClick={async () => {
-                          try {
-                            setLoading(true);
-                            await rejectBooking();
-                            toast.success("Booking rejected successfully");
-                            setShowPopup(false);
-                            window.location.reload();
-                          } catch (err) {
-                            console.log(err);
-                          } finally {
-                            setLoading(false);
-                          }
-                        }}
-                      >
-                        Reject
-                      </button>
-
-                      <button
-                        style={{
-                          background: "#f1f1f1",
-                          color: "#333",
-                          border: "none",
-                          padding: "10px 20px",
-                          borderRadius: "6px",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => {
-                          setRejectionReason("");
-                          setShowPopup(false);
-                        }}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </PopupBox>
-                </PopupOverlay>
-              )}
-              {/* </div> */}
             </BookingList>
-
-            
           ) : (
             <EmptyState>
               <IconWrapper>
@@ -345,51 +402,90 @@ const DashboardHome = () => {
                 Upload your venue details to get noticed
               </EmptyDescription>
             </EmptyState>
-          )}
-        </BookingCard>
-
-        {/* <EmptyState>
-        <EmptyIcon>
-          <BsBox />
-        </EmptyIcon>
-        <EmptyTitle>No Records Yet</EmptyTitle>
-        <EmptyText>
-          Create your first venue to start managing bookings and events
-        </EmptyText>
-      </EmptyState> */}
+          )} */}
+           <Outlet />
+        {/* </BookingCard> */}
       </Wrapper>
     </Container>
+
   );
 };
 
 export default DashboardHome;
 
-const EmptyState = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 400px;
-  gap: 1rem;
+const CloseIcon = styled(FiX)`
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #555;
+
+  &:hover {
+    color: #000;
+  }
 `;
 
-const IconWrapper = styled.div`
-  font-size: 4rem;
-  color: #666;
-  margin-bottom: 0.5rem;
-`;
+const Dier = styled.div`
+  width: 90%;
 
-const EmptyTitle = styled.h2`
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: #333;
-  margin: 0;
-`;
+  .tabs {
+    margin-top: 1rem;
+    background: #f4f4f7;
+    border-radius: 50px;
+    padding: 5px;
+    display: flex;
+    gap: 10px;
+    width: fit-content;
 
-const EmptyDescription = styled.p`
-  font-size: 0.95rem;
-  color: #999;
-  margin: 0;
+    .tab {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 20px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      color: #333;
+
+      .icon {
+        font-size: 1.1rem;
+      }
+
+      &:hover {
+        background: #e7e7eb;
+      }
+    }
+
+    .active {
+      background: white;
+      box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+      font-weight: 600;
+    }
+  }
+`;
+`
+
+@media (max-width: 480px) {
+  .dier {
+    width: 100%;
+
+    .tabs {
+      width: 100%;
+      gap: 5px;
+      padding: 3px;
+
+      .tab {
+        padding: 5px 12px;
+        font-size: 0.8rem;
+
+        .icon {
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+}
 `;
 
 const Container = styled.div`
@@ -400,71 +496,165 @@ const Container = styled.div`
   padding-top: 30px;
   background: #f8f9fa;
   gap: 1rem;
-
-  @media (max-width: 768px) {
-    padding-top: 20px;
-  }
 `;
 
 const Wrapper = styled.div`
   width: 95%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+`;
+
+const WelcomeSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+`;
+
+const WelcomeText = styled.h2`
+  font-size: 24px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 4px 0;
+`;
+
+const DateText = styled.p`
+  font-size: 14px;
+  color: #9ca3af;
+  margin: 0;
+`;
+
+const StatsGrid = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 32px;
+  margin-top: 30px;
+  width: 100%;
+  justify-content: space-between;
+  flex-wrap: wrap;
+`;
+
+const StatCard = styled.div`
+  background: white;
+  width: 21%;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f3f4f6;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    transform: translateY(-2px);
+  }
 
   @media (max-width: 768px) {
-    width: 90%;
+    width: 48%;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
   }
 `;
+
+const StatHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+`;
+
+const StatTitle = styled.h3`
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  margin: 0;
+`;
+
+const StatIcon = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+`;
+
+const StatValue = styled.div`
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+`;
+
+const ModalBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalContent = styled.div`
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 400px;
+  position: relative;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+`;
+
+const Select = styled.select`
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+`;
+
+const Button = styled.button`
+  background: #805c94;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+`;
+
 const BookingCard = styled.div`
   background: #fff;
   border-radius: 12px;
-  height: 5%;
   display: flex;
-  justify-content: space-between;
   flex-direction: column;
   width: 100%;
 `;
+
 const BookingList = styled.div`
   display: flex;
-  background: #f8f9fa;
   flex-direction: column;
-
   gap: 1.5rem;
-`;
-
-const BookingInfo = styled.div`
-  display: flex;
-  flex-direction: column;
 `;
 
 const VenueName = styled.h3`
   font-size: 23px;
   font-weight: 600;
   color: #1e1e1e;
-  @media (max-width: 768px) {
-    font-size: 20px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 0.5rem;
-    font-size: 18px;
-  }
 `;
 
 const CustomerName = styled.p`
   font-size: 23px;
   color: #666;
-
-  @media (max-width: 768px) {
-    font-size: 20px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 18px;
-    margin-top: 1.5rem;
-  }
 `;
 
 const Occasion = styled.p`
@@ -496,29 +686,12 @@ const AcceptButton = styled.button`
   border-radius: 8px;
   padding: 10px 30px;
   cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: #00b44a;
-  }
-
-  &:hover:not(:disabled) {
-    background-color: #43a047;
-  }
 
   &:disabled {
     background-color: #c8e6c9;
     color: #666;
     cursor: not-allowed;
     opacity: 0.7;
-  }
-  @media (max-width: 768px) {
-    font-size: 20px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 0.5rem;
-    font-size: 18px;
   }
 `;
 
@@ -531,216 +704,29 @@ const RejectButton = styled.button`
   border-radius: 8px;
   padding: 10px 50px;
   cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: red;
-    color: white;
-  }
-
-  &:hover:not(:disabled) {
-    background-color: #e53935;
-  }
-
-  &:disabled {
-    background-color: #e53935;
-    color: white;
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
-  @media (max-width: 768px) {
-    font-size: 20px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 0.5rem;
-    font-size: 18px;
-  }
 `;
 
-const WelcomeSection = styled.div`
+const EmptyState = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 10px;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
 `;
 
-const WelcomeText = styled.h2`
-  font-size: 24px;
-  font-weight: 600;
-  color: #111827;
-  margin: 0 0 4px 0;
-
-  @media (max-width: 768px) {
-    font-size: 20px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 18px;
-  }
+const IconWrapper = styled.div`
+  font-size: 4rem;
+  color: #666;
 `;
 
-const DateText = styled.p`
-  font-size: 14px;
-  color: #9ca3af;
-  margin: 0;
-
-  @media (max-width: 480px) {
-    font-size: 12px;
-  }
-`;
-
-const StatsGrid = styled.div`
-  display: flex;
-  gap: 10px;
-  margin-bottom: 32px;
-  margin-top: 30px;
-  width: 100%;
-  justify-content: space-between;
-
-  @media (max-width: 1024px) {
-    gap: 12px;
-  }
-
-  @media (max-width: 768px) {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-top: 20px;
-    margin-bottom: 24px;
-  }
-
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-`;
-
-const StatCard = styled.div`
-  background: white;
-  width: 21%;
-  border-radius: 12px;
-  padding: 10px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f3f4f6;
-  transition: all 0.2s ease;
-
-  &:hover {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-    transform: translateY(-2px);
-  }
-
-  @media (max-width: 1024px) {
-    padding: 16px;
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
-    padding: 16px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 14px;
-  }
-`;
-
-const StatHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 16px;
-
-  @media (max-width: 480px) {
-    margin-bottom: 12px;
-  }
-`;
-
-const StatTitle = styled.h3`
-  font-size: 14px;
+const EmptyTitle = styled.h2`
+  font-size: 1.25rem;
   font-weight: 500;
-  color: #6b7280;
-  margin: 0;
-  line-height: 1.4;
-  display: flex;
-  justify-content: space-between;
-
-  @media (max-width: 480px) {
-    font-size: 13px;
-  }
+  color: #333;
 `;
 
-const StatIcon = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  /* color:black; */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 25px;
-  flex-shrink: 0;
-
-  @media (max-width: 480px) {
-    width: 36px;
-    height: 36px;
-    font-size: 18px;
-  }
+const EmptyDescription = styled.p`
+  font-size: 0.95rem;
+  color: #999;
 `;
-
-const StatValue = styled.div`
-  font-size: 32px;
-  font-weight: 700;
-  color: #111827;
-
-  @media (max-width: 768px) {
-    font-size: 28px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 24px;
-  }
-`;
-const PopupOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-`;
-
-const PopupBox = styled.div`
-  background: #fff;
-  width: 400px;
-  max-width: 90%;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.3s ease;
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  h3 {
-    font-size: 20px;
-    font-weight: 600;
-    color: #333;
-  }
-
-  p {
-    font-size: 14px;
-    color: #555;
-  }
-`;
-

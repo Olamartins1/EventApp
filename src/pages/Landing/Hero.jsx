@@ -21,7 +21,7 @@ const Hero = () => {
     if (user) {
       // User is logged in - navigate to their dashboard
       if (user.role === "venue-owner") {
-        navigate("/dashboardHomed"); // Replace with your actual venue owner dashboard route
+        navigate("/dashboardHome"); // Replace with your actual venue owner dashboard route
       } else if (user.role === "client" || user.role === "customer") {
         navigate("/individual-dashboard"); // Replace with your actual client dashboard route
       } else {

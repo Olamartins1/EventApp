@@ -304,7 +304,7 @@ const DetailsPage = () => {
                       }}
                     />
 
-                    <NumberType>Number of Day</NumberType>
+                    {/* <NumberType>Number of Day</NumberType>
                     <input
                       type="text"
                       value={days}
@@ -313,7 +313,7 @@ const DetailsPage = () => {
                         background: "#f3f4f6",
                         cursor: "not-allowed",
                       }}
-                    />
+                    /> */}
                   </EventContainer>
 
                   <PricingBreakdown>
@@ -334,12 +334,12 @@ const DetailsPage = () => {
                       </span>
                     </BreakdownItem>
 
-                    <BreakdownItem>
+                    {/* <BreakdownItem>
                       <span>Caution Fee</span>
                       <span>
                         ₦{days > 0 ? venue?.cautionfee?.toLocaleString() : "0"}
                       </span>
-                    </BreakdownItem>
+                    </BreakdownItem> */}
 
                     <BreakdownItem>
                       <span>Total</span>
@@ -348,8 +348,8 @@ const DetailsPage = () => {
                         {days > 0
                           ? (
                               theAmount * days +
-                              servicecharge +
-                              venue?.cautionfee
+                              servicecharge 
+                              // venue?.cautionfee
                             ).toLocaleString()
                           : "0"}
                       </span>
