@@ -158,7 +158,7 @@ const Invoice = () => {
             <thead>
               <tr>
                 <th>Description</th>
-                <th>Qty</th>
+             
                 <th>Price (₦)</th>
                 <th>Total (₦)</th>
               </tr>
@@ -166,19 +166,19 @@ const Invoice = () => {
             <tbody>
               <tr>
                 <td>Venue Rental</td>
-                <td>1</td>
+         
                 <td>{invoice?.venueId?.price}</td>
                 <td>{invoice?.venueId?.price}</td>
               </tr>
               <tr>
-                <td>Service Fee (5%)</td>
-                <td>1</td>
-                <td>{invoice?.venuebookingId?.servicecharge}</td>
-                <td>{invoice?.venuebookingId?.servicecharge}</td>
+                <td>VAT (7.5%)</td>
+              
+                <td>{invoice?.venuebookingId?.vat}</td>
+                <td>{invoice?.venuebookingId?.vat}</td>
               </tr>
               <tr>
                 <td>Caution Fee</td>
-                <td>1</td>
+        
                 <td>{invoice?.venueId?.cautionfee}</td>
                 <td>{invoice?.venueId?.cautionfee}</td>
               </tr>
@@ -333,6 +333,7 @@ const InvoiceContainer = styled.div`
         margin-top: 10px;
 
         th {
+          
           text-align: left;
           color: #555;
           padding: 8px 0;
@@ -341,7 +342,7 @@ const InvoiceContainer = styled.div`
         }
 
         td {
-          padding: 8px 0;
+          padding: 8px;
           color: #444;
         }
 
@@ -350,6 +351,7 @@ const InvoiceContainer = styled.div`
     font-weight: 600;
     color: #333;
     width: 70%;
+  
   }
 
   .grand-total {
@@ -377,6 +379,7 @@ const InvoiceContainer = styled.div`
 
     .download-btn {
       background: #5b21b6;
+      
       color: #fff;
       padding: 10px 20px;
       border: none;

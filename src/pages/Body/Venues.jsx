@@ -877,7 +877,7 @@ const Venues = () => {
     price: "",
     type: "indoor",
     amenities: [],
-    cautionfee: "",
+    // cautionfee: "",
     openingtime: "08:00 AM",
     closingtime: "11:00 PM",
     hallsize: "",
@@ -907,7 +907,7 @@ const Venues = () => {
           : venue.amenities
           ? venue.amenities.split(",").map((a) => a.trim())
           : [],
-        cautionfee: venue.cautionfee || "",
+        // cautionfee: venue.cautionfee || "",
         openingtime: venue.openingtime || "",
         closingtime: venue.closingtime || "",
         hallsize: venue.hallsize || "",
@@ -933,7 +933,7 @@ const Venues = () => {
         price: "",
         type: "indoor",
         amenities: [],
-        cautionfee: "",
+        // cautionfee: "",
         openingtime: "",
         closingtime: "",
         hallsize: "",
@@ -966,7 +966,7 @@ const Venues = () => {
       price: "",
       type: "indoor",
       amenities: [],
-      cautionfee: "",
+      // cautionfee: "",
       openingtime: "",
       closingtime: "",
       hallsize: "",
@@ -1114,7 +1114,7 @@ const Venues = () => {
       venueFormData.append("price", formData.price);
       venueFormData.append("type", formData.type);
       venueFormData.append("amenities", formData.amenities.join(", "));
-      venueFormData.append("cautionfee", formData.cautionfee || 0);
+      // venueFormData.append("cautionfee", formData.cautionfee || 0);
       venueFormData.append("openingtime", formData.openingtime);
       venueFormData.append("closingtime", formData.closingtime);
       venueFormData.append("hallsize", formData.hallsize);
@@ -1578,9 +1578,9 @@ const Venues = () => {
                       onChange={handleInputChange}
                       placeholder="e.g. 250000"
                     />
-                    <HelpText>Price per day, excluding caution fee.</HelpText>
+                    {/* <HelpText>Price per day, excluding caution fee.</HelpText> */}
                   </FormGroup>
-                  <FormGroup>
+                  {/* <FormGroup>
                     <Label>
                       Caution Fee (₦) <span>*</span>
                     </Label>
@@ -1591,7 +1591,7 @@ const Venues = () => {
                       onChange={handleInputChange}
                       placeholder="e.g. 50000"
                     />
-                  </FormGroup>
+                  </FormGroup> */}
                 </FormRow>
 
                 <FormRow>

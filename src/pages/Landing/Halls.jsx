@@ -84,8 +84,8 @@ const Halls = () => {
 
   return (
     <Container>
-      <h2>Featured Event Halls</h2>
-      <p>Discover our handpicked selection of premium venues</p>
+      <h2>Verified Venues</h2>
+      {/* <p>Discover our handpicked selection of premium venues</p> */}
 
       <CarouselWrapper>
         <ArrowButton
@@ -102,11 +102,19 @@ const Halls = () => {
               <Hall_card key={hall._id || hall.id}>
                 <Image_holder
                   onClick={() => {
-                    if (!user || user.role !== "venue-owner") {
-                      toast.info("Please login");
-                      navigate("/login");
+                    if (!user) {
+                      // User is not logged in
+                      toast.info("Please login to view venue details");
+                      navigate("/venue/:id");
+                    } else if (
+                      user.role === "client" ||
+                      user.role === "customer"
+                    ) {
+                      // User is logged in as client - allow access to detail page
+                      navigate(`/venue/${hall._id}`);
                     } else {
-                      navigate(`venue/${hall._id}`);
+                      // User is logged in but not a client (e.g., venue-owner)
+                      toast.info("Only clients can view venue details");
                     }
                   }}
                 >
@@ -180,7 +188,7 @@ const ArrowButton = styled.button`
   ${(props) => props.position}: 10px;
   top: 50%;
   transform: translateY(-50%);
-  background-color: white;
+  background-color: #cdd1db;
   border: none;
   border-radius: 50%;
   width: 50px;
