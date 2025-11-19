@@ -52,6 +52,11 @@ const Sidebar = () => {
     setIsOpen(false);
   };
 
+  const handleLogoClick = () => {
+    navigate("/"); // Navigate to landing page
+    setIsOpen(false); // Close sidebar on mobile
+  };
+
   const toggleSidebar = () => setIsOpen(!isOpen);
   const handleLogoutClick = () => setShowLogoutPopup(true);
   const confirmLogout = () => {
@@ -73,7 +78,7 @@ const Sidebar = () => {
 
       <Container $isOpen={isOpen}>
         <LogoSection>
-          <Logo>Eventiq</Logo>
+          <Logo onClick={handleLogoClick}>Eventiq</Logo>
           <MobileMenuButton2 onClick={toggleSidebar}>
             <FiX />
           </MobileMenuButton2>
@@ -208,6 +213,7 @@ const MobileMenuButton2 = styled.button`
     display: flex;
   }
 `;
+
 const MobileMenuButton = styled.button`
   display: none;
   top: 20px;
@@ -303,6 +309,17 @@ const Logo = styled.h1`
   margin: 0;
   font-weight: 400;
   font-style: italic;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: #4a2660;
+    transform: scale(1.02);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 
   @media (max-width: 480px) {
     font-size: 28px;
