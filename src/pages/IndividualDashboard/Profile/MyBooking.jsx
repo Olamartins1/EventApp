@@ -166,7 +166,7 @@ const MyBooking = () => {
 
 export default MyBooking;
 
-// Styled Components (keep the same as before)
+
 const Bookhall = styled.div`
   width: 90%;
   margin: 0 auto;
