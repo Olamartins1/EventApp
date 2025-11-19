@@ -119,7 +119,7 @@ export default Outdoor;
 
 
 const PageHolder = styled.div`
-  max-width: 1400px;
+ width: 95%;
   margin: 0 auto;
   padding: 2rem 1.5rem;
   background-color: #f9fafb;
@@ -164,7 +164,7 @@ const PageDescription = styled.span`
   font-weight: 400;
 
   &:before {
-    content: "------";
+    content: "-";
     margin-right: 0.5rem;
   }
 `;

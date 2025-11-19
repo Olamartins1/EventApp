@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Table, Building2, TreePine, MapPin, ChevronDown,NotebookPen } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useArea } from "../../assets/AreaContext/AreaContext";
+import axios from "axios";
+import { useContext } from "react";
+import { AuthContext } from "../../assets/AuthContext/AuthContext";
 
 const Individual_subHeader = () => {
   const navigate = useNavigate();
@@ -12,23 +15,47 @@ const Individual_subHeader = () => {
 const storedArea = JSON.parse(localStorage.getItem("All area"));
 
   const isActive = (path) => location.pathname === path;
+  const {token} = useContext(AuthContext)
+
+  const [areas,setAreas] = useState([])
 
 
-  const areas = [
-    "All Areas",
-    "Victoria Island",
-    "Lekki",
-    "Ikeja",
-    "Yaba",
-    "Ikoyi",
-    "Surulere",
-    "Ajah",
-    "Maryland",
-    "Festac",
-    "Apapa",
-    "Agege/Ogba",
-  ];
+  // const areas = [
+  //   "All Areas",
+  //   "Victoria Island",
+  //   "Lekki",
+  //   "Ikeja",
+  //   "Yaba",
+  //   "Ikoyi",
+  //   "Surulere",
+  //   "Ajah",
+  //   "Maryland",
+  //   "Festac",
+  //   "Apapa",
+  //   "Agege/Ogba",
+  // ];
 
+
+  useEffect(() => {
+    const fetchArea = async () => {
+      try {
+        const response = await axios.get(`https://eventiq-final-project.onrender.com/api/v1/cities`,
+            {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+setAreas(["All Areas", ...response.data.data]);
+      } catch (err) {
+        console.log("Error fetching venues:", err);
+    };
+  }
+    fetchArea();
+  }, []);
+  
+
+console.log("area",areas)
   const iconMap = {
     "all-venues": Table,
     "indoor-halls": Building2,
