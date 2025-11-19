@@ -16,9 +16,20 @@ const OwnerBookings = () => {
   // PAGINATION
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
+  
+  // Sort bookings: pending first, then by date (newest first)
+  const sortedBookings = [...booking].sort((a, b) => {
+    // If one is pending and the other isn't, pending comes first
+    if (a.bookingstatus === "pending" && b.bookingstatus !== "pending") return -1;
+    if (a.bookingstatus !== "pending" && b.bookingstatus === "pending") return 1;
+    
+    // If both have same status, sort by date (newest first)
+    return new Date(b.date) - new Date(a.date);
+  });
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentBookings = booking.slice(indexOfFirstItem, indexOfLastItem);
+  const currentBookings = sortedBookings.slice(indexOfFirstItem, indexOfLastItem);
 
   // ACCEPT BOOKING
   const acceptBooking = async (id) => {
@@ -29,9 +40,9 @@ const OwnerBookings = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
+window.location.reload()
       // refresh after accept
-      setTimeout(() => window.location.reload(), 2000);
+      // setTimeout(() => window.location.reload(), 0);
     } catch (err) {
       console.log(err);
     }
@@ -142,7 +153,7 @@ const OwnerBookings = () => {
 
 export default OwnerBookings;
 
-// 🎨 STYLES
+// 🎨 STYLES (unchanged)
 const BookingCard = styled.div`
   background: #fff;
   border-radius: 12px;
@@ -151,19 +162,14 @@ const BookingCard = styled.div`
   padding: 20px 20px;
   width: 100%;
   height: 50%;
-
- 
 `;
 
-const Wrapper = styled.div`
-/* background:blue; */
-`;
+const Wrapper = styled.div``;
 
 const BookingList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
-  /* background:yellow; */
 `;
 
 const VenueName = styled.h3`
@@ -207,6 +213,7 @@ const AcceptButton = styled.button`
   padding: 10px 30px;
   cursor: pointer;
   margin-bottom: 10px;
+  margin-right: 25px;
 
   &:disabled {
     background-color: #c8e6c9;

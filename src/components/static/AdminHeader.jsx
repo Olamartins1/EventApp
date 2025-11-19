@@ -144,3 +144,127 @@ const Wrapper = styled.div`
     }
   }
 `;
+// import React from "react";
+// import styled from "styled-components";
+
+// const AdminHeader = () => {
+//   return (
+//     <Container>
+//       <Wrapper>
+//         <AdminIcon>
+//           <Text>
+//             <Name>Admin User</Name>
+//             <Email>admin@eventiq.ng</Email>
+//           </Text>
+//           <Avatar>AD</Avatar>
+//         </AdminIcon>
+//       </Wrapper>
+//     </Container>
+//   );
+// };
+
+// export default AdminHeader;
+
+// const Container = styled.div`
+//   width: 100%;
+//   position: sticky;
+//   top: 0;
+//   z-index: 999;
+//   background-color: white;
+// `;
+
+// const Wrapper = styled.div`
+//   width: 100%;
+//   height: 80px;
+//   display: flex;
+//   justify-content: flex-end;
+//   align-items: center;
+//   border-bottom: 1px solid #f3f4f6;
+//   padding: 0 20px;
+
+//   @media (max-width: 768px) {
+//     height: 70px;
+//     padding: 0 15px;
+//   }
+
+//   @media (max-width: 480px) {
+//     height: 65px;
+//     padding: 0 10px;
+//   }
+// `;
+
+// const AdminIcon = styled.div`
+//   display: flex;
+//   align-items: center;
+//   gap: 12px;
+
+//   @media (max-width: 768px) {
+//     gap: 8px;
+//   }
+
+//   @media (max-width: 480px) {
+//     width: 100%;
+//     justify-content: space-between;
+//   }
+// `;
+
+// const Text = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-end;
+
+//   @media (max-width: 480px) {
+//     align-items: flex-start;
+//   }
+// `;
+
+// const Name = styled.div`
+//   font-size: 16px;
+//   font-weight: 500;
+
+//   @media (max-width: 768px) {
+//     font-size: 14px;
+//   }
+
+//   @media (max-width: 480px) {
+//     font-size: 13px;
+//   }
+// `;
+
+// const Email = styled.div`
+//   font-size: 14px;
+//   color: gray;
+//   font-weight: 300;
+
+//   @media (max-width: 768px) {
+//     font-size: 12px;
+//   }
+
+//   @media (max-width: 480px) {
+//     font-size: 11px;
+//   }
+// `;
+
+// const Avatar = styled.div`
+//   width: 40px;
+//   height: 40px;
+//   background: #603379;
+//   color: #fff;
+//   border-radius: 50%;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   font-size: 18px;
+
+//   @media (max-width: 768px) {
+//     width: 35px;
+//     height: 35px;
+//     font-size: 16px;
+//   }
+
+//   @media (max-width: 480px) {
+//     width: 32px;
+//     height: 32px;
+//     font-size: 14px;
+//   }
+// `;

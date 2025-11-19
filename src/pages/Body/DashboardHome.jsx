@@ -238,11 +238,16 @@ const DashboardHome = () => {
             <StatCard onClick={() => setShowModal(true)}>
               <StatHeader>
                 <StatTitle>Withdraw</StatTitle>
+                
                 <StatIcon style={{ background: "#efebf2" }}>
+                 
                   <FaWallet style={{ color: "#805c94" }} />
+                  
                 </StatIcon>
+                
               </StatHeader>
               <StatValue>{statsData?.occupancyRate?.total}₦</StatValue>
+               <button>withdraw</button>
             </StatCard>
           </StatsGrid>
         )}
@@ -488,6 +493,7 @@ const Dier = styled.div`
 }
 `;
 
+
 const Container = styled.div`
   width: 100%;
   display: flex;
@@ -548,6 +554,22 @@ const StatCard = styled.div`
     transform: translateY(-2px);
   }
 
+  
+   button{
+    width:30%;
+    height:30px;
+    background-color:#fff;
+    border: 1px solid #6b467a;
+    color:#000;
+    border-radius:5px;
+
+    &:hover{
+      background-color:#6b467a;
+      color:#fff;
+      cursor:pointer;
+    }
+  }
+
   @media (max-width: 768px) {
     width: 48%;
   }
@@ -569,6 +591,8 @@ const StatTitle = styled.h3`
   font-weight: 500;
   color: #6b7280;
   margin: 0;
+
+ 
 `;
 
 const StatIcon = styled.div`
@@ -585,6 +609,7 @@ const StatValue = styled.div`
   font-size: 32px;
   font-weight: 700;
   color: #111827;
+
 `;
 
 const ModalBackground = styled.div`

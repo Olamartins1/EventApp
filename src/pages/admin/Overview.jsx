@@ -1,49 +1,85 @@
 import React from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import { BsBuilding } from "react-icons/bs";
 import { FiUsers } from "react-icons/fi";
 import { RiHashtag, RiVerifiedBadgeLine } from "react-icons/ri";
 import { CiCalendar } from "react-icons/ci";
 
-const statsData = [
-  {
-    title: "Total Venues",
-    value: "0",
-    icon: <BsBuilding />,
-    iconBg: "#e9d5ff",
-    iconColor: "purple",
-  },
-  {
-    title: "Total Users",
-    value: "0",
-    icon: <FiUsers />,
-    iconBg: "#e3e9fa",
-    iconColor: "blue",
-  },
-  {
-    title: "Total Bookings",
-    value: "#0",
-    icon: <CiCalendar />,
-    iconBg: "#e3e9fa",
-    iconColor: "blue",
-  },
-  {
-    title: "Total Revenue",
-    value: "0%",
-    icon: <RiHashtag />,
-    iconBg: "#e0cb8c",
-    iconColor: "orange",
-  },
-];
-
 const Overview = () => {
-  const resendVerificationCode = async (email) => {
-    try {
-      await axios.post(
-        "https://eventiq-final-project.onrender.com/api/v1/resendOtp"
-      );
-    } catch (error) {}
-  };
+  const [stats, setStats] = useState({
+    totalVenues: 0,
+    totalUsers: 0,
+    totalBookings: 0,
+    totalRevenue: 0,
+  });
+  const [management, setManagement] = useState([]);
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchOverviewStats = async () => {
+      try {
+        const response = await axios.get(
+          "https://eventiq-final-project.onrender.com/api/v1/overview",
+
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = response.data;
+
+        console.log(response);
+
+        setStats({
+          totalVenues: data.analysis.totalVenues || 0,
+          totalUsers: data.analysis.totalUser || 0,
+          totalBookings: data.analysis.totalBookings || 0,
+          totalRevenue: data.analysis.totalRevenue || 0,
+        });
+        setManagement(data.totalManagement || []);
+      } catch (err) {
+        console.error("Failed to fetch overview stats:", err);
+      }
+    };
+
+    fetchOverviewStats();
+  }, []);
+
+  const statsData = [
+    {
+      title: "Total Venues",
+      value: stats.totalVenues,
+      icon: <BsBuilding />,
+      iconBg: "#e9d5ff",
+      iconColor: "purple",
+    },
+    {
+      title: "Total Users",
+      value: stats.totalUsers,
+      icon: <FiUsers />,
+      iconBg: "#e3e9fa",
+      iconColor: "blue",
+    },
+    {
+      title: "Total Bookings",
+      value: stats.totalBookings,
+      icon: <CiCalendar />,
+      iconBg: "#e3e9fa",
+      iconColor: "blue",
+    },
+    {
+      title: "Total Revenue",
+      value: stats.totalRevenue,
+      icon: <RiHashtag />,
+      iconBg: "#e0cb8c",
+      iconColor: "orange",
+    },
+  ];
 
   return (
     <Container>
@@ -75,45 +111,62 @@ const Overview = () => {
           </Subtitle>
           <ContactDetail>
             <ContactWrapper>
-              <Detail>
-                <div className="icon">
-                  <FiUsers />
-                </div>
-                <div className="names">
-                  <p style={{ color: "black", fontSize: "18px" }}>
-                    Chinedu Okafor
-                  </p>
-                  <p style={{ fontSize: "13px", color: "gray" }}>
-                    Wedding Ceremony
-                  </p>
-                  <p style={{ color: "black", fontSize: "18px" }}>Venue</p>
-                  <p style={{ fontSize: "13px", color: "gray" }}>
-                    Versatile Event Center
-                  </p>
-                </div>
-                <div className="eventDate">
-                  <p style={{ color: "black", fontSize: "16px" }}>Event Date</p>
-                  <p style={{ fontSize: "13px", color: "gray" }}>5 Nov, 2025</p>
-                </div>
-                <div className="bookingAmount">
-                  <p style={{ color: "black", fontSize: "16px" }}>
-                    Booking Amount
-                  </p>
-                  <p style={{ fontSize: "13px", color: "gray" }}>#420,000</p>
-                </div>
-                <div className="cautionFee">
-                  <p style={{ color: "black", fontSize: "16px" }}>
-                    Caution fee
-                  </p>
-                  <p style={{ fontSize: "13px", color: "gray" }}>#100,000</p>
-                </div>
-                <div className="btn">
-                  <div className="btn-icon">
-                    <RiVerifiedBadgeLine />
+              {management.map((item) => (
+                <Detail key={item._id}>
+                  <div className="icon">
+                    <FiUsers />
                   </div>
-                  <button>Mark as paid</button>
-                </div>
-              </Detail>
+                  <div className="names">
+                    <p style={{ color: "black", fontSize: "18px" }}>
+                      {item.clientId}
+                    </p>
+                    <p style={{ fontSize: "13px", color: "gray" }}>
+                      {item.eventType}
+                    </p>
+                    <p style={{ color: "black", fontSize: "18px" }}>Venue</p>
+                    <p style={{ fontSize: "13px", color: "gray" }}>
+                      {item.venueOwnerId}
+                    </p>
+                  </div>
+                  <div className="eventDate">
+                    <p style={{ color: "black", fontSize: "16px" }}>
+                      Event Date
+                    </p>
+                    <p style={{ fontSize: "13px", color: "gray" }}>
+                      {item.date}
+                    </p>
+                  </div>
+                  <div className="bookingAmount">
+                    <p style={{ color: "black", fontSize: "16px" }}>
+                      Booking Amount
+                    </p>
+                    <p style={{ fontSize: "13px", color: "gray" }}>
+                      {" "}
+                      ₦{item.total.toLocaleString()}
+                    </p>
+                  </div>
+                  <div className="cautionFee">
+                    <p style={{ color: "black", fontSize: "16px" }}>
+                      Caution fee
+                    </p>
+                    <p style={{ fontSize: "13px", color: "gray" }}>
+                      {" "}
+                      {item.servicecharge
+                        ? `₦${item.servicecharge.toLocaleString()}`
+                        : "₦0"}
+                    </p>
+                  </div>
+                  <div className="btn">
+                    <div className="btn-icon">
+                      <RiVerifiedBadgeLine />
+                    </div>
+                    <button>
+                      {" "}
+                      {item.paymentstatus === "paid" ? "Paid" : "Mark as paid"}
+                    </button>
+                  </div>
+                </Detail>
+              ))}
             </ContactWrapper>
           </ContactDetail>
         </SubContainer>
@@ -126,7 +179,7 @@ export default Overview;
 
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
+  min-height: 600px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -180,6 +233,7 @@ const DateText = styled.p`
   line-height: 24px;
   @media (max-width: 480px) {
     font-size: 12px;
+    width: 80%;
   }
 `;
 
@@ -204,8 +258,20 @@ const StatsGrid = styled.div`
   }
 
   @media (max-width: 480px) {
-    grid-template-columns: 1fr;
-    gap: 10px;
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 8px;
+    scroll-snap-type: x mandatory;
+    width: 100%;
+
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #cfcfcf;
+      border-radius: 10px;
+    }
   }
 `;
 
@@ -233,7 +299,11 @@ const StatCard = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding: 14px;
+    min-width: 130px;
+    max-width: 130px;
+    padding: 10px;
+    border-radius: 10px;
+    scroll-snap-align: center;
   }
 `;
 
@@ -257,7 +327,7 @@ const StatTitle = styled.h3`
   line-height: 20px;
 
   @media (max-width: 480px) {
-    font-size: 13px;
+    font-size: 12px;
   }
 `;
 
@@ -274,9 +344,10 @@ const StatIcon = styled.div`
   flex-shrink: 0;
 
   @media (max-width: 480px) {
-    width: 36px;
-    height: 36px;
-    font-size: 18px;
+    width: 34px;
+    height: 34px;
+    font-size: 16px;
+    border-radius: 8px;
   }
 `;
 
@@ -291,9 +362,9 @@ const StatValue = styled.div`
     font-size: 28px;
   }
 
-  @media (max-width: 480px) {
-    font-size: 24px;
-  }
+@media (max-width: 480px) {
+  font-size: 20px;
+}
 `;
 
 const SubContainer = styled.div`
@@ -303,6 +374,12 @@ const SubContainer = styled.div`
   border-radius: 12px;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 480px) {
+    padding: 10px 0;
+    width: 85%;
+    margin-left: -1px;
+  }
 `;
 
 const Subtitle = styled.div`
@@ -332,6 +409,20 @@ const Subtitle = styled.div`
     line-height: 20px;
     margin-top: 12px;
   }
+
+  @media (max-width: 480px) {
+    padding-left: 12px;
+    margin-bottom: 6px;
+
+    h4 {
+      font-size: 14px;
+    }
+
+    h5 {
+      font-size: 12px;
+      width: 70%;
+    }
+  }
 `;
 
 const ContactDetail = styled.div`
@@ -347,6 +438,12 @@ const ContactWrapper = styled.div`
   height: 100%;
   margin: auto;
   margin-top: 20px;
+  @media (max-width: 480px) {
+    width: 80%;
+    margin-left: 12px;
+    padding: 0 10px;
+    margin-top: 12px;
+  }
 `;
 
 const Detail = styled.div`
@@ -374,7 +471,7 @@ const Detail = styled.div`
 
   .names {
     margin-left: 15px;
-    width: 20%;
+    width: 30%;
     height: 90%;
   }
 
@@ -439,5 +536,112 @@ const Detail = styled.div`
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    height: auto;
+    padding: 16px;
+  }
+
+  .icon {
+    width: 50px;
+    height: 50px;
+    color: #0e4bf1;
+    background: #e3e9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 24px;
+    margin-left: 10px;
+
+    @media (max-width: 480px) {
+      margin-left: 0;
+    }
+  }
+
+  .names,
+  .eventDate,
+  .bookingAmount,
+  .cautionFee {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    @media (max-width: 480px) {
+      width: 80%;
+
+      align-items: flex-start;
+      margin-left: 0 !important;
+      gap: 2px;
+    }
+  }
+
+  /* Desktop widths */
+  .names {
+    width: 20%;
+  }
+  .eventDate {
+    width: 15%;
+  }
+  .bookingAmount {
+    width: 15%;
+  }
+  .cautionFee {
+    width: 15%;
+  }
+
+  /* -------- MOBILE BUTTON FIX -------- */
+  .btn {
+    width: 15%;
+    height: 40px;
+    background: green;
+    margin-left: 25px;
+    margin-right: 5px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+
+    @media (max-width: 480px) {
+      width: 50%;
+      margin: 10px 0 0 0;
+      height: 45px;
+      justify-content: center;
+    }
+  }
+
+  .btn-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 20px;
+    margin-left: 10px;
+
+    @media (max-width: 480px) {
+      margin-left: 0;
+      margin-right: 6px;
+      width: 30px;
+    }
+  }
+
+  button {
+    width: 90%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-family: Poppins;
+    font-size: 14px;
+    font-weight: 500;
+
+    @media (max-width: 480px) {
+      width: auto;
+    }
   }
 `;

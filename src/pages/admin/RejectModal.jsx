@@ -10,7 +10,12 @@ const RejectModal = ({ onCancel, onSubmit }) => {
   };
 
   return (
-    <ModalOverlay onClick={onCancel}>
+    // <ModalOverlay onClick={onCancel}>
+    <ModalOverlay
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onCancel();
+      }}
+    >
       <ModalContainer onClick={(e) => e.stopPropagation()}>
         <Title>Unverify Venue</Title>
         <Subtitle>Reason for rejecting venue</Subtitle>
