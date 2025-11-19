@@ -15,9 +15,20 @@ const OwnerBookings = () => {
 
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
+  
+  // Sort bookings: pending first, then by date (newest first)
+  const sortedBookings = [...booking].sort((a, b) => {
+    // If one is pending and the other isn't, pending comes first
+    if (a.bookingstatus === "pending" && b.bookingstatus !== "pending") return -1;
+    if (a.bookingstatus !== "pending" && b.bookingstatus === "pending") return 1;
+    
+    // If both have same status, sort by date (newest first)
+    return new Date(b.date) - new Date(a.date);
+  });
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentBookings = booking.slice(indexOfFirstItem, indexOfLastItem);
+  const currentBookings = sortedBookings.slice(indexOfFirstItem, indexOfLastItem);
 
   const acceptBooking = async (id) => {
     try {
@@ -25,7 +36,9 @@ const OwnerBookings = () => {
         `https://eventiq-final-project.onrender.com/api/v1/acceptbooking/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setTimeout(() => window.location.reload(), 2000);
+window.location.reload()
+      // refresh after accept
+      // setTimeout(() => window.location.reload(), 0);
     } catch (err) {
       console.log(err);
     }
@@ -134,7 +147,7 @@ const BookingList = styled.div`
 
 const Card = styled.div`
   background: #fff;
-  height; 5%;
+  height: 5%;
   border-radius: 12px;
   padding: 20px;
   display: flex;

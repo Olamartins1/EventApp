@@ -74,7 +74,7 @@ const Login = () => {
           navigate("/individual-dashboard");
         } else {
           // fallback (if role missing or new role added)
-          navigate("/individual-dashboard");
+          navigate("/admin-dashboard");
         }
         setLoading(false);
       }, 2000);

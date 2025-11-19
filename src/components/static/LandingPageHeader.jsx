@@ -71,21 +71,23 @@ const LandingpageHeader = () => {
               </StyledLink>
 
               {user ? (
-                <button
-                  onClick={handleLogoutClick}
-                  style={{
-                    width: "95px",
-                    height: "35px",
-                    fontSize: "1.2rem",
-                    borderRadius: "10px",
-                    cursor: "pointer",
-                    background: "#603278",
-                    color: "#fff",
-                    border: "none",
-                  }}
-                >
-                  Logout
-                </button>
+                <Logout>
+                  <button
+                    onClick={handleLogoutClick}
+                    style={{
+                      width: "95px",
+                      height: "35px",
+                      fontSize: "1.2rem",
+                      borderRadius: "10px",
+                      cursor: "pointer",
+                      background: "#603278",
+                      color: "#fff",
+                      border: "none",
+                    }}
+                  >
+                    Logout
+                  </button>
+                </Logout>
               ) : (
                 <SignupDropdownWrapper>
                   <SignupDropdown />
@@ -274,7 +276,8 @@ const StyledLinks = styled.div`
   display: flex;
   align-items: center;
   /* background:red; */
-  gap: 12rem;
+  justify-content: space-between;
+  gap: 10rem;
   margin-right: 10px;
 
   @media (max-width: 768px) {
@@ -284,6 +287,16 @@ const StyledLinks = styled.div`
 
   @media (max-width: 1024px) {
     gap: 1rem;
+  }
+`;
+
+const Logout = styled.button`
+  margin-right: 180px;
+  border: none;
+  background: none;
+  @media (max-width: 480px) {
+    margin-right: 120px;
+    margin-top: 20px;
   }
 `;
 const SignupDropdownWrapper = styled.div`
