@@ -1,32 +1,103 @@
-import React from "react";
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+import { AuthContext } from "../../assets/AuthContext/AuthContext";
 
 const Withdraw = () => {
+  const { token } = useContext(AuthContext);
+  const [withdrawals, setWithdrawals] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getWithdrawal = async () => {
+      try {
+        const res = await axios.get(
+          "https://eventiq-final-project.onrender.com/api/v1/withdrawal",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        console.log("the user withdrawal data is", res.data);
+
+        // Store the withdrawals data in state
+        setWithdrawals(res.data.data);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getWithdrawal();
+  }, [token]);
+
+  // Format date function with error handling
+  const formatDate = (dateString) => {
+    if (!dateString) return "Date not available";
+
+    try {
+      const date = new Date(dateString);
+
+      if (isNaN(date.getTime())) {
+        return "Invalid date";
+      }
+
+      const options = { year: "numeric", month: "short", day: "numeric" };
+      return date.toLocaleDateString("en-US", options);
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return "Date error";
+    }
+  };
+
+  // Format currency function
+  const formatCurrency = (amount) => {
+    if (amount === null || amount === undefined) return "₦0";
+    return `₦${amount.toLocaleString()}`;
+  };
+
+  if (loading) {
+    return <Wrapper>Loading withdrawals...</Wrapper>;
+  }
+
   return (
     <Wrapper>
-      <Card>
-        <Header>
-          <Amount>₦5,000</Amount>
-          <Status className="processing">Processing</Status>
-        </Header>
+      {withdrawals.length > 0 ? (
+        withdrawals.map((withdrawal) => (
+          <Card key={withdrawal._id}>
+            <Header>
+              <Amount>Amount: {formatCurrency(withdrawal.amount)}</Amount>
+              <Status className="processing">Processing</Status>
+            </Header>
 
-        <BankInfo>GTBank • 0987654321 • Ibrahim Ade</BankInfo>
+            <BankInfo>
+              <span>Bank Name: {withdrawal.bankName}</span>
+              <span>Account Number: {withdrawal.accountNumber}</span>
+              <span>Account Name: {withdrawal.accountName}</span>
+            </BankInfo>
 
-        <Footer>
-          <Date>Requested: Nov 18, 2025</Date>
-        </Footer>
-      </Card>
+            {/* <Footer>
+              <Date>Requested: {formatDate(withdrawal.createdAt)}</Date>
+              <TransactionId>ID: {withdrawal._id}</TransactionId>
+            </Footer> */}
+          </Card>
+        ))
+      ) : (
+        <div>No withdrawals found</div>
+      )}
     </Wrapper>
   );
 };
 
 export default Withdraw;
 
+// ========== STYLES BELOW ==========
+
 const Wrapper = styled.div`
   width: 100%;
   margin-top: 20px;
-  height: 400px;
-  // background: yellow;
+  min-height: 400px;
 `;
 
 const Card = styled.div`
@@ -37,12 +108,12 @@ const Card = styled.div`
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
   border: 1px solid #f0f0f0;
   font-family: "Inter", sans-serif;
+  margin-bottom: 16px;
 
   @media (max-width: 600px) {
     padding: 16px;
     width: 89%;
   }
-  
 `;
 
 const Header = styled.div`
@@ -51,7 +122,6 @@ const Header = styled.div`
   align-items: center;
 
   @media (max-width: 600px) {
-   
     align-items: flex-start;
     gap: 8px;
   }
@@ -86,11 +156,14 @@ const Status = styled.span`
   }
 `;
 
-const BankInfo = styled.p`
-  margin: 12px 0;
+const BankInfo = styled.div`
   font-size: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   color: #4b5563;
   font-weight: 500;
+  margin-top: 15px;
 
   @media (max-width: 600px) {
     font-size: 16px;
@@ -99,16 +172,27 @@ const BankInfo = styled.p`
 
 const Footer = styled.div`
   margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 `;
 
 const Date = styled.p`
   font-size: 18px;
   color: #6b7280;
-  margin-bottom: 10px;
+  margin: 0;
 
   @media (max-width: 600px) {
     font-size: 15px;
   }
+`;
+
+const TransactionId = styled.span`
+  font-size: 12px;
+  color: #888;
+  font-family: monospace;
 `;
 
 const ActionButton = styled.button`
@@ -118,10 +202,10 @@ const ActionButton = styled.button`
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
-
   background: #e5e7eb;
   color: #6b7280;
   cursor: not-allowed;
+  margin-top: 10px;
 
   @media (max-width: 600px) {
     padding: 10px;

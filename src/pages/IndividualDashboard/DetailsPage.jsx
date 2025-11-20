@@ -99,9 +99,6 @@ const DetailsPage = () => {
 
     if (!eventDate || !eventType || !days) {
       toast.error("Please fill in all fields before booking");
-      console.log("event:", eventDate == false);
-      console.log("type:", eventType == false);
-      console.log("days:", days == false);
       return;
     }
 

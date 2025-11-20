@@ -26,7 +26,6 @@ const MyBooking = () => {
           }
         );
 
-        console.log("Bookings API Response:", bookingsResponse.data);
 
         // Fetch invoices
         const invoiceResponse = await axios.get(
@@ -38,14 +37,12 @@ const MyBooking = () => {
           }
         );
 
-        console.log("Invoices API Response:", invoiceResponse.data);
 
         // Sort bookings by most recent
         const sortedBookings = [...bookingsResponse.data.data].sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
 
-        console.log("Sorted Bookings:", sortedBookings);
 
         // Create a map of invoices by booking ID
         const invoiceMap = {};
@@ -56,7 +53,6 @@ const MyBooking = () => {
           }
         });
 
-        console.log("Invoice Map:", invoiceMap);
 
         // Attach invoice to each booking
         const bookingsWithInvoices = sortedBookings.map((booking) => ({
@@ -64,7 +60,6 @@ const MyBooking = () => {
           invoice: invoiceMap[booking._id] || null,
         }));
 
-        console.log("Final Bookings with Invoices:", bookingsWithInvoices);
 
         setBookings(bookingsWithInvoices);
       } catch (error) {
@@ -103,7 +98,7 @@ const MyBooking = () => {
                 </p>
               </div>
 <div className="status-row">
-  <p className="label">Booking Status:</p>
+  <p className="label">Booking Status</p>
 
   <span
     className={`status ${
@@ -126,7 +121,7 @@ const MyBooking = () => {
                 <span className="value">{item.eventType || "Not specified"}</span>
               </div>
               <div className="detail">
-                <span className="label"> Fee</span>
+                <span className="label"> {item.paymentstatus === "paid" ? "Total Paid" : "Fee"}</span>
                 <span className="value">₦{item.total || 0}</span>
               </div>
               <div className="detail">
@@ -177,6 +172,12 @@ const Bookhall = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  .status-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 `;
 
 const BookingCard = styled.div`

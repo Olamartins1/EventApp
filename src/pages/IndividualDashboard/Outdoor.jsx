@@ -30,9 +30,7 @@ const Outdoor = () => {
             },
           }
         );
-        console.log(
-          `https://eventiq-final-project.onrender.com/api/v1/allvenues-outdoor?city=${selectedArea}`
-        );
+       
 
         setVenues(response.data.data);
       } catch (err) {
