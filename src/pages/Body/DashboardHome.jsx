@@ -158,14 +158,20 @@ const DashboardHome = () => {
   const currentBookings = booking.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(booking.length / itemsPerPage);
 
- const handleChange = (e) => {
+const handleChange = (e) => {
   const { name, value } = e.target;
 
   setFormData({
     ...formData,
-    [name]: name === "amount" ? Number(value) : value,
+    [name]:
+      name === "amount"
+        ? value === "" 
+          ? ""                 // allow empty input
+          : Number(value)      // convert when typing numbers
+        : value,
   });
 };
+
 
 
   const handleWithdraw = async () => {
@@ -176,7 +182,8 @@ const DashboardHome = () => {
       !formData.amount ||
       !formData.bankType ||
       !formData.accountNumber
-    ) {
+    )
+     {
       toast.error("Please fill in all fields");
       return;
     }
@@ -193,7 +200,6 @@ const DashboardHome = () => {
           },
         }
       );
-
       toast.success(res.data?.message || "Withdrawal successful!");
       setShowModal(false); // close the modal
       setFormData({
@@ -202,6 +208,7 @@ const DashboardHome = () => {
         amount: "",
         bankType: "",
       });
+         window.location.reload();
 
       // Optionally, update statsData to reflect new balance after withdrawal
       // setStatsData(prev => ({
