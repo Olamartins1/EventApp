@@ -41,6 +41,7 @@ import { AiOutlineTable } from "react-icons/ai";
 const DashboardHome = () => {
   const navigate = useNavigate();
   const [statsData, setStatsData] = useState({});
+  console.log("the stats data is", statsData);
   const [showPopup, setShowPopup] = useState(false);
   const [booking, setBooking] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -49,7 +50,7 @@ const DashboardHome = () => {
   const [show, setShow] = useState("ownerbookings");
   const [formData, setFormData] = useState({
     accountName: "",
-    bank: "",
+    bankName: "",
     amount: "",
     bankType: "",
     accountNumber: "",
@@ -60,6 +61,28 @@ const DashboardHome = () => {
   const [deleteid, setDeleteid] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
+  
+// useEffect(() => {
+//   const getWithdrawal = async () => {
+//     try {
+//       const res = await axios.get(
+//         "https://eventiq-final-project.onrender.com/api/v1/withdrawal",
+//         {
+//           headers: { Authorization: `Bearer ${token}` },
+//         }
+//       );
+
+//       console.log("the user withdrawal data is", res.data);
+
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };
+
+//   getWithdrawal();
+// }, [token]);
+
+ 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -78,6 +101,8 @@ const DashboardHome = () => {
     };
     fetchData();
   }, [token]);
+
+
 
   useEffect(() => {
     const fetchBooking = async () => {
@@ -133,15 +158,21 @@ const DashboardHome = () => {
   const currentBookings = booking.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(booking.length / itemsPerPage);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+ const handleChange = (e) => {
+  const { name, value } = e.target;
+
+  setFormData({
+    ...formData,
+    [name]: name === "amount" ? Number(value) : value,
+  });
+};
+
 
   const handleWithdraw = async () => {
     // Validate form
     if (
       !formData.accountName ||
-      !formData.bank ||
+      !formData.bankName ||
       !formData.amount ||
       !formData.bankType ||
       !formData.accountNumber
@@ -167,7 +198,7 @@ const DashboardHome = () => {
       setShowModal(false); // close the modal
       setFormData({
         accountName: "",
-        bank: "",
+        bankName: "",
         amount: "",
         bankType: "",
       });
@@ -227,7 +258,7 @@ const DashboardHome = () => {
             </StatCard>
             <StatCard>
               <StatHeader>
-                <StatTitle>Revenue (this Month) </StatTitle>
+                <StatTitle>Revenue </StatTitle>
                 <StatIcon style={{ background: "#c2ffd5" }}>
                   <TbCurrencyNaira style={{ color: "#14dd50" }} />
                 </StatIcon>
@@ -246,7 +277,7 @@ const DashboardHome = () => {
                 </StatIcon>
                 
               </StatHeader>
-              <StatValue>{statsData?.occupancyRate?.total}₦</StatValue>
+              <StatValue>₦{statsData?.availableBalance}</StatValue>
                <button>withdraw</button>
             </StatCard>
           </StatsGrid>
@@ -294,9 +325,9 @@ const DashboardHome = () => {
               />
               <Input
                 type="text"
-                name="bank"
+                name="bankName"
                 placeholder="Bank Name"
-                value={formData.bank}
+                value={formData.bankName}
                 onChange={handleChange}
               />
               <Input
@@ -310,7 +341,7 @@ const DashboardHome = () => {
                 type="number"
                 name="accountNumber"
                 placeholder="Account Number"
-                value={formData.amountNumber}
+                value={formData.accountNumber}
                 onChange={handleChange}
               />
               <Select

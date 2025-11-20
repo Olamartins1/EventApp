@@ -6,6 +6,7 @@ import { AuthContext } from "../../assets/AuthContext/AuthContext";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import { IoArrowBackOutline } from "react-icons/io5";
+import { FaLocationDot } from "react-icons/fa6";
 import Loading from "../../components/static/Loading/Loading";
 
 const Invoice = () => {
@@ -137,12 +138,12 @@ const Invoice = () => {
             <h4>{invoice?.venueId?.name || "Lush Garden Paradise"}</h4>
             <div className="venue-meta">
               <div>
-                <p>📍 {invoice?.venueId?.location?.street},
+                <p><FaLocationDot /> {invoice?.venueId?.location?.street},
                   {invoice?.location?.city}
                 </p>
                 <p>📅 {invoice?.issuedDate}</p>
                 <p>
-                  👥 {invoice?.capacity?.minimum}–{invoice?.capacity?.maximum} guests
+                  👥 {invoice?.venueId?.capacity?.minimum}–{invoice?.venueId?.capacity?.maximum} guests
                 </p>
               </div>
               <div>
@@ -177,16 +178,16 @@ const Invoice = () => {
                 <td>{invoice?.venuebookingId?.vat}</td>
                 <td>{invoice?.venuebookingId?.vat}</td>
               </tr>
-              <tr>
+              {/* <tr>
                 <td>Caution Fee</td>
         
                 <td>{invoice?.venueId?.cautionfee}</td>
                 <td>{invoice?.venueId?.cautionfee}</td>
-              </tr>
+              </tr> */}
             </tbody>
             <tfoot>
               <tr>
-                <td colSpan="3" className="grand-total-label">
+                <td colSpan="2" className="grand-total-label">
                   Grand Total
                 </td>
                 <td className="grand-total">
@@ -358,8 +359,9 @@ const InvoiceContainer = styled.div`
   .grand-total {
     font-weight: 700;
     color: #5b21b6;
-    background: #f3e8ff;
+    /* background: #f3e8ff; */
     border-radius: 6px;
+    /* width: 10%; */
   }
 }
 

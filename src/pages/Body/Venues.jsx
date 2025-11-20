@@ -860,7 +860,6 @@ const Venues = () => {
   const { user } = useContext(AuthContext);
   const { token } = useContext(AuthContext);
   const [venues, setVenues] = useState([]);
-  console.log(venues);
   const [loading, setLoading] = useState(true);
   const [features, setFeatures] = useState([]);
   const [error, setError] = useState(null);
@@ -1135,7 +1134,6 @@ const Venues = () => {
         venueFormData.append("doc", documentFiles.certificateOfOccupancy);
       }
 
-      console.log(" Submitting venue data with FormData", venueFormData);
 
       const venueResponse = await axios.post(
         "https://eventiq-final-project.onrender.com/api/v1/list-venue",
@@ -1149,7 +1147,6 @@ const Venues = () => {
         }
       );
 
-      console.log("the venue is", venueFormData);
 
       if (venueResponse.data.data) {
         if (editingVenue) {
@@ -1204,6 +1201,7 @@ const Venues = () => {
     try {
       if (!token) {
         toast.error("Please login to subscribe");
+
         return;
       }
 

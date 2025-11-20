@@ -33,7 +33,6 @@ const Overview = () => {
         );
         const data = response.data;
 
-        console.log(response);
 
         setStats({
           totalVenues: data.analysis.totalVenues || 0,

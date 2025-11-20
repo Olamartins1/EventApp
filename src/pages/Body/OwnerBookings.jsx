@@ -3,26 +3,26 @@ import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { FiPackage } from "react-icons/fi";
 import { GoDotFill } from "react-icons/go";
-import Loading from "../../components/static/Loading/Loading";
+// import Loading from "../../components/static/Loading/Loading";
 import { AuthContext } from "../../assets/AuthContext/AuthContext";
+import Loading from "../../components/static/Loading/Loading";
 
 const OwnerBookings = () => {
   const [booking, setBooking] = useState([]);
   const [loading, setLoading] = useState(true);
   const { token } = useContext(AuthContext);
-  const [deleteid, setDeleteid] = useState(null);
-  const [showPopup, setShowPopup] = useState(false);
+
+  const [showAcceptPopup, setShowAcceptPopup] = useState(false);   // NEW
+  const [selectedBookingId, setSelectedBookingId] = useState(null); // NEW
 
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
-  
-  // Sort bookings: pending first, then by date (newest first)
+  const [acceptLoading, setAcceptLoading] = useState(false);
+
+
   const sortedBookings = [...booking].sort((a, b) => {
-    // If one is pending and the other isn't, pending comes first
     if (a.bookingstatus === "pending" && b.bookingstatus !== "pending") return -1;
     if (a.bookingstatus !== "pending" && b.bookingstatus === "pending") return 1;
-    
-    // If both have same status, sort by date (newest first)
     return new Date(b.date) - new Date(a.date);
   });
 
@@ -30,17 +30,20 @@ const OwnerBookings = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentBookings = sortedBookings.slice(indexOfFirstItem, indexOfLastItem);
 
-  const acceptBooking = async (id) => {
+  // ✔ CALL ACCEPT API ONLY AFTER POPUP CONFIRMATION
+  const confirmAccept = async () => {
     try {
+      setAcceptLoading(true);
       await axios.get(
-        `https://eventiq-final-project.onrender.com/api/v1/acceptbooking/${id}`,
+        `https://eventiq-final-project.onrender.com/api/v1/acceptbooking/${selectedBookingId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-window.location.reload()
-      // refresh after accept
-      // setTimeout(() => window.location.reload(), 0);
+      setShowAcceptPopup(false);
+      window.location.reload();
     } catch (err) {
       console.log(err);
+    }finally {
+      setAcceptLoading(false);
     }
   };
 
@@ -63,10 +66,26 @@ window.location.reload()
   }, [token]);
 
   return (
+    <>
+    {/* <Loading /> */}
     <Container>
+      {showAcceptPopup && (
+        <PopupOverlay>
+          <PopupBox>
+            <PopupTitle>Confirm Booking Acceptance</PopupTitle>
+            <PopupText>Are you sure you want to accept this booking?</PopupText>
+
+            <PopupButtons>
+              <ConfirmBtn onClick={confirmAccept}>   {acceptLoading ? <Loading /> : " Accept"}</ConfirmBtn>
+              <CancelBtn onClick={() => setShowAcceptPopup(false)}>Cancel</CancelBtn>
+            </PopupButtons>
+          </PopupBox>
+        </PopupOverlay>
+      )}
+
       {loading ? (
         <LoadingWrapper>
-          <Loading />
+          {/* <Loading /> */}
         </LoadingWrapper>
       ) : booking.length > 0 ? (
         <BookingList>
@@ -78,7 +97,7 @@ window.location.reload()
                 <CustomerInfo>
                   <CustomerName>{item.clientId.firstName}</CustomerName>
                   <CustomerName>{item.clientId.surname}</CustomerName>
-                  <GoDotFill className="move"/>
+                  <GoDotFill className="move" />
                   <CustomerName>
                     {new Date(item.date).toLocaleDateString("en-US", {
                       month: "short",
@@ -90,12 +109,17 @@ window.location.reload()
                 <Occasion>{item.eventType}</Occasion>
                 <Price>₦{item.venueId.price}</Price>
                 <Actions>
+                  
                   <AcceptButton
                     disabled={!isPending}
-                    onClick={() => acceptBooking(item._id)}
+                    onClick={() => {
+                      setSelectedBookingId(item._id);
+                      setShowAcceptPopup(true);
+                    }}
                   >
                     {isPending ? "Accept" : "Accepted"}
                   </AcceptButton>
+
                   {isPending && (
                     <RejectButton
                       onClick={() => {
@@ -123,10 +147,12 @@ window.location.reload()
         </EmptyState>
       )}
     </Container>
+    </>
   );
 };
 
 export default OwnerBookings;
+
 
 
 const Container = styled.div`
@@ -388,5 +414,106 @@ const EmptyDescription = styled.p`
 
   @media (max-width: 480px) {
     font-size: 0.85rem;
+  }
+`;
+
+const PopupOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  padding: 30px; 
+`;
+
+const PopupBox = styled.div`
+  background: white;
+  padding: 25px 20px;
+  width: 100%;
+  max-width: 380px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+
+  @media (max-width: 480px) {
+    padding: 20px 15px;
+    max-width: 320px;
+  }
+`;
+
+const PopupTitle = styled.h3`
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 12px;
+
+  @media (max-width: 480px) {
+    font-size: 18px;
+  }
+`;
+
+const PopupText = styled.p`
+  font-size: 16px;
+  margin-bottom: 25px;
+  color: #333;
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+  }
+`;
+
+const PopupButtons = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+
+  @media (max-width: 400px) {
+    flex-direction: column;
+  }
+`;
+
+const ConfirmBtn = styled.button`
+  background: #0a8346;
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  flex: 1;
+  font-size: 15px;
+  font-weight: 500;
+
+  &:hover {
+    background: #066d39;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+    padding: 10px;
+  }
+`;
+
+const CancelBtn = styled.button`
+  background: #d9534f;
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  flex: 1;
+  font-size: 15px;
+  font-weight: 500;
+
+  &:hover {
+    background: #b7433f;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+    padding: 10px;
   }
 `;

@@ -9,7 +9,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const VenueCard = ({ venue, onStatusChange }) => {
-  console.log("WORKING", venue);
   // const [showModal, setShowModal] = useState(false);
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
@@ -224,7 +223,6 @@ const VenueCard = ({ venue, onStatusChange }) => {
         }
       );
 
-      console.log("Approved response:", res.data);
       toast.success("Venue approved successfully!");
 
       // if (onStatusChange)
@@ -298,7 +296,6 @@ const VenueCard = ({ venue, onStatusChange }) => {
         }
       );
 
-      console.log("Rejected response:", res.data);
       toast.success("Venue rejected successfully!");
 
       setShowRejectModal(false);
