@@ -93,7 +93,7 @@ const MyBooking = () => {
                 <p className="venue-location">
                   {item.venueLocation || 
                    (item.venueId?.location ? 
-                    `${item.venueId.location.street}, ${item.venueId.location.city}, ${item.venueId.location.state}` 
+                    ` ${item.venueId.location.state}` 
                     : "Location not available")}
                 </p>
               </div>
