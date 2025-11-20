@@ -189,8 +189,7 @@ const SubHeaderContainer = styled.div`
 
   @media (max-width: 1024px) {
     padding: 0 2rem;
-    margin-top: 15%;
-    position: sticky;
+    margin-top: 10%;
   }
 
   @media (max-width: 768px) {
